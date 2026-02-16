@@ -1,7 +1,6 @@
 {
   "_README": "各案件のURL設定。アフィリエイトURLが取得できたらurlフィールドを上書きし、python scripts/inject_affiliate_links.py を実行。",
   "_MOSHIMO_ID": "833667",
-
   "sbi_securities": {
     "name": "SBI証券",
     "asp": "アクセストレード推奨",
@@ -18,17 +17,18 @@
   },
   "wealthnavi": {
     "name": "WealthNavi",
-    "asp": "もしもアフィリエイト / A8.net",
+    "asp": "A8.net",
     "search_keyword": "ウェルスナビ WealthNavi",
     "official_url": "https://www.wealthnavi.com/",
     "url": "https://www.wealthnavi.com/"
   },
   "money_forward": {
     "name": "マネーフォワード クラウド確定申告",
-    "asp": "もしもアフィリエイト / A8.net",
+    "asp": "A8.net",
     "search_keyword": "マネーフォワード",
     "official_url": "https://biz.moneyforward.com/tax_return/",
-    "url": "https://biz.moneyforward.com/tax_return/"
+    "url": "https://px.a8.net/svt/ejp?a8mat=3N3VF4+834ZLE+4JGQ+BXB8Z",
+    "a8_link": "https://px.a8.net/svt/ejp?a8mat=3N3VF4+834ZLE+4JGQ+BXB8Z"
   },
   "zeirishi_dot_com": {
     "name": "税理士ドットコム",
@@ -86,7 +86,6 @@
     "official_url": "https://www.renosy.com/",
     "url": "https://www.renosy.com/"
   },
-
   "sim_povo": {
     "name": "povo",
     "official_url": "https://povo.jp/",
