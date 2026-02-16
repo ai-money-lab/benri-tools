@@ -35,6 +35,7 @@ scripts/get_moshimo_links*.py
 scripts/extract_moshimo_links.py
 scripts/moshimo_debug.py
 scripts/_debug_moshimo.py
+scripts/x_schedule_posts.py
 
 # Temp
 *.tmp
@@ -42,6 +43,9 @@ scripts/_debug_moshimo.py
 
 # Playwright MCP cache
 .playwright-mcp/
+
+# Playwright browser data (contains login sessions)
+data/pw_browser/
 
 # Root screenshots (debug artifacts)
 *-full.png
