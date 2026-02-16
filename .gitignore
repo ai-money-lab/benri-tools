@@ -46,6 +46,7 @@ scripts/x_schedule_posts.py
 
 # Playwright browser data (contains login sessions)
 data/pw_browser/
+data/x_browser_profile/
 
 # Root screenshots (debug artifacts)
 *-full.png

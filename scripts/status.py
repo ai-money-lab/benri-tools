@@ -46,25 +46,38 @@ def list_files(directory, pattern='*'):
 def check_scheduler():
     import subprocess
     import platform
+    tasks = {}
     if platform.system() == 'Windows':
-        try:
-            result = subprocess.run(
-                ['schtasks', '/Query', '/TN', 'MoneyMachineDaily'],
-                capture_output=True, text=True, timeout=5
-            )
-            if result.returncode == 0:
-                return "ACTIVE (Task Scheduler)"
-            return "NOT SET"
-        except Exception:
-            return "N/A"
+        for name in ['MoneyMachineDaily', 'MoneyMachineXPost']:
+            try:
+                result = subprocess.run(
+                    ['schtasks', '/Query', '/TN', name],
+                    capture_output=True, text=True, timeout=5
+                )
+                tasks[name] = "ACTIVE" if result.returncode == 0 else "NOT SET"
+            except Exception:
+                tasks[name] = "N/A"
     else:
         try:
             result = subprocess.run(['crontab', '-l'], capture_output=True, text=True, timeout=5)
-            if 'daily_run' in result.stdout:
-                return "ACTIVE (cron)"
-            return "NOT SET"
+            tasks['MoneyMachineDaily'] = "ACTIVE" if 'daily_run' in result.stdout else "NOT SET"
+            tasks['MoneyMachineXPost'] = "ACTIVE" if 'x_daily_post' in result.stdout else "NOT SET"
         except Exception:
-            return "N/A"
+            tasks['MoneyMachineDaily'] = "N/A"
+            tasks['MoneyMachineXPost'] = "N/A"
+    return tasks
+
+
+def check_x_queue():
+    import json
+    queue_path = os.path.join(BASE_DIR, 'data', 'x_post_queue.json')
+    if not os.path.exists(queue_path):
+        return None
+    with open(queue_path, 'r', encoding='utf-8') as f:
+        queue = json.load(f)
+    total = len(queue)
+    posted = sum(1 for p in queue if p.get('posted'))
+    return {'total': total, 'posted': posted, 'remaining': total - posted}
 
 def main():
     now = datetime.now().strftime('%Y-%m-%d %H:%M')
@@ -134,8 +147,17 @@ def main():
 
     # Scheduler
     print("\n SCHEDULER")
-    sched_status = check_scheduler()
-    print(f"  daily_run.py: {sched_status}")
+    sched_tasks = check_scheduler()
+    for name, status in sched_tasks.items():
+        print(f"  {name}: {status}")
+
+    # X Post Queue
+    print("\n X POST QUEUE")
+    xq = check_x_queue()
+    if xq:
+        print(f"  Total: {xq['total']}, Posted: {xq['posted']}, Remaining: {xq['remaining']}")
+    else:
+        print("  (queue file not found)")
 
     print("\n" + "=" * 48)
 
