@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A8.net 提携申請ガイド</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
+    color: #1a1a1a;
+    background: #fff;
+    line-height: 1.7;
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 32px 24px 64px;
+  }
+  h1 {
+    font-size: 1.6rem;
+    border-bottom: 3px solid #1a1a1a;
+    padding-bottom: 12px;
+    margin-bottom: 8px;
+  }
+  .subtitle {
+    color: #555;
+    font-size: 0.9rem;
+    margin-bottom: 32px;
+  }
+  h2 {
+    font-size: 1.2rem;
+    margin-top: 36px;
+    margin-bottom: 12px;
+    padding: 6px 12px;
+    background: #f5f5f5;
+    border-left: 4px solid #1a1a1a;
+  }
+  h3 {
+    font-size: 1.05rem;
+    margin-top: 24px;
+    margin-bottom: 8px;
+  }
+  .prereq {
+    background: #fffde7;
+    border: 1px solid #e0d97e;
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin-bottom: 28px;
+  }
+  .prereq strong { display: block; margin-bottom: 4px; }
+  .prereq code {
+    background: #f0f0f0;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 0.95rem;
+  }
+  .program-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin-bottom: 20px;
+  }
+  .program-card .name {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  .program-card table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 14px;
+    font-size: 0.92rem;
+  }
+  .program-card table th {
+    text-align: left;
+    width: 140px;
+    padding: 4px 8px 4px 0;
+    vertical-align: top;
+    color: #555;
+    font-weight: normal;
+  }
+  .program-card table td {
+    padding: 4px 0;
+  }
+  .program-card table td a {
+    color: #1558b0;
+    word-break: break-all;
+  }
+  .steps {
+    list-style: none;
+    counter-reset: step;
+    padding: 0;
+  }
+  .steps li {
+    counter-increment: step;
+    padding: 4px 0 4px 32px;
+    position: relative;
+    font-size: 0.93rem;
+  }
+  .steps li::before {
+    content: counter(step);
+    position: absolute;
+    left: 0;
+    top: 4px;
+    width: 22px;
+    height: 22px;
+    background: #1a1a1a;
+    color: #fff;
+    border-radius: 50%;
+    font-size: 0.75rem;
+    text-align: center;
+    line-height: 22px;
+  }
+  .expected {
+    font-size: 0.88rem;
+    color: #555;
+    margin-top: 8px;
+  }
+  .expected strong { color: #1a1a1a; }
+  .checkbox-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 3px 0;
+    font-size: 0.93rem;
+  }
+  .checkbox-item input[type="checkbox"] {
+    margin-top: 5px;
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+  }
+  .note-box {
+    background: #f0f7ff;
+    border: 1px solid #b3d4f7;
+    border-radius: 6px;
+    padding: 18px 22px;
+    margin-top: 32px;
+  }
+  .note-box h3 {
+    margin-top: 0;
+    margin-bottom: 12px;
+    font-size: 1rem;
+  }
+  .note-box ul {
+    list-style: none;
+    padding: 0;
+  }
+  .note-box li {
+    padding: 4px 0;
+    font-size: 0.92rem;
+    padding-left: 16px;
+    position: relative;
+  }
+  .note-box li::before {
+    content: "\25B6";
+    position: absolute;
+    left: 0;
+    font-size: 0.65rem;
+    top: 7px;
+    color: #1558b0;
+  }
+  code, .cmd {
+    background: #f0f0f0;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-family: "Consolas", "Courier New", monospace;
+    font-size: 0.88rem;
+  }
+  .cmd-block {
+    background: #1a1a1a;
+    color: #e0e0e0;
+    padding: 12px 16px;
+    border-radius: 6px;
+    font-family: "Consolas", "Courier New", monospace;
+    font-size: 0.88rem;
+    margin-top: 8px;
+    overflow-x: auto;
+  }
+  .checklist-section { margin-top: 32px; }
+</style>
+</head>
+<body>
+
+<h1>A8.net 提携申請ガイド</h1>
+<p class="subtitle">内部用マニュアル ― 各アフィリエイトプログラムへの提携申請手順</p>
+
+<div class="prereq">
+  <strong>前提条件</strong>
+  A8.net にログイン済みであること<br>
+  ログインID: <code>freemlife</code><br>
+  管理画面: <a href="https://pub.a8.net/" target="_blank">https://pub.a8.net/</a>
+</div>
+
+<h2>共通手順</h2>
+<ol class="steps">
+  <li>A8.net にログインする</li>
+  <li>「プログラム検索」画面を開く</li>
+  <li>キーワード欄に検索語を入力する</li>
+  <li>「検索」ボタンをクリック</li>
+  <li>該当プログラムの「提携申請する」をクリック</li>
+  <li>確認ページで再度「提携申請する」をクリック</li>
+</ol>
+<p class="expected" style="margin-top:12px;">
+  <strong>結果:</strong> 「提携完了」（即時提携）または「審査中」と表示される
+</p>
+
+<h2>プログラム一覧 &amp; チェックリスト</h2>
+<p style="font-size:0.9rem; color:#555; margin-bottom:16px;">
+  各プログラムのチェックボックスにチェックを入れて進捗を管理してください。
+</p>
+
+<!-- 1. RENOSY -->
+<div class="program-card">
+  <div class="checkbox-item">
+    <input type="checkbox" id="prog1">
+    <label for="prog1" class="name">RENOSY</label>
+  </div>
+  <table>
+    <tr><th>検索キーワード</th><td><code>RENOSY</code></td></tr>
+    <tr><th>検索URL</th><td><a href="https://pub.a8.net/a8v2/asProgramSearchAction.do" target="_blank">https://pub.a8.net/a8v2/asProgramSearchAction.do</a></td></tr>
+  </table>
+  <p class="expected"><strong>想定結果:</strong> 提携完了 or 審査中</p>
+</div>
+
+<!-- 2. マネードクター -->
+<div class="program-card">
+  <div class="checkbox-item">
+    <input type="checkbox" id="prog2">
+    <label for="prog2" class="name">マネードクター</label>
+  </div>
+  <table>
+    <tr><th>検索キーワード</th><td><code>マネードクター</code></td></tr>
+    <tr><th>検索URL</th><td><a href="https://pub.a8.net/a8v2/asProgramSearchAction.do" target="_blank">https://pub.a8.net/a8v2/asProgramSearchAction.do</a></td></tr>
+  </table>
+  <p class="expected"><strong>想定結果:</strong> 提携完了 or 審査中</p>
+</div>
+
+<!-- 3. 保険見直しラボ -->
+<div class="program-card">
+  <div class="checkbox-item">
+    <input type="checkbox" id="prog3">
+    <label for="prog3" class="name">保険見直しラボ</label>
+  </div>
+  <table>
+    <tr><th>検索キーワード</th><td><code>保険見直しラボ</code></td></tr>
+    <tr><th>検索URL</th><td><a href="https://pub.a8.net/a8v2/asProgramSearchAction.do" target="_blank">https://pub.a8.net/a8v2/asProgramSearchAction.do</a></td></tr>
+  </table>
+  <p class="expected"><strong>想定結果:</strong> 提携完了 or 審査中</p>
+</div>
+
+<!-- 4. 保険スクエアbang! -->
+<div class="program-card">
+  <div class="checkbox-item">
+    <input type="checkbox" id="prog4">
+    <label for="prog4" class="name">保険スクエアbang!</label>
+  </div>
+  <table>
+    <tr><th>検索キーワード</th><td><code>保険スクエアbang</code></td></tr>
+    <tr><th>検索URL</th><td><a href="https://pub.a8.net/a8v2/asProgramSearchAction.do" target="_blank">https://pub.a8.net/a8v2/asProgramSearchAction.do</a></td></tr>
+  </table>
+  <p class="expected"><strong>想定結果:</strong> 提携完了 or 審査中</p>
+</div>
+
+<!-- 5. モゲチェック -->
+<div class="program-card">
+  <div class="checkbox-item">
+    <input type="checkbox" id="prog5">
+    <label for="prog5" class="name">モゲチェック</label>
+  </div>
+  <table>
+    <tr><th>検索キーワード</th><td><code>モゲチェック</code></td></tr>
+    <tr><th>検索URL</th><td><a href="https://pub.a8.net/a8v2/asProgramSearchAction.do" target="_blank">https://pub.a8.net/a8v2/asProgramSearchAction.do</a></td></tr>
+  </table>
+  <p class="expected"><strong>想定結果:</strong> 提携完了 or 審査中</p>
+</div>
+
+<!-- 6. 税理士ドットコム -->
+<div class="program-card">
+  <div class="checkbox-item">
+    <input type="checkbox" id="prog6">
+    <label for="prog6" class="name">税理士ドットコム</label>
+  </div>
+  <table>
+    <tr><th>検索キーワード</th><td><code>税理士ドットコム</code></td></tr>
+    <tr><th>検索URL</th><td><a href="https://pub.a8.net/a8v2/asProgramSearchAction.do" target="_blank">https://pub.a8.net/a8v2/asProgramSearchAction.do</a></td></tr>
+  </table>
+  <p class="expected"><strong>想定結果:</strong> 提携完了 or 審査中</p>
+</div>
+
+<!-- 7. LHH転職エージェント -->
+<div class="program-card">
+  <div class="checkbox-item">
+    <input type="checkbox" id="prog7">
+    <label for="prog7" class="name">LHH転職エージェント</label>
+  </div>
+  <table>
+    <tr><th>検索キーワード</th><td><code>LHH</code></td></tr>
+    <tr><th>検索URL</th><td><a href="https://pub.a8.net/a8v2/asProgramSearchAction.do" target="_blank">https://pub.a8.net/a8v2/asProgramSearchAction.do</a></td></tr>
+  </table>
+  <p class="expected"><strong>想定結果:</strong> 提携完了 or 審査中</p>
+</div>
+
+<!-- 8. ピタテン -->
+<div class="program-card">
+  <div class="checkbox-item">
+    <input type="checkbox" id="prog8">
+    <label for="prog8" class="name">ピタテン</label>
+  </div>
+  <table>
+    <tr><th>検索キーワード</th><td><code>ピタテン</code></td></tr>
+    <tr><th>検索URL</th><td><a href="https://pub.a8.net/a8v2/asProgramSearchAction.do" target="_blank">https://pub.a8.net/a8v2/asProgramSearchAction.do</a></td></tr>
+  </table>
+  <p class="expected"><strong>想定結果:</strong> 提携完了 or 審査中</p>
+</div>
+
+<!-- 9. UZUZ -->
+<div class="program-card">
+  <div class="checkbox-item">
+    <input type="checkbox" id="prog9">
+    <label for="prog9" class="name">UZUZ</label>
+  </div>
+  <table>
+    <tr><th>検索キーワード</th><td><code>UZUZ</code></td></tr>
+    <tr><th>検索URL</th><td><a href="https://pub.a8.net/a8v2/asProgramSearchAction.do" target="_blank">https://pub.a8.net/a8v2/asProgramSearchAction.do</a></td></tr>
+  </table>
+  <p class="expected"><strong>想定結果:</strong> 提携完了 or 審査中</p>
+</div>
+
+<!-- 10. ウェルスナビ -->
+<div class="program-card">
+  <div class="checkbox-item">
+    <input type="checkbox" id="prog10">
+    <label for="prog10" class="name">ウェルスナビ</label>
+  </div>
+  <table>
+    <tr><th>検索キーワード</th><td><code>ウェルスナビ</code></td></tr>
+    <tr><th>検索URL</th><td><a href="https://pub.a8.net/a8v2/asProgramSearchAction.do" target="_blank">https://pub.a8.net/a8v2/asProgramSearchAction.do</a></td></tr>
+  </table>
+  <p class="expected"><strong>想定結果:</strong> 提携完了 or 審査中</p>
+</div>
+
+<!-- 11. SBI証券 -->
+<div class="program-card">
+  <div class="checkbox-item">
+    <input type="checkbox" id="prog11">
+    <label for="prog11" class="name">SBI証券</label>
+  </div>
+  <table>
+    <tr><th>検索キーワード</th><td><code>SBI証券</code></td></tr>
+    <tr><th>検索URL</th><td><a href="https://pub.a8.net/a8v2/asProgramSearchAction.do" target="_blank">https://pub.a8.net/a8v2/asProgramSearchAction.do</a></td></tr>
+  </table>
+  <p class="expected"><strong>想定結果:</strong> 提携完了 or 審査中</p>
+</div>
+
+<div class="note-box">
+  <h3>提携申請後の対応</h3>
+  <ul>
+    <li><strong>即時提携の場合:</strong> すぐに広告リンクが作成可能です。「広告リンク作成」画面へ進んでください。</li>
+    <li><strong>審査ありの場合:</strong> 数日〜1週間で結果がメール通知されます。承認後に広告リンクを作成してください。</li>
+    <li><strong>リンク取得後:</strong> <code>config/affiliate_links.json</code> の該当キーの <code>url</code> フィールドを、取得したアフィリエイトリンクで更新してください。</li>
+    <li><strong>ツールへの反映:</strong> 以下のコマンドを実行して、各ツールのHTMLにリンクを注入します。</li>
+  </ul>
+  <div class="cmd-block">python scripts/inject_affiliate_links.py</div>
+</div>
+
+</body>
+</html>

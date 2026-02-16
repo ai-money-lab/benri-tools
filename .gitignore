@@ -18,10 +18,23 @@ nul
 
 # Logs (keep directory, ignore contents)
 logs/*.log
+logs/*.png
+logs/*.html
+logs/*.json
+logs/screenshots/
 
 # Secrets
 .env
 *.key
+
+# ASP automation scripts (contain credentials)
+scripts/a8_*.py
+scripts/asp_*.py
+scripts/auto_asp_partner.py
+scripts/get_moshimo_links*.py
+scripts/extract_moshimo_links.py
+scripts/moshimo_debug.py
+scripts/_debug_moshimo.py
 
 # Temp
 *.tmp

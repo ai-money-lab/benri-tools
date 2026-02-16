@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ふるさと納税 控除上限額シミュレーター【無料】</title>
+<meta name="description" content="ふるさと納税の控除上限額をかんたん計算。年収・家族構成・扶養人数を入力するだけで、最適な寄附上限額と税控除の内訳がわかります。">
+<meta name="keywords" content="ふるさと納税,シミュレーター,控除上限額,計算,寄附金控除,所得税,住民税,確定申告,ワンストップ特例">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="">
+<!-- OGP -->
+<meta property="og:title" content="ふるさと納税 控除上限額シミュレーター【無料】">
+<meta property="og:description" content="ふるさと納税の控除上限額をかんたん計算。年収・家族構成・扶養人数を入力するだけで最適な寄附額がわかります。">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:site_name" content="ふるさと納税シミュレーター">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="ふるさと納税 控除上限額シミュレーター【無料】">
+<meta name="twitter:description" content="ふるさと納税の控除上限額をかんたん計算。年収・家族構成で最適な寄附額を自動計算。">
+<style>
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', Meiryo, sans-serif;
+  background: #ffffff;
+  color: #333;
+  line-height: 1.7;
+  min-height: 100vh;
+}
+.header {
+  background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 50%, #1a3a4a 100%);
+  color: #fff;
+  padding: 32px 16px 28px;
+  text-align: center;
+}
+.header h1 {
+  font-size: clamp(1.3rem, 4vw, 2rem);
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  margin-bottom: 8px;
+}
+.header p {
+  font-size: clamp(0.82rem, 2.5vw, 1rem);
+  opacity: 0.88;
+}
+.container {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 20px 12px 40px;
+}
+.card {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 2px 16px rgba(27,94,32,0.10), 0 1px 4px rgba(0,0,0,0.06);
+  padding: 28px 24px;
+  margin-bottom: 22px;
+}
+.card-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #1b5e20;
+  margin-bottom: 22px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #e8f5e9;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.card-title .icon {
+  font-size: 1.3rem;
+}
+
+/* Input group */
+.input-group {
+  margin-bottom: 22px;
+}
+.input-group label {
+  display: block;
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin-bottom: 8px;
+  color: #1b5e20;
+}
+.input-group .hint {
+  font-size: 0.8rem;
+  color: #777;
+  font-weight: 400;
+  margin-left: 6px;
+}
+.slider-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.slider-row input[type="range"] {
+  flex: 1;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  border-radius: 3px;
+  background: #c8e6c9;
+  outline: none;
+}
+.slider-row input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #2e7d32;
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(27,94,32,0.35);
+  transition: transform 0.15s;
+}
+.slider-row input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+}
+.slider-row input[type="range"]::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #2e7d32;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 1px 4px rgba(27,94,32,0.35);
+}
+.number-input {
+  width: 100px;
+  padding: 7px 10px;
+  border: 2px solid #c8e6c9;
+  border-radius: 8px;
+  font-size: 1rem;
+  text-align: right;
+  font-weight: 600;
+  color: #1b5e20;
+  transition: border-color 0.2s;
+}
+.number-input:focus {
+  outline: none;
+  border-color: #2e7d32;
+}
+.unit {
+  font-size: 0.88rem;
+  color: #666;
+  white-space: nowrap;
+}
+
+/* Radio / Select */
+.option-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+.radio-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 18px;
+  border: 2px solid #c8e6c9;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: all 0.2s;
+  user-select: none;
+}
+.radio-label:hover {
+  border-color: #2e7d32;
+}
+.radio-label input:checked + span {
+  color: #1b5e20;
+  font-weight: 700;
+}
+.radio-label:has(input:checked) {
+  background: #e8f5e9;
+  border-color: #2e7d32;
+}
+.radio-label input {
+  accent-color: #2e7d32;
+  width: 16px;
+  height: 16px;
+}
+.select-input {
+  padding: 8px 16px;
+  border: 2px solid #c8e6c9;
+  border-radius: 8px;
+  font-size: 1rem;
+  color: #1b5e20;
+  font-weight: 600;
+  background: #fff;
+  cursor: pointer;
+}
+.select-input:focus {
+  outline: none;
+  border-color: #2e7d32;
+}
+
+/* Result highlight */
+.result-main {
+  background: linear-gradient(135deg, #1b5e20, #2e7d32);
+  border-radius: 14px;
+  padding: 28px 24px;
+  text-align: center;
+  margin-bottom: 18px;
+  color: #fff;
+}
+.result-main .result-label {
+  font-size: 1rem;
+  opacity: 0.9;
+  margin-bottom: 6px;
+}
+.result-main .result-value {
+  font-size: clamp(2rem, 6vw, 2.8rem);
+  font-weight: 900;
+  letter-spacing: 0.02em;
+}
+.result-main .result-value .yen {
+  font-size: 1rem;
+  font-weight: 600;
+}
+.result-main .result-note {
+  font-size: 0.82rem;
+  opacity: 0.78;
+  margin-top: 8px;
+}
+
+/* Result grid */
+.result-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 14px;
+  margin-bottom: 20px;
+}
+.result-item {
+  background: #f1f8e9;
+  border-radius: 10px;
+  padding: 16px;
+  text-align: center;
+  border: 1px solid #e8f5e9;
+}
+.result-item .label {
+  font-size: 0.82rem;
+  color: #555;
+  margin-bottom: 4px;
+}
+.result-item .value {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #1b5e20;
+}
+.result-item .value .yen {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+.result-item.navy {
+  background: #e3f2fd;
+  border-color: #bbdefb;
+}
+.result-item.navy .value {
+  color: #1a3a4a;
+}
+
+/* Breakdown bar */
+.breakdown-bar {
+  display: flex;
+  height: 32px;
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 16px 0 10px;
+}
+.breakdown-bar div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #fff;
+  transition: width 0.4s ease;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.bar-income-tax { background: #1b5e20; }
+.bar-resident-basic { background: #388e3c; }
+.bar-resident-special { background: #66bb6a; }
+
+.breakdown-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-bottom: 8px;
+}
+.breakdown-legend .legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.82rem;
+  color: #444;
+}
+.breakdown-legend .legend-color {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+/* Chart */
+.chart-wrapper {
+  display: flex;
+  justify-content: center;
+  padding: 10px 0;
+}
+canvas#barChart {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Detail table */
+.detail-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  margin-top: 8px;
+}
+.detail-table th, .detail-table td {
+  padding: 8px 12px;
+  text-align: left;
+  border-bottom: 1px solid #e8f5e9;
+}
+.detail-table th {
+  background: #f1f8e9;
+  color: #1b5e20;
+  font-weight: 600;
+  width: 55%;
+}
+.detail-table td {
+  text-align: right;
+  font-weight: 600;
+  color: #333;
+}
+.detail-table tr.total-row th,
+.detail-table tr.total-row td {
+  border-top: 2px solid #2e7d32;
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+.detail-table tr.total-row td {
+  color: #1b5e20;
+}
+
+/* Tip box */
+.tip-box {
+  background: #f1f8e9;
+  border: 1px solid #c8e6c9;
+  border-radius: 10px;
+  padding: 16px 18px;
+  margin-top: 16px;
+  font-size: 0.88rem;
+  color: #2e7d32;
+  line-height: 1.8;
+}
+.tip-box strong {
+  color: #1b5e20;
+}
+
+/* Affiliate */
+.affiliate-section {
+  text-align: center;
+  padding: 10px 0 0;
+}
+.affiliate-section p {
+  font-size: 0.92rem;
+  color: #555;
+  margin-bottom: 16px;
+}
+.btn-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px;
+}
+.btn-affiliate {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 28px;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+.btn-primary {
+  background: linear-gradient(135deg, #1b5e20, #2e7d32);
+  color: #fff;
+  box-shadow: 0 3px 12px rgba(27,94,32,0.3);
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 20px rgba(27,94,32,0.4);
+}
+.btn-secondary {
+  background: #fff;
+  color: #1a3a4a;
+  border: 2px solid #1a3a4a;
+  box-shadow: 0 2px 8px rgba(26,58,74,0.12);
+}
+.btn-secondary:hover {
+  background: #e3f2fd;
+  transform: translateY(-2px);
+}
+
+/* Footer */
+.footer {
+  background: #f1f8e9;
+  border-top: 1px solid #e8f5e9;
+  padding: 24px 16px;
+  text-align: center;
+}
+.footer .disclaimer {
+  font-size: 0.82rem;
+  color: #888;
+  max-width: 700px;
+  margin: 0 auto 10px;
+  line-height: 1.8;
+}
+.footer .copy {
+  font-size: 0.78rem;
+  color: #aaa;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .card {
+    padding: 20px 16px;
+    border-radius: 10px;
+  }
+  .slider-row {
+    flex-wrap: wrap;
+  }
+  .slider-row input[type="range"] {
+    width: 100%;
+    flex: none;
+    order: 2;
+  }
+  .number-input {
+    order: 1;
+  }
+  .unit {
+    order: 1;
+  }
+  .result-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .result-item .value {
+    font-size: 1.05rem;
+  }
+  .btn-affiliate {
+    width: 100%;
+    justify-content: center;
+    padding: 14px 20px;
+  }
+  .header {
+    padding: 24px 12px 20px;
+  }
+  .breakdown-legend {
+    gap: 8px;
+  }
+}
+@media (max-width: 380px) {
+  .result-grid {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <h1>ふるさと納税 控除上限額シミュレーター</h1>
+  <p>年収・家族構成から最適な寄附上限額をかんたん計算</p>
+</header>
+
+<div class="container">
+
+  <!-- Input Card -->
+  <div class="card">
+    <div class="card-title"><span class="icon">&#9998;</span> あなたの情報を入力</div>
+
+    <div class="input-group">
+      <label for="incomeSlider">年収（額面）<span class="hint">※源泉徴収票の「支払金額」</span></label>
+      <div class="slider-row">
+        <input type="range" id="incomeSlider" min="200" max="2000" value="500" step="10">
+        <input type="number" id="incomeNumber" class="number-input" min="200" max="2000" value="500">
+        <span class="unit">万円</span>
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label>家族構成</label>
+      <div class="option-row">
+        <label class="radio-label">
+          <input type="radio" name="familyType" value="single" checked>
+          <span>独身 / 共働き</span>
+        </label>
+        <label class="radio-label">
+          <input type="radio" name="familyType" value="spouse">
+          <span>配偶者控除あり</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label for="dependents">扶養人数<span class="hint">※16歳以上の扶養親族</span></label>
+      <div class="option-row">
+        <select id="dependents" class="select-input">
+          <option value="0">0人</option>
+          <option value="1">1人</option>
+          <option value="2">2人</option>
+          <option value="3">3人</option>
+          <option value="4">4人</option>
+          <option value="5">5人</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label for="socialSlider">社会保険料<span class="hint">※源泉徴収票の金額。不明なら空欄で自動概算</span></label>
+      <div class="slider-row">
+        <input type="range" id="socialSlider" min="0" max="300" value="0" step="1">
+        <input type="number" id="socialNumber" class="number-input" min="0" max="300" value="0" placeholder="自動">
+        <span class="unit">万円</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Result Card -->
+  <div class="card" style="padding:0; overflow:hidden;">
+    <div class="result-main">
+      <div class="result-label">ふるさと納税 控除上限額（目安）</div>
+      <div class="result-value" id="limitDisplay">0<span class="yen"> 円</span></div>
+      <div class="result-note">※自己負担2,000円を含む寄附可能額です</div>
+    </div>
+  </div>
+
+  <!-- Breakdown Card -->
+  <div class="card">
+    <div class="card-title"><span class="icon">&#128202;</span> 控除の内訳</div>
+
+    <div class="result-grid">
+      <div class="result-item">
+        <div class="label">所得税からの控除</div>
+        <div class="value" id="incomeTaxDeductionDisplay">0<span class="yen"> 円</span></div>
+      </div>
+      <div class="result-item">
+        <div class="label">住民税からの控除（基本分）</div>
+        <div class="value" id="residentBasicDisplay">0<span class="yen"> 円</span></div>
+      </div>
+      <div class="result-item">
+        <div class="label">住民税からの控除（特例分）</div>
+        <div class="value" id="residentSpecialDisplay">0<span class="yen"> 円</span></div>
+      </div>
+      <div class="result-item navy">
+        <div class="label">控除合計（税額軽減分）</div>
+        <div class="value" id="totalDeductionDisplay">0<span class="yen"> 円</span></div>
+      </div>
+    </div>
+
+    <!-- Stacked bar -->
+    <div class="breakdown-bar" id="breakdownBar">
+      <div class="bar-income-tax" id="barIncomeTax" style="width:33.3%">所得税</div>
+      <div class="bar-resident-basic" id="barResidentBasic" style="width:33.3%">住民税(基本)</div>
+      <div class="bar-resident-special" id="barResidentSpecial" style="width:33.4%">住民税(特例)</div>
+    </div>
+    <div class="breakdown-legend">
+      <div class="legend-item"><div class="legend-color" style="background:#1b5e20;"></div>所得税からの控除</div>
+      <div class="legend-item"><div class="legend-color" style="background:#388e3c;"></div>住民税（基本分）</div>
+      <div class="legend-item"><div class="legend-color" style="background:#66bb6a;"></div>住民税（特例分）</div>
+    </div>
+  </div>
+
+  <!-- Bar Chart Card -->
+  <div class="card">
+    <div class="card-title"><span class="icon">&#128200;</span> 寄附額 vs 税額軽減</div>
+    <div class="chart-wrapper">
+      <canvas id="barChart" width="600" height="320"></canvas>
+    </div>
+  </div>
+
+  <!-- Detail Card -->
+  <div class="card">
+    <div class="card-title"><span class="icon">&#128221;</span> 計算の詳細</div>
+    <table class="detail-table">
+      <tr><th>給与収入</th><td id="detailIncome">0 円</td></tr>
+      <tr><th>給与所得控除</th><td id="detailSalaryDeduction">0 円</td></tr>
+      <tr><th>給与所得</th><td id="detailSalaryIncome">0 円</td></tr>
+      <tr><th>社会保険料控除</th><td id="detailSocial">0 円</td></tr>
+      <tr><th>基礎控除</th><td id="detailBasic">0 円</td></tr>
+      <tr><th>配偶者控除</th><td id="detailSpouse">0 円</td></tr>
+      <tr><th>扶養控除</th><td id="detailDependent">0 円</td></tr>
+      <tr><th>所得税の課税所得</th><td id="detailTaxableIncome">0 円</td></tr>
+      <tr><th>所得税率</th><td id="detailTaxRate">0 %</td></tr>
+      <tr><th>住民税の課税所得</th><td id="detailResidentTaxable">0 円</td></tr>
+      <tr class="total-row"><th>控除上限額（目安）</th><td id="detailLimit">0 円</td></tr>
+    </table>
+
+    <div class="tip-box">
+      <strong>ワンストップ特例のポイント:</strong> 寄附先が5自治体以内ならワンストップ特例制度で確定申告が不要に。この場合、所得税分の控除も住民税から全額控除されます。<br>
+      <strong>注意:</strong> iDeCo・医療費控除・住宅ローン控除がある方は、上限額が変わります。
+    </div>
+  </div>
+
+  <!-- Affiliate Card -->
+  <div class="card">
+    <div class="card-title"><span class="icon">&#128161;</span> おすすめサービス</div>
+    <div class="affiliate-section">
+      <p>ふるさと納税をお得に始めましょう</p>
+      <div class="btn-row">
+        <a href="https://www.furusato-tax.jp/" class="btn-affiliate btn-primary" target="_blank" rel="nofollow noopener">ふるさと納税サイトで返礼品を探す</a>
+        <a href="https://px.a8.net/svt/ejp?a8mat=3N3VF4+834ZLE+4JGQ+BXB8Z" class="btn-affiliate btn-secondary" target="_blank" rel="nofollow noopener">確定申告を簡単に【マネーフォワード クラウド】</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer class="footer">
+  <p class="disclaimer">
+    ※ この計算は概算です。正確な控除上限額は税務署または税理士にご相談ください。<br>
+    ※ 住宅ローン控除・医療費控除・iDeCo等の他の控除がある場合、上限額は変動します。<br>
+    ※ 社会保険料が未入力の場合、給与収入の約15%として概算しています。
+  </p>
+  <p class="copy">&copy; 2025 ふるさと納税シミュレーター</p>
+</footer>
+
+<script>
+(function() {
+  'use strict';
+
+  // === DOM references ===
+  var incomeSlider = document.getElementById('incomeSlider');
+  var incomeNumber = document.getElementById('incomeNumber');
+  var socialSlider = document.getElementById('socialSlider');
+  var socialNumber = document.getElementById('socialNumber');
+  var dependents = document.getElementById('dependents');
+  var familyRadios = document.querySelectorAll('input[name="familyType"]');
+
+  // === Sync slider <-> number ===
+  function syncPair(slider, number) {
+    slider.addEventListener('input', function() {
+      number.value = slider.value;
+      calculate();
+    });
+    number.addEventListener('input', function() {
+      var v = parseInt(number.value) || 0;
+      var min = parseInt(slider.min);
+      var max = parseInt(slider.max);
+      if (v < min) v = min;
+      if (v > max) v = max;
+      slider.value = v;
+      calculate();
+    });
+    number.addEventListener('blur', function() {
+      var v = parseInt(number.value) || 0;
+      var min = parseInt(slider.min);
+      var max = parseInt(slider.max);
+      if (v < min) v = min;
+      if (v > max) v = max;
+      number.value = v;
+      slider.value = v;
+      calculate();
+    });
+  }
+  syncPair(incomeSlider, incomeNumber);
+  syncPair(socialSlider, socialNumber);
+
+  dependents.addEventListener('change', calculate);
+  familyRadios.forEach(function(r) {
+    r.addEventListener('change', calculate);
+  });
+
+  function getFamilyType() {
+    var checked = document.querySelector('input[name="familyType"]:checked');
+    return checked ? checked.value : 'single';
+  }
+
+  // === 給与所得控除（令和2年分以降） ===
+  function calcSalaryDeduction(salaryYen) {
+    if (salaryYen <= 550000) return salaryYen;
+    if (salaryYen <= 1625000) return 550000;
+    if (salaryYen <= 1800000) return Math.floor(salaryYen * 0.4 - 100000);
+    if (salaryYen <= 3600000) return Math.floor(salaryYen * 0.3 + 80000);
+    if (salaryYen <= 6600000) return Math.floor(salaryYen * 0.2 + 440000);
+    if (salaryYen <= 8500000) return Math.floor(salaryYen * 0.1 + 1100000);
+    return 1950000;
+  }
+
+  // === 基礎控除（所得税用：令和2年分以降） ===
+  function calcBasicDeduction(totalIncome) {
+    if (totalIncome <= 24000000) return 480000;
+    if (totalIncome <= 24500000) return 320000;
+    if (totalIncome <= 25000000) return 160000;
+    return 0;
+  }
+
+  // === 基礎控除（住民税用） ===
+  function calcBasicDeductionResident(totalIncome) {
+    if (totalIncome <= 24000000) return 430000;
+    if (totalIncome <= 24500000) return 290000;
+    if (totalIncome <= 25000000) return 150000;
+    return 0;
+  }
+
+  // === 扶養控除（一般扶養親族38万円/人として概算） ===
+  function calcDependentDeduction(numDependents) {
+    return numDependents * 380000;
+  }
+
+  // === 扶養控除（住民税用：33万円/人） ===
+  function calcDependentDeductionResident(numDependents) {
+    return numDependents * 330000;
+  }
+
+  // === 配偶者控除（所得税38万円、住民税33万円） ===
+  function getSpouseDeduction(familyType) {
+    return familyType === 'spouse' ? 380000 : 0;
+  }
+  function getSpouseDeductionResident(familyType) {
+    return familyType === 'spouse' ? 330000 : 0;
+  }
+
+  // === 社会保険料控除（未入力なら給与の約15%で概算） ===
+  function calcSocialInsurance(salaryYen, inputManYen) {
+    if (inputManYen > 0) return inputManYen * 10000;
+    return Math.floor(salaryYen * 0.15);
+  }
+
+  // === 所得税率の取得 ===
+  function getIncomeTaxRate(taxableIncome) {
+    if (taxableIncome <= 1950000) return { rate: 0.05, deduction: 0 };
+    if (taxableIncome <= 3300000) return { rate: 0.10, deduction: 97500 };
+    if (taxableIncome <= 6950000) return { rate: 0.20, deduction: 427500 };
+    if (taxableIncome <= 9000000) return { rate: 0.23, deduction: 636000 };
+    if (taxableIncome <= 18000000) return { rate: 0.33, deduction: 1536000 };
+    if (taxableIncome <= 40000000) return { rate: 0.40, deduction: 2796000 };
+    return { rate: 0.45, deduction: 4796000 };
+  }
+
+  // === ふるさと納税 控除上限額の計算 ===
+  // 上限額 = 住民税所得割額 * 20% / (100% - 住民税率10% - 所得税率*(1+復興税率2.1%)) + 2000
+  // ただし特例分の上限 = 住民税所得割額 * 20%
+  function calcFurusatoLimit(taxableIncomeIT, taxableIncomeRes) {
+    var taxInfo = getIncomeTaxRate(taxableIncomeIT);
+    var incomeTaxRate = taxInfo.rate;
+
+    // 住民税所得割額（住民税率10%）
+    var residentTaxShotokuWari = Math.max(0, Math.floor(taxableIncomeRes * 0.10));
+
+    // ふるさと納税の上限計算
+    // 特例分が住民税所得割の20%以内に収まる条件
+    var denominator = 1 - 0.10 - incomeTaxRate * 1.021;
+    if (denominator <= 0) denominator = 0.001; // ゼロ除算防止
+
+    var limit = Math.floor(residentTaxShotokuWari * 0.20 / denominator) + 2000;
+
+    // 上限の安全マージン（実務的に少し下方に丸める）
+    limit = Math.floor(limit / 1000) * 1000;
+
+    if (limit < 2000) limit = 2000;
+
+    return {
+      limit: limit,
+      incomeTaxRate: incomeTaxRate,
+      residentTaxShotokuWari: residentTaxShotokuWari
+    };
+  }
+
+  // === 控除の内訳計算 ===
+  // 寄附額をdonationとして:
+  // 1) 所得税控除 = (donation - 2000) * 所得税率 * 1.021
+  // 2) 住民税基本分 = (donation - 2000) * 10%
+  // 3) 住民税特例分 = (donation - 2000) * (100% - 10% - 所得税率*1.021)
+  //    ただし特例分上限 = 住民税所得割額の20%
+  function calcDeductionBreakdown(donation, incomeTaxRate, residentTaxShotokuWari) {
+    var base = Math.max(0, donation - 2000);
+
+    var incomeTaxDeduction = Math.floor(base * incomeTaxRate * 1.021);
+    var residentBasic = Math.floor(base * 0.10);
+
+    var specialRate = 1 - 0.10 - incomeTaxRate * 1.021;
+    if (specialRate < 0) specialRate = 0;
+    var residentSpecial = Math.floor(base * specialRate);
+
+    // 特例分の上限 = 住民税所得割の20%
+    var specialMax = Math.floor(residentTaxShotokuWari * 0.20);
+    if (residentSpecial > specialMax) {
+      residentSpecial = specialMax;
+    }
+
+    return {
+      incomeTax: incomeTaxDeduction,
+      residentBasic: residentBasic,
+      residentSpecial: residentSpecial,
+      total: incomeTaxDeduction + residentBasic + residentSpecial
+    };
+  }
+
+  // === Format number ===
+  function formatNum(n) {
+    return n.toLocaleString('ja-JP');
+  }
+
+  function formatManYen(yen) {
+    if (yen >= 10000) {
+      return Math.floor(yen / 10000).toLocaleString('ja-JP') + '万' + (yen % 10000 > 0 ? (yen % 10000).toLocaleString('ja-JP') : '') + '円';
+    }
+    return yen.toLocaleString('ja-JP') + '円';
+  }
+
+  // === Main calculation ===
+  function calculate() {
+    var incomeMan = parseInt(incomeSlider.value) || 200;
+    var socialMan = parseInt(socialNumber.value) || 0;
+    var familyType = getFamilyType();
+    var numDep = parseInt(dependents.value) || 0;
+
+    var incomeYen = incomeMan * 10000;
+
+    // 給与所得控除
+    var salaryDeduction = calcSalaryDeduction(incomeYen);
+    var salaryIncome = Math.max(0, incomeYen - salaryDeduction);
+
+    // 社会保険料控除
+    var socialInsurance = calcSocialInsurance(incomeYen, socialMan);
+
+    // === 所得税用の課税所得 ===
+    var basicDeduction = calcBasicDeduction(salaryIncome);
+    var spouseDeduction = getSpouseDeduction(familyType);
+    var dependentDeduction = calcDependentDeduction(numDep);
+
+    var totalDeductionsIT = socialInsurance + basicDeduction + spouseDeduction + dependentDeduction;
+    var taxableIncomeIT = Math.max(0, salaryIncome - totalDeductionsIT);
+    taxableIncomeIT = Math.floor(taxableIncomeIT / 1000) * 1000; // 千円未満切り捨て
+
+    // === 住民税用の課税所得 ===
+    var basicDeductionRes = calcBasicDeductionResident(salaryIncome);
+    var spouseDeductionRes = getSpouseDeductionResident(familyType);
+    var dependentDeductionRes = calcDependentDeductionResident(numDep);
+
+    var totalDeductionsRes = socialInsurance + basicDeductionRes + spouseDeductionRes + dependentDeductionRes;
+    var taxableIncomeRes = Math.max(0, salaryIncome - totalDeductionsRes);
+
+    // ふるさと納税上限額
+    var furusatoResult = calcFurusatoLimit(taxableIncomeIT, taxableIncomeRes);
+    var limit = furusatoResult.limit;
+    var incomeTaxRate = furusatoResult.incomeTaxRate;
+    var residentTaxShotokuWari = furusatoResult.residentTaxShotokuWari;
+
+    // 控除の内訳
+    var breakdown = calcDeductionBreakdown(limit, incomeTaxRate, residentTaxShotokuWari);
+
+    // === Update displays ===
+
+    // Main result
+    document.getElementById('limitDisplay').innerHTML = formatNum(limit) + '<span class="yen"> 円</span>';
+
+    // Breakdown grid
+    document.getElementById('incomeTaxDeductionDisplay').innerHTML = formatNum(breakdown.incomeTax) + '<span class="yen"> 円</span>';
+    document.getElementById('residentBasicDisplay').innerHTML = formatNum(breakdown.residentBasic) + '<span class="yen"> 円</span>';
+    document.getElementById('residentSpecialDisplay').innerHTML = formatNum(breakdown.residentSpecial) + '<span class="yen"> 円</span>';
+    document.getElementById('totalDeductionDisplay').innerHTML = formatNum(breakdown.total) + '<span class="yen"> 円</span>';
+
+    // Breakdown bar
+    var bTotal = breakdown.incomeTax + breakdown.residentBasic + breakdown.residentSpecial;
+    if (bTotal > 0) {
+      var p1 = (breakdown.incomeTax / bTotal * 100).toFixed(1);
+      var p2 = (breakdown.residentBasic / bTotal * 100).toFixed(1);
+      var p3 = (100 - parseFloat(p1) - parseFloat(p2)).toFixed(1);
+      document.getElementById('barIncomeTax').style.width = p1 + '%';
+      document.getElementById('barIncomeTax').textContent = parseFloat(p1) >= 10 ? '所得税' : '';
+      document.getElementById('barResidentBasic').style.width = p2 + '%';
+      document.getElementById('barResidentBasic').textContent = parseFloat(p2) >= 12 ? '住民税(基本)' : '';
+      document.getElementById('barResidentSpecial').style.width = p3 + '%';
+      document.getElementById('barResidentSpecial').textContent = parseFloat(p3) >= 12 ? '住民税(特例)' : '';
+    } else {
+      document.getElementById('barIncomeTax').style.width = '33.3%';
+      document.getElementById('barResidentBasic').style.width = '33.3%';
+      document.getElementById('barResidentSpecial').style.width = '33.4%';
+    }
+
+    // Detail table
+    document.getElementById('detailIncome').textContent = formatNum(incomeYen) + ' 円';
+    document.getElementById('detailSalaryDeduction').textContent = '-' + formatNum(salaryDeduction) + ' 円';
+    document.getElementById('detailSalaryIncome').textContent = formatNum(salaryIncome) + ' 円';
+    document.getElementById('detailSocial').textContent = '-' + formatNum(socialInsurance) + ' 円';
+    document.getElementById('detailBasic').textContent = '-' + formatNum(basicDeduction) + ' 円';
+    document.getElementById('detailSpouse').textContent = spouseDeduction > 0 ? '-' + formatNum(spouseDeduction) + ' 円' : '0 円';
+    document.getElementById('detailDependent').textContent = dependentDeduction > 0 ? '-' + formatNum(dependentDeduction) + ' 円' : '0 円';
+    document.getElementById('detailTaxableIncome').textContent = formatNum(taxableIncomeIT) + ' 円';
+    document.getElementById('detailTaxRate').textContent = (incomeTaxRate * 100).toFixed(0) + ' %';
+    document.getElementById('detailResidentTaxable').textContent = formatNum(taxableIncomeRes) + ' 円';
+    document.getElementById('detailLimit').textContent = formatNum(limit) + ' 円';
+
+    // Draw bar chart
+    drawBarChart(limit, breakdown);
+  }
+
+  // === Bar Chart (Canvas) ===
+  function drawBarChart(donation, breakdown) {
+    var canvas = document.getElementById('barChart');
+    var ctx = canvas.getContext('2d');
+    var dpr = window.devicePixelRatio || 1;
+
+    var cw = Math.min(600, canvas.parentElement.offsetWidth - 20);
+    var ch = 320;
+
+    canvas.width = cw * dpr;
+    canvas.height = ch * dpr;
+    ctx.scale(dpr, dpr);
+
+    canvas.style.width = cw + 'px';
+    canvas.style.height = ch + 'px';
+
+    ctx.clearRect(0, 0, cw, ch);
+
+    var totalBenefit = breakdown.total;
+    var selfPay = 2000;
+
+    // Chart parameters
+    var chartLeft = 60;
+    var chartRight = cw - 30;
+    var chartTop = 50;
+    var chartBottom = ch - 60;
+    var chartWidth = chartRight - chartLeft;
+    var chartHeight = chartBottom - chartTop;
+
+    var barWidth = Math.min(80, chartWidth * 0.25);
+    var gap = chartWidth * 0.15;
+
+    // Scale
+    var maxVal = Math.max(donation, totalBenefit + selfPay, 10000);
+    maxVal = Math.ceil(maxVal / 10000) * 10000;
+
+    function yPos(val) {
+      return chartBottom - (val / maxVal) * chartHeight;
+    }
+
+    // Title
+    ctx.fillStyle = '#1b5e20';
+    ctx.font = 'bold 14px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('寄附額と税額軽減の比較', cw / 2, 28);
+
+    // Y axis
+    ctx.strokeStyle = '#e0e0e0';
+    ctx.lineWidth = 1;
+    ctx.fillStyle = '#888';
+    ctx.font = '11px sans-serif';
+    ctx.textAlign = 'right';
+    ctx.textBaseline = 'middle';
+
+    var steps = 5;
+    for (var i = 0; i <= steps; i++) {
+      var val = (maxVal / steps) * i;
+      var y = yPos(val);
+      ctx.beginPath();
+      ctx.moveTo(chartLeft, y);
+      ctx.lineTo(chartRight, y);
+      ctx.stroke();
+      var label = val >= 10000 ? (val / 10000) + '万' : val.toLocaleString();
+      ctx.fillText(label, chartLeft - 8, y);
+    }
+
+    // Bar 1: Donation (寄附額)
+    var bar1x = chartLeft + chartWidth * 0.25 - barWidth / 2;
+    var bar1h = (donation / maxVal) * chartHeight;
+    var bar1y = chartBottom - bar1h;
+
+    // Gradient for donation bar
+    var grad1 = ctx.createLinearGradient(bar1x, bar1y, bar1x, chartBottom);
+    grad1.addColorStop(0, '#2e7d32');
+    grad1.addColorStop(1, '#1b5e20');
+    ctx.fillStyle = grad1;
+    roundedRect(ctx, bar1x, bar1y, barWidth, bar1h, 6);
+    ctx.fill();
+
+    // Bar label
+    ctx.fillStyle = '#fff';
+    ctx.font = 'bold 12px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    if (bar1h > 30) {
+      ctx.fillText(formatNum(donation) + '円', bar1x + barWidth / 2, bar1y + bar1h / 2);
+    }
+
+    // Bar 2: Benefit (税額軽減 + 自己負担)
+    var bar2x = chartLeft + chartWidth * 0.75 - barWidth / 2;
+
+    // Self-pay portion
+    var selfPayH = (selfPay / maxVal) * chartHeight;
+    var benefitH = (totalBenefit / maxVal) * chartHeight;
+    var bar2totalH = selfPayH + benefitH;
+    var bar2y = chartBottom - bar2totalH;
+
+    // Benefit portion (stacked: income tax + resident basic + resident special)
+    var itH = (breakdown.incomeTax / maxVal) * chartHeight;
+    var rbH = (breakdown.residentBasic / maxVal) * chartHeight;
+    var rsH = (breakdown.residentSpecial / maxVal) * chartHeight;
+
+    // Draw stacked from bottom
+    var stackY = chartBottom - selfPayH;
+
+    // Self-pay (bottom)
+    ctx.fillStyle = '#ef5350';
+    roundedRectBottom(ctx, bar2x, stackY, barWidth, selfPayH, 0);
+    ctx.fill();
+
+    // Resident Special
+    stackY -= rsH;
+    ctx.fillStyle = '#66bb6a';
+    ctx.fillRect(bar2x, stackY, barWidth, rsH);
+
+    // Resident Basic
+    stackY -= rbH;
+    ctx.fillStyle = '#388e3c';
+    ctx.fillRect(bar2x, stackY, barWidth, rbH);
+
+    // Income Tax
+    stackY -= itH;
+    ctx.fillStyle = '#1b5e20';
+    roundedRectTop(ctx, bar2x, stackY, barWidth, itH, 6);
+    ctx.fill();
+
+    // Value on top
+    ctx.fillStyle = '#1b5e20';
+    ctx.font = 'bold 11px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'bottom';
+    ctx.fillText(formatNum(totalBenefit) + '円', bar2x + barWidth / 2, stackY - 4);
+
+    // Self-pay label
+    if (selfPayH > 12) {
+      ctx.fillStyle = '#fff';
+      ctx.font = '10px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('自己負担', bar2x + barWidth / 2, chartBottom - selfPayH / 2);
+    }
+
+    // X axis labels
+    ctx.fillStyle = '#333';
+    ctx.font = 'bold 13px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'top';
+    ctx.fillText('寄附額', bar1x + barWidth / 2, chartBottom + 12);
+    ctx.fillText('税額軽減', bar2x + barWidth / 2, chartBottom + 12);
+
+    // Bottom legend
+    var legendY = chartBottom + 34;
+    var legendData = [
+      { label: '所得税控除', color: '#1b5e20' },
+      { label: '住民税(基本)', color: '#388e3c' },
+      { label: '住民税(特例)', color: '#66bb6a' },
+      { label: '自己負担', color: '#ef5350' }
+    ];
+    var legendTotalWidth = legendData.length * 100;
+    var legendStartX = (cw - legendTotalWidth) / 2;
+    ctx.textBaseline = 'middle';
+    legendData.forEach(function(item, idx) {
+      var lx = legendStartX + idx * 100;
+      ctx.fillStyle = item.color;
+      ctx.fillRect(lx, legendY - 5, 10, 10);
+      ctx.fillStyle = '#555';
+      ctx.font = '10px sans-serif';
+      ctx.textAlign = 'left';
+      ctx.fillText(item.label, lx + 14, legendY);
+    });
+  }
+
+  // Rounded rect helpers
+  function roundedRect(ctx, x, y, w, h, r) {
+    if (h < r * 2) r = h / 2;
+    if (w < r * 2) r = w / 2;
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.arcTo(x + w, y, x + w, y + h, r);
+    ctx.arcTo(x + w, y + h, x, y + h, 0);
+    ctx.arcTo(x, y + h, x, y, 0);
+    ctx.arcTo(x, y, x + w, y, r);
+    ctx.closePath();
+  }
+
+  function roundedRectTop(ctx, x, y, w, h, r) {
+    if (h < r) r = h;
+    if (w < r * 2) r = w / 2;
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.arcTo(x + w, y, x + w, y + h, r);
+    ctx.lineTo(x + w, y + h);
+    ctx.lineTo(x, y + h);
+    ctx.arcTo(x, y, x + w, y, r);
+    ctx.closePath();
+  }
+
+  function roundedRectBottom(ctx, x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    ctx.lineTo(x + w, y);
+    ctx.arcTo(x + w, y + h, x, y + h, r);
+    ctx.arcTo(x, y + h, x, y, r);
+    ctx.lineTo(x, y);
+    ctx.closePath();
+  }
+
+  // Initial calculation
+  calculate();
+
+  // Redraw chart on resize
+  var resizeTimer;
+  window.addEventListener('resize', function() {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(calculate, 150);
+  });
+})();
+</script>
+
+</body>
+</html>
