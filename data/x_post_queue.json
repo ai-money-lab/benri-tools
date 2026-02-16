@@ -3,7 +3,8 @@
     "id": "post_02_kakutei",
     "body": "確定申告、ちゃんと準備できてる人どれくらいいる？\n\n「副業の税金っていくら？」\n「手取りって結局いくら？」\n\nこの2つに即答できない人、割と多い。\n\n年収を入れるだけで所得税・住民税・社会保険料を全部自動計算するツールをClaude AIで作った。\n\n使ってみた人いたら感想教えて。",
     "reply": "ツールはこちらです（無料）\nhttps://ai-money-lab.github.io/benri-tools/tax-calculator/",
-    "posted": false
+    "posted": true,
+    "posted_at": "2026-02-16T19:00:30.543495"
   },
   {
     "id": "post_01_buzz",
@@ -57,6 +58,66 @@
     "id": "post_10_thread",
     "body": "Claude AIで作った無料ツール16個：\n\n税金/年収手取り/住宅ローン\n格安SIM比較/投資リターン\n新NISA/ふるさと納税上限額\n保険必要額/年金受給額\nFIRE達成/配当金/不動産利回り\n失業保険/老後資金/複利計算\n持ち家vs賃貸\n\n全部無料、ブラウザだけで使える。",
     "reply": "こちらからどうぞ\nhttps://ai-money-lab.github.io/benri-tools/",
+    "posted": false
+  },
+  {
+    "id": "post_11_nenkin",
+    "body": "年金、月いくらもらえるか知ってる？\n\n会社員20年（平均年収400万）の場合：\n国民年金 → 約6.5万円/月\n厚生年金 → 約8.5万円/月\n合計 → 約15万円/月\n\n「思ったより少ない」と感じた人、正しい。\n\n老後に月25万円必要なら、毎月10万円の不足。\n20年で2,400万円足りない。\n\n自分の場合いくらか、計算してみて。",
+    "reply": "年金受給額シミュレーターはこちら（無料）\nhttps://ai-money-lab.github.io/benri-tools/pension-calculator/",
+    "posted": false
+  },
+  {
+    "id": "post_12_hoken",
+    "body": "生命保険、入りすぎてませんか？\n\n独身なら基本不要。\n共働き子供なしでも最低限でいい。\n\n本当に必要な保障額は：\n子供1人 → 約2,000万円\n子供2人 → 約3,000万円\n住宅ローンあり → 団信でカバー\n\n保険の見直しで月1万円以上浮く人、かなり多い。",
+    "reply": "あなたに必要な保障額を計算できます\nhttps://ai-money-lab.github.io/benri-tools/insurance-calculator/",
+    "posted": false
+  },
+  {
+    "id": "post_13_shitsugyo",
+    "body": "会社を辞めた後の失業保険、いくらもらえるか即答できる？\n\n月給30万円・勤続5年の場合：\n日額 → 約5,900円\n給付日数 → 90日\n総額 → 約53万円\n\n自己都合退職だと2ヶ月の待機期間がある。\nその間の生活費、準備してる？\n\n辞める前に計算しておいた方がいい。",
+    "reply": "自分の条件で失業保険額を計算できます\nhttps://ai-money-lab.github.io/benri-tools/unemployment-benefit/",
+    "posted": false
+  },
+  {
+    "id": "post_14_loan",
+    "body": "住宅ローン、借りすぎてない？\n\n年収500万で借りられる上限は約4,500万円。\nでも安全な借入額は年収の5倍＝2,500万円。\n\n4,000万を0.7%・35年で借りると：\n月々返済 → 約10.8万円\n総返済額 → 約4,530万円\n利息だけで530万円。\n\n繰上返済すると100万以上の差がつく。",
+    "reply": "住宅ローンシミュレーターで計算してみて\nhttps://ai-money-lab.github.io/benri-tools/loan-calculator/",
+    "posted": false
+  },
+  {
+    "id": "post_15_tedori",
+    "body": "年収と手取り、差がどれだけあるか知ってる？\n\n年収400万 → 手取り約315万（79%）\n年収600万 → 手取り約460万（77%）\n年収800万 → 手取り約590万（74%）\n年収1000万 → 手取り約720万（72%）\n\n年収が上がるほど税金の取り分が増える。\n\n転職で年収100万アップしても手取りは70万しか増えない。",
+    "reply": "正確な手取り額を計算できます\nhttps://ai-money-lab.github.io/benri-tools/salary-calculator/",
+    "posted": false
+  },
+  {
+    "id": "post_16_taishoku",
+    "body": "退職金、いくらもらえるか計算したことある？\n\n大企業（勤続20年）→ 約1,000万円\n中小企業（勤続20年）→ 約400万円\n\nこの差、知らないと人生設計が狂う。\n\nしかも退職金にも税金がかかる。\n勤続20年なら800万円までは非課税だけど、それを超えると課税される。",
+    "reply": "退職金の手取り額をシミュレーションできます\nhttps://ai-money-lab.github.io/benri-tools/retirement-calculator/",
+    "posted": false
+  },
+  {
+    "id": "post_17_fudousan",
+    "body": "不動産投資の利回り、表面と実質で全然違う。\n\n物件価格2,000万・家賃8万/月の場合：\n表面利回り → 4.8%\n実質利回り → 3.2%（管理費・修繕・税金込み）\n\nこの差を知らずに「利回り5%」に飛びつく人が多い。\n\nまず数字で判断するクセをつけよう。",
+    "reply": "不動産利回りを正確に計算できます\nhttps://ai-money-lab.github.io/benri-tools/real-estate-yield/",
+    "posted": false
+  },
+  {
+    "id": "post_18_fire",
+    "body": "FIREに必要な資産額、計算してみた。\n\n月の生活費25万円の場合：\n年間支出 → 300万円\n必要資産（4%ルール）→ 7,500万円\n\n月3万円を年利5%で積み立てると：\n30年で約2,500万円。\n\n7,500万には届かない。月10万の積立で約8,300万。\n\nFIREの現実、数字で見ると冷静になれる。",
+    "reply": "老後資金シミュレーターで計算してみて\nhttps://ai-money-lab.github.io/benri-tools/retirement-fund/",
+    "posted": false
+  },
+  {
+    "id": "post_19_kakuteiyohi",
+    "body": "副業で20万円稼いだら確定申告が必要。\n\nでも「20万円ルール」を誤解してる人が多い。\n\n・売上20万ではなく所得（売上-経費）20万\n・住民税の申告は1円でも必要\n・メルカリの生活用品売却は非課税\n\n自分が申告必要かどうか、3問で判定できるチェッカー作った。",
+    "reply": "確定申告が必要か30秒でわかります\nhttps://ai-money-lab.github.io/benri-tools/tax-return-checker/",
+    "posted": false
+  },
+  {
+    "id": "post_20_toushi",
+    "body": "100万円を投資したら10年後いくらになる？\n\n年利3% → 134万円\n年利5% → 163万円\n年利7% → 197万円\n年利10% → 259万円\n\nたった2%の差で10年後に30万円以上変わる。\n\n銀行預金（0.01%）に100万預けても10年で+1,000円。\n\n「投資しない」も立派なリスク。",
+    "reply": "投資リターン計算機はこちら\nhttps://ai-money-lab.github.io/benri-tools/investment-return/",
     "posted": false
   }
 ]

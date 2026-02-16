@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FX損益シミュレーター | 無料お金ツール集</title>
+<meta name="description" content="FX取引の損益をリアルタイムで計算。通貨ペア・ロット数・レバレッジを設定して、必要証拠金・損益額・pips・ロスカットラインを瞬時にシミュレーション。完全無料のFX計算ツール。">
+<meta name="keywords" content="FX,損益計算,シミュレーター,pips,証拠金,ロスカット,レバレッジ,為替">
+<meta property="og:title" content="FX損益シミュレーター | 無料お金ツール集">
+<meta property="og:description" content="FX取引の損益をリアルタイムで計算。通貨ペア・ロット数・レバレッジを設定して、必要証拠金・損益・pips・ロスカットラインを瞬時にシミュレーション。">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://ai-money-lab.github.io/benri-tools/fx-calculator/">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:site_name" content="無料お金ツール集">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="FX損益シミュレーター | 無料お金ツール集">
+<meta name="twitter:description" content="FX取引の損益をリアルタイム計算。必要証拠金・pips・ロスカットラインも瞬時にシミュレーション。">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--primary:#667eea;--primary-dark:#764ba2;--gradient:linear-gradient(135deg,#667eea,#764ba2);--shadow:0 2px 12px rgba(0,0,0,.08);--shadow-lg:0 4px 24px rgba(0,0,0,.12);--radius:12px;--text:#333;--text-light:#666;--border:#e0e0e0;--bg:#f4f6fb}
+html{font-size:16px;scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Hiragino Sans","Noto Sans JP",sans-serif;background:var(--bg);color:var(--text);line-height:1.7;min-height:100vh}
+a{color:var(--primary);text-decoration:none}
+
+.header{background:var(--gradient);color:#fff;text-align:center;padding:2.2rem 1rem 2rem}
+.header h1{font-size:1.6rem;font-weight:700;margin-bottom:.4rem;letter-spacing:.02em}
+.header p{font-size:.9rem;opacity:.9}
+
+.container{max-width:720px;margin:0 auto;padding:0 1rem 2.5rem}
+
+.card{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);padding:1.5rem;margin-top:1.5rem}
+.card-title{font-size:1.1rem;font-weight:700;color:#1a2744;margin-bottom:1.2rem;padding-bottom:.6rem;border-bottom:2px solid rgba(102,126,234,.2);display:flex;align-items:center;gap:.5rem}
+.card-title::before{content:"";display:inline-block;width:4px;height:1.1rem;background:var(--primary);border-radius:2px}
+
+.input-group{margin-bottom:1.2rem}
+.input-group:last-child{margin-bottom:0}
+.input-label{display:block;margin-bottom:.4rem;font-weight:600;font-size:.95rem}
+.input-label .unit{font-weight:400;color:var(--text-light);font-size:.85rem;margin-left:.3rem}
+
+select,input[type=number]{width:100%;padding:.6rem .75rem;border:1.5px solid var(--border);border-radius:8px;font-size:1rem;font-family:inherit;transition:border-color .2s;background:#fff;-webkit-appearance:none;appearance:none}
+select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23666' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right .75rem center;padding-right:2rem}
+select:focus,input[type=number]:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(102,126,234,.15)}
+input[type=number]::-webkit-inner-spin-button{opacity:1}
+
+.row-2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem}
+@media(max-width:480px){.row-2,.row-3{grid-template-columns:1fr}}
+
+.direction-toggle{display:flex;gap:0;border-radius:8px;overflow:hidden;border:1.5px solid var(--border)}
+.direction-toggle label{flex:1;text-align:center;padding:.55rem;font-weight:600;font-size:.95rem;cursor:pointer;transition:all .2s;background:#fff;color:var(--text-light)}
+.direction-toggle input{display:none}
+.direction-toggle input:checked+label.buy-label{background:#e8f5e9;color:#2e7d32;border-color:#2e7d32}
+.direction-toggle input:checked+label.sell-label{background:#fce4ec;color:#c62828;border-color:#c62828}
+
+.btn-calc{display:block;width:100%;padding:.85rem;background:var(--gradient);color:#fff;border:none;border-radius:8px;font-size:1.05rem;font-weight:700;cursor:pointer;margin-top:1.2rem;transition:transform .15s,box-shadow .15s;letter-spacing:.03em}
+.btn-calc:hover{transform:translateY(-1px);box-shadow:var(--shadow-lg)}
+.btn-calc:active{transform:translateY(0)}
+
+.results-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.75rem}
+@media(max-width:480px){.results-grid{grid-template-columns:1fr}}
+.result-box{border-radius:10px;padding:1rem;text-align:center}
+.result-box.primary{background:var(--gradient);color:#fff;grid-column:1/-1}
+.result-box .label{font-size:.8rem;font-weight:600;margin-bottom:.25rem;opacity:.85}
+.result-box.primary .label{font-size:.85rem;opacity:.9}
+.result-box .value{font-size:1.4rem;font-weight:800}
+.result-box.primary .value{font-size:2rem}
+.result-box .sub{font-size:.75rem;margin-top:.15rem;opacity:.7}
+.result-box.positive{background:#e8f5e9;border:1px solid #c8e6c9}
+.result-box.positive .value{color:#2e7d32}
+.result-box.negative{background:#fce4ec;border:1px solid #f8bbd0}
+.result-box.negative .value{color:#c62828}
+.result-box.neutral{background:#f3e8fd;border:1px solid #e1bee7}
+.result-box.neutral .value{color:#6a1b9a}
+.result-box.info{background:#e8eaf6;border:1px solid #c5cae9}
+.result-box.info .value{color:#283593}
+.result-box.warn{background:#fff3e0;border:1px solid #ffe0b2}
+.result-box.warn .value{color:#e65100}
+
+.hidden{display:none}
+
+.gauge-container{margin-top:1rem}
+.gauge-bar{position:relative;height:14px;background:#e0e0e0;border-radius:7px;overflow:visible;margin:8px 0 4px}
+.gauge-fill{height:100%;border-radius:7px;transition:width .4s}
+.gauge-marker{position:absolute;top:-4px;width:3px;height:22px;background:#333;border-radius:1px;transform:translateX(-50%);z-index:2}
+.gauge-labels{display:flex;justify-content:space-between;font-size:.75rem;color:var(--text-light)}
+
+.note{background:#fffde7;border:1px solid #fff9c4;border-radius:8px;padding:.75rem 1rem;font-size:.82rem;color:#795548;margin-top:1rem;line-height:1.6}
+.note strong{color:#e65100}
+
+.canvas-wrap{position:relative;width:100%;margin:1rem auto 0}
+.canvas-wrap canvas{width:100%!important;height:auto!important;display:block}
+
+.related-tools{background:#f8f9fa;border-radius:12px;padding:20px;margin:20px 0}
+.related-tools h3{font-size:1rem;color:#1a2744;margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid #667eea}
+.related-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px}
+.related-link{display:block;padding:10px 14px;background:#fff;border-radius:8px;text-decoration:none;color:#333;font-size:.9rem;font-weight:500;box-shadow:0 1px 3px rgba(0,0,0,.08);transition:transform .15s,box-shadow .15s}
+.related-link:hover{transform:translateY(-1px);box-shadow:0 3px 8px rgba(102,126,234,.2);color:#667eea}
+
+footer{text-align:center;padding:2rem 1rem;font-size:.8rem;color:var(--text-light)}
+footer a{color:var(--primary)}
+</style>
+</head>
+<body>
+<header class="header">
+  <h1>FX損益シミュレーター</h1>
+  <p>通貨ペア・ロット数・レバレッジから損益・証拠金・ロスカットラインを瞬時に計算</p>
+</header>
+
+<div class="container">
+  <!-- 入力セクション -->
+  <div class="card">
+    <div class="card-title">取引条件を入力</div>
+
+    <div class="row-2">
+      <div class="input-group">
+        <label class="input-label" for="pair">通貨ペア</label>
+        <select id="pair">
+          <option value="USDJPY" data-pip="0.01" data-quote="JPY" data-rate="150.00">USD/JPY</option>
+          <option value="EURJPY" data-pip="0.01" data-quote="JPY" data-rate="163.00">EUR/JPY</option>
+          <option value="GBPJPY" data-pip="0.01" data-quote="JPY" data-rate="190.00">GBP/JPY</option>
+          <option value="EURUSD" data-pip="0.0001" data-quote="USD" data-rate="1.0800">EUR/USD</option>
+          <option value="AUDJPY" data-pip="0.01" data-quote="JPY" data-rate="98.00">AUD/JPY</option>
+        </select>
+      </div>
+      <div class="input-group">
+        <label class="input-label" for="leverage">レバレッジ</label>
+        <select id="leverage">
+          <option value="1">1倍（レバなし）</option>
+          <option value="5">5倍</option>
+          <option value="10">10倍</option>
+          <option value="25" selected>25倍（国内上限）</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label class="input-label">売買方向</label>
+      <div class="direction-toggle">
+        <input type="radio" name="direction" id="dir-buy" value="buy" checked>
+        <label for="dir-buy" class="buy-label">買い（ロング）</label>
+        <input type="radio" name="direction" id="dir-sell" value="sell">
+        <label for="dir-sell" class="sell-label">売り（ショート）</label>
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label class="input-label" for="lots">取引数量<span class="unit">（1ロット = 10,000通貨）</span></label>
+      <input type="number" id="lots" value="1.0" min="0.1" step="0.1" placeholder="1.0">
+    </div>
+
+    <div class="row-2">
+      <div class="input-group">
+        <label class="input-label" for="entry">エントリー価格</label>
+        <input type="number" id="entry" step="any" placeholder="150.000">
+      </div>
+      <div class="input-group">
+        <label class="input-label" for="close">決済価格</label>
+        <input type="number" id="close" step="any" placeholder="151.000">
+      </div>
+    </div>
+
+    <button class="btn-calc" onclick="calculate()">損益を計算する</button>
+  </div>
+
+  <!-- 計算結果 -->
+  <div class="card hidden" id="result-card">
+    <div class="card-title">計算結果</div>
+    <div class="results-grid">
+      <div class="result-box primary" id="rb-pl">
+        <div class="label">損益額</div>
+        <div class="value" id="val-pl">--</div>
+        <div class="sub" id="sub-pl"></div>
+      </div>
+      <div class="result-box neutral" id="rb-pips">
+        <div class="label">獲得pips</div>
+        <div class="value" id="val-pips">--</div>
+        <div class="sub">pips</div>
+      </div>
+      <div class="result-box neutral" id="rb-plrate">
+        <div class="label">損益率（対証拠金）</div>
+        <div class="value" id="val-plrate">--</div>
+        <div class="sub">%</div>
+      </div>
+      <div class="result-box info">
+        <div class="label">必要証拠金</div>
+        <div class="value" id="val-margin">--</div>
+        <div class="sub">円</div>
+      </div>
+      <div class="result-box info">
+        <div class="label">取引総額</div>
+        <div class="value" id="val-notional">--</div>
+        <div class="sub">円</div>
+      </div>
+    </div>
+
+    <!-- ロスカットライン -->
+    <div class="card-title" style="margin-top:1.5rem">ロスカットライン（参考）</div>
+    <p style="font-size:.85rem;color:var(--text-light);margin-bottom:.5rem">証拠金維持率50%・100%でのロスカット水準（目安）</p>
+    <div class="results-grid">
+      <div class="result-box warn">
+        <div class="label">ロスカット（維持率50%）</div>
+        <div class="value" id="val-lc50">--</div>
+        <div class="sub" id="sub-lc50"></div>
+      </div>
+      <div class="result-box warn">
+        <div class="label">ロスカット（維持率100%）</div>
+        <div class="value" id="val-lc100">--</div>
+        <div class="sub" id="sub-lc100"></div>
+      </div>
+    </div>
+
+    <!-- 損益チャート -->
+    <div class="card-title" style="margin-top:1.5rem">価格変動と損益の関係</div>
+    <div class="canvas-wrap">
+      <canvas id="plChart" width="680" height="320"></canvas>
+    </div>
+
+    <div class="note">
+      <strong>注意:</strong> このシミュレーションは概算値です。スプレッド・スワップポイント・手数料は含まれていません。ロスカットラインは業者の設定（維持率50%/100%）により異なります。実際の取引では各FX業者の仕様をご確認ください。
+    </div>
+  </div>
+
+  <!-- アフィリエイトCTA -->
+  <div id="cta-section" class="hidden">
+    <div style="background:linear-gradient(135deg,#667eea,#764ba2);border-radius:12px;padding:20px;margin:24px 0;color:#fff">
+      <p style="font-weight:700;font-size:1.1rem;margin-bottom:8px">FXを始めるなら</p>
+      <p style="font-size:.9rem;margin-bottom:12px">DMM FXは口座開設無料・最短30分で取引開始。初心者向けデモ口座も完備。</p>
+      <a href="https://px.a8.net/svt/ejp?a8mat=35HUXC+4EDES2+1WP2+6DZBL" target="_blank" rel="nofollow noopener" style="display:inline-block;background:#fff;color:#667eea;padding:10px 24px;border-radius:8px;text-decoration:none;font-weight:700">DMM FX 公式サイトへ →</a>
+    </div>
+  </div>
+
+  <!-- 関連ツール -->
+  <div class="related-tools">
+    <h3>関連ツール</h3>
+    <div class="related-grid">
+      <a class="related-link" href="https://ai-money-lab.github.io/benri-tools/investment-return/">投資リターン計算機</a>
+      <a class="related-link" href="https://ai-money-lab.github.io/benri-tools/compound-interest/">複利計算シミュレーター</a>
+      <a class="related-link" href="https://ai-money-lab.github.io/benri-tools/dividend-yield/">配当金利回り計算機</a>
+      <a class="related-link" href="https://ai-money-lab.github.io/benri-tools/nisa-simulator/">積立NISAシミュレーター</a>
+    </div>
+  </div>
+
+  <!-- 用語解説 -->
+  <div class="card">
+    <div class="card-title">FX用語解説</div>
+    <dl style="font-size:.9rem;line-height:1.8">
+      <dt style="font-weight:700;margin-top:.6rem">pip（ピップ）</dt>
+      <dd style="color:var(--text-light);margin-left:1rem">為替レートの最小変動単位。対円通貨ペアは0.01（1銭）、ドルストレートは0.0001が1pip。</dd>
+      <dt style="font-weight:700;margin-top:.6rem">ロット</dt>
+      <dd style="color:var(--text-light);margin-left:1rem">取引数量の単位。国内FXでは1ロット=10,000通貨が一般的。0.1ロット（1,000通貨）から取引可能な業者も。</dd>
+      <dt style="font-weight:700;margin-top:.6rem">レバレッジ</dt>
+      <dd style="color:var(--text-light);margin-left:1rem">証拠金に対して何倍の取引ができるかの倍率。国内FXは最大25倍。高レバレッジはリスクも増大。</dd>
+      <dt style="font-weight:700;margin-top:.6rem">必要証拠金</dt>
+      <dd style="color:var(--text-light);margin-left:1rem">ポジションを持つために最低限必要な資金。取引総額 / レバレッジ で算出。</dd>
+      <dt style="font-weight:700;margin-top:.6rem">ロスカット</dt>
+      <dd style="color:var(--text-light);margin-left:1rem">含み損が拡大し証拠金維持率が一定水準を下回った場合、強制的にポジションが決済される仕組み。</dd>
+    </dl>
+  </div>
+</div>
+
+<footer>
+  <p>&copy; 2026 <a href="https://ai-money-lab.github.io/benri-tools/">無料お金ツール集</a></p>
+</footer>
+
+<script>
+// 通貨ペア選択時にデフォルトレートをセット
+const pairSelect = document.getElementById('pair');
+const entryInput = document.getElementById('entry');
+const closeInput = document.getElementById('close');
+
+pairSelect.addEventListener('change', function() {
+  const opt = this.options[this.selectedIndex];
+  const rate = parseFloat(opt.dataset.rate);
+  entryInput.value = rate.toFixed(opt.dataset.quote === 'JPY' ? 3 : 5);
+  closeInput.value = '';
+  closeInput.focus();
+});
+
+// 初期値セット
+window.addEventListener('DOMContentLoaded', function() {
+  const opt = pairSelect.options[pairSelect.selectedIndex];
+  const rate = parseFloat(opt.dataset.rate);
+  entryInput.value = rate.toFixed(3);
+});
+
+// リアルタイム計算（入力変更時）
+['pair','leverage','lots','entry','close'].forEach(function(id) {
+  document.getElementById(id).addEventListener('input', autoCalc);
+});
+document.querySelectorAll('input[name="direction"]').forEach(function(r) {
+  r.addEventListener('change', autoCalc);
+});
+
+function autoCalc() {
+  const entry = parseFloat(entryInput.value);
+  const close = parseFloat(closeInput.value);
+  if (!isNaN(entry) && !isNaN(close) && entry > 0 && close > 0) {
+    calculate();
+  }
+}
+
+function calculate() {
+  const opt = pairSelect.options[pairSelect.selectedIndex];
+  const quote = opt.dataset.quote;
+  const pipSize = parseFloat(opt.dataset.pip);
+  const leverage = parseInt(document.getElementById('leverage').value);
+  const lots = parseFloat(document.getElementById('lots').value);
+  const entry = parseFloat(entryInput.value);
+  const close = parseFloat(closeInput.value);
+  const direction = document.querySelector('input[name="direction"]:checked').value;
+
+  if (isNaN(lots) || isNaN(entry) || isNaN(close) || lots <= 0 || entry <= 0 || close <= 0) {
+    return;
+  }
+
+  const units = lots * 10000; // 1ロット = 10,000通貨
+  const priceDiff = direction === 'buy' ? (close - entry) : (entry - close);
+  const pips = priceDiff / pipSize;
+
+  // 損益計算
+  let plJPY;
+  if (quote === 'JPY') {
+    // 対円ペア: 損益 = priceDiff * units
+    plJPY = priceDiff * units;
+  } else {
+    // ドルストレート: 損益 = priceDiff * units（USD建て）→ 円換算（USD/JPYの参考レート使用）
+    const usdJpyRate = 150; // 参考レート
+    plJPY = priceDiff * units * usdJpyRate;
+  }
+
+  // 取引総額（円換算）
+  let notionalJPY;
+  if (quote === 'JPY') {
+    notionalJPY = entry * units;
+  } else {
+    const usdJpyRate = 150;
+    notionalJPY = entry * units * usdJpyRate;
+  }
+
+  // 必要証拠金
+  const margin = notionalJPY / leverage;
+
+  // 損益率
+  const plRate = (plJPY / margin) * 100;
+
+  // ロスカットライン計算
+  // 証拠金維持率 = (証拠金 + 含み損益) / 必要証拠金 * 100
+  // 維持率X%時: margin + (lcPrice - entry) * units * dir = margin * X/100
+  // (lcPrice - entry) * units * dir = margin * (X/100 - 1)
+  // 買いの場合 dir=1, 売りの場合 dir=-1
+  const dir = direction === 'buy' ? 1 : -1;
+  let lc50, lc100;
+
+  if (quote === 'JPY') {
+    // 買い: lc = entry - margin*(1 - 0.50) / units
+    // 売り: lc = entry + margin*(1 - 0.50) / units
+    lc50 = entry - dir * margin * (1 - 0.50) / units;
+    lc100 = entry - dir * margin * (1 - 1.00) / units; // = entry（維持率100%ではロスカットなし = エントリー価格）
+  } else {
+    const usdJpyRate = 150;
+    lc50 = entry - dir * margin * (1 - 0.50) / (units * usdJpyRate);
+    lc100 = entry - dir * margin * (1 - 1.00) / (units * usdJpyRate);
+  }
+
+  // 表示
+  const resultCard = document.getElementById('result-card');
+  resultCard.classList.remove('hidden');
+  document.getElementById('cta-section').classList.remove('hidden');
+
+  const isProfit = plJPY >= 0;
+  document.getElementById('val-pl').textContent = (isProfit ? '+' : '') + formatYen(plJPY);
+  document.getElementById('sub-pl').textContent = isProfit ? '利益' : '損失';
+  const rbPl = document.getElementById('rb-pl');
+  rbPl.style.background = isProfit
+    ? 'linear-gradient(135deg,#2e7d32,#43a047)'
+    : 'linear-gradient(135deg,#c62828,#e53935)';
+
+  document.getElementById('val-pips').textContent = (pips >= 0 ? '+' : '') + pips.toFixed(1);
+  const rbPips = document.getElementById('rb-pips');
+  rbPips.className = 'result-box ' + (pips >= 0 ? 'positive' : 'negative');
+
+  document.getElementById('val-plrate').textContent = (plRate >= 0 ? '+' : '') + plRate.toFixed(2);
+  const rbPlrate = document.getElementById('rb-plrate');
+  rbPlrate.className = 'result-box ' + (plRate >= 0 ? 'positive' : 'negative');
+
+  document.getElementById('val-margin').textContent = formatYen(margin);
+  document.getElementById('val-notional').textContent = formatYen(notionalJPY);
+
+  // ロスカットライン
+  const decimals = quote === 'JPY' ? 3 : 5;
+  document.getElementById('val-lc50').textContent = lc50.toFixed(decimals);
+  document.getElementById('sub-lc50').textContent = 'エントリーから ' + (direction === 'buy' ? '-' : '+') + Math.abs(lc50 - entry).toFixed(decimals);
+  document.getElementById('val-lc100').textContent = lc100.toFixed(decimals);
+  document.getElementById('sub-lc100').textContent = 'エントリーから ' + (direction === 'buy' ? '-' : '+') + Math.abs(lc100 - entry).toFixed(decimals);
+
+  // チャート描画
+  drawPLChart(entry, close, units, pipSize, quote, direction, margin, lc50);
+
+  // スクロール
+  resultCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function formatYen(val) {
+  const abs = Math.abs(Math.round(val));
+  if (abs >= 100000000) {
+    return (val / 100000000).toFixed(2) + '億';
+  }
+  if (abs >= 10000) {
+    return (val / 10000).toFixed(1) + '万';
+  }
+  return Math.round(val).toLocaleString();
+}
+
+function drawPLChart(entry, close, units, pipSize, quote, direction, margin, lc50) {
+  const canvas = document.getElementById('plChart');
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+  const w = 680, h = 320;
+  canvas.width = w * dpr;
+  canvas.height = h * dpr;
+  ctx.scale(dpr, dpr);
+  canvas.style.width = w + 'px';
+  canvas.style.height = h + 'px';
+
+  // 描画エリア
+  const pad = { top: 30, right: 20, bottom: 50, left: 80 };
+  const cw = w - pad.left - pad.right;
+  const ch = h - pad.top - pad.bottom;
+
+  ctx.clearRect(0, 0, w, h);
+
+  // 価格範囲を計算（エントリー価格を中心に +/-で表示）
+  const range = Math.abs(close - entry) * 2.5;
+  const minPrice = entry - range;
+  const maxPrice = entry + range;
+  const dir = direction === 'buy' ? 1 : -1;
+
+  // 損益計算関数
+  function calcPL(price) {
+    const diff = dir * (price - entry);
+    if (quote === 'JPY') return diff * units;
+    return diff * units * 150; // USD換算
+  }
+
+  const plMin = calcPL(minPrice);
+  const plMax = calcPL(maxPrice);
+  const yMin = Math.min(plMin, plMax);
+  const yMax = Math.max(plMin, plMax);
+
+  function xPos(price) { return pad.left + (price - minPrice) / (maxPrice - minPrice) * cw; }
+  function yPos(pl) { return pad.top + ch - (pl - yMin) / (yMax - yMin) * ch; }
+
+  // 背景グリッド
+  ctx.strokeStyle = '#eee';
+  ctx.lineWidth = 1;
+  const yTicks = 6;
+  for (let i = 0; i <= yTicks; i++) {
+    const y = pad.top + (ch / yTicks) * i;
+    ctx.beginPath();
+    ctx.moveTo(pad.left, y);
+    ctx.lineTo(w - pad.right, y);
+    ctx.stroke();
+  }
+
+  // ゼロライン
+  const zeroY = yPos(0);
+  if (zeroY >= pad.top && zeroY <= pad.top + ch) {
+    ctx.strokeStyle = '#999';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([4, 3]);
+    ctx.beginPath();
+    ctx.moveTo(pad.left, zeroY);
+    ctx.lineTo(w - pad.right, zeroY);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = '#666';
+    ctx.font = '11px sans-serif';
+    ctx.textAlign = 'right';
+    ctx.fillText('0円', pad.left - 8, zeroY + 4);
+  }
+
+  // 損益ライン（グラデーション塗り）
+  const steps = 200;
+  ctx.beginPath();
+  for (let i = 0; i <= steps; i++) {
+    const price = minPrice + (maxPrice - minPrice) * i / steps;
+    const pl = calcPL(price);
+    const x = xPos(price);
+    const y = yPos(pl);
+    if (i === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+  }
+  ctx.strokeStyle = '#667eea';
+  ctx.lineWidth = 2.5;
+  ctx.stroke();
+
+  // 利益エリア（緑）と損失エリア（赤）
+  // 利益側
+  ctx.save();
+  ctx.beginPath();
+  const entryX = xPos(entry);
+  if (direction === 'buy') {
+    ctx.moveTo(entryX, yPos(0));
+    for (let i = 0; i <= steps; i++) {
+      const price = entry + (maxPrice - entry) * i / steps;
+      if (price > maxPrice) break;
+      ctx.lineTo(xPos(price), yPos(calcPL(price)));
+    }
+    ctx.lineTo(xPos(maxPrice), yPos(0));
+  } else {
+    ctx.moveTo(entryX, yPos(0));
+    for (let i = 0; i <= steps; i++) {
+      const price = minPrice + (entry - minPrice) * i / steps;
+      ctx.lineTo(xPos(price), yPos(calcPL(price)));
+    }
+    ctx.lineTo(entryX, yPos(0));
+  }
+  ctx.closePath();
+  ctx.fillStyle = 'rgba(46,125,50,.1)';
+  ctx.fill();
+  ctx.restore();
+
+  // 損失側
+  ctx.save();
+  ctx.beginPath();
+  if (direction === 'buy') {
+    ctx.moveTo(entryX, yPos(0));
+    for (let i = 0; i <= steps; i++) {
+      const price = minPrice + (entry - minPrice) * i / steps;
+      ctx.lineTo(xPos(price), yPos(calcPL(price)));
+    }
+    ctx.lineTo(xPos(minPrice), yPos(0));
+  } else {
+    ctx.moveTo(entryX, yPos(0));
+    for (let i = 0; i <= steps; i++) {
+      const price = entry + (maxPrice - entry) * i / steps;
+      if (price > maxPrice) break;
+      ctx.lineTo(xPos(price), yPos(calcPL(price)));
+    }
+    ctx.lineTo(xPos(maxPrice), yPos(0));
+  }
+  ctx.closePath();
+  ctx.fillStyle = 'rgba(198,40,40,.1)';
+  ctx.fill();
+  ctx.restore();
+
+  // エントリーポイント
+  ctx.beginPath();
+  ctx.arc(xPos(entry), yPos(0), 5, 0, Math.PI * 2);
+  ctx.fillStyle = '#667eea';
+  ctx.fill();
+  ctx.strokeStyle = '#fff';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  // 決済ポイント
+  const closePL = calcPL(close);
+  ctx.beginPath();
+  ctx.arc(xPos(close), yPos(closePL), 6, 0, Math.PI * 2);
+  ctx.fillStyle = closePL >= 0 ? '#2e7d32' : '#c62828';
+  ctx.fill();
+  ctx.strokeStyle = '#fff';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  // ロスカットライン
+  if (lc50 >= minPrice && lc50 <= maxPrice) {
+    const lcX = xPos(lc50);
+    ctx.strokeStyle = '#e65100';
+    ctx.lineWidth = 1.5;
+    ctx.setLineDash([6, 3]);
+    ctx.beginPath();
+    ctx.moveTo(lcX, pad.top);
+    ctx.lineTo(lcX, pad.top + ch);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = '#e65100';
+    ctx.font = 'bold 10px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('LC(50%)', lcX, pad.top - 5);
+  }
+
+  // 軸ラベル
+  ctx.fillStyle = '#666';
+  ctx.font = '11px sans-serif';
+  ctx.textAlign = 'center';
+  const decimals = quote === 'JPY' ? 2 : 4;
+  const xTicks = 5;
+  for (let i = 0; i <= xTicks; i++) {
+    const price = minPrice + (maxPrice - minPrice) * i / xTicks;
+    const x = xPos(price);
+    ctx.fillText(price.toFixed(decimals), x, h - pad.bottom + 18);
+  }
+
+  // Y軸ラベル
+  ctx.textAlign = 'right';
+  for (let i = 0; i <= yTicks; i++) {
+    const pl = yMin + (yMax - yMin) * (yTicks - i) / yTicks;
+    const y = pad.top + (ch / yTicks) * i;
+    ctx.fillText(formatYenAxis(pl), pad.left - 8, y + 4);
+  }
+
+  // 軸タイトル
+  ctx.fillStyle = '#999';
+  ctx.font = '11px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('価格', w / 2, h - 5);
+  ctx.save();
+  ctx.translate(14, pad.top + ch / 2);
+  ctx.rotate(-Math.PI / 2);
+  ctx.fillText('損益（円）', 0, 0);
+  ctx.restore();
+
+  // 凡例
+  ctx.font = '11px sans-serif';
+  ctx.textAlign = 'left';
+  const legendY = pad.top + 10;
+  const legendX = pad.left + 10;
+  // エントリー
+  ctx.beginPath();
+  ctx.arc(legendX, legendY, 4, 0, Math.PI * 2);
+  ctx.fillStyle = '#667eea';
+  ctx.fill();
+  ctx.fillStyle = '#333';
+  ctx.fillText('エントリー', legendX + 10, legendY + 4);
+  // 決済
+  ctx.beginPath();
+  ctx.arc(legendX + 90, legendY, 4, 0, Math.PI * 2);
+  ctx.fillStyle = closePL >= 0 ? '#2e7d32' : '#c62828';
+  ctx.fill();
+  ctx.fillStyle = '#333';
+  ctx.fillText('決済', legendX + 100, legendY + 4);
+}
+
+function formatYenAxis(val) {
+  const abs = Math.abs(val);
+  if (abs >= 100000000) return (val / 100000000).toFixed(1) + '億';
+  if (abs >= 10000) return (val / 10000).toFixed(0) + '万';
+  if (abs >= 1000) return (val / 1000).toFixed(0) + '千';
+  return Math.round(val).toString();
+}
+</script>
+</body>
+</html>
