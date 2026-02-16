@@ -1,0 +1,1218 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>年金受給額シミュレーター【無料】繰上げ・繰下げ比較</title>
+<meta name="description" content="年金受給額を無料でシミュレーション。国民年金・厚生年金の受給見込み額、繰上げ・繰下げ受給の比較、損益分岐年齢まで一目でわかる計算ツールです。">
+<meta name="keywords" content="年金,受給額,シミュレーター,計算,繰上げ,繰下げ,国民年金,厚生年金,損益分岐">
+<meta property="og:title" content="年金受給額シミュレーター【無料】繰上げ・繰下げ比較">
+<meta property="og:description" content="年金受給額を無料でシミュレーション。国民年金・厚生年金の受給見込み額、繰上げ・繰下げ受給の比較、損益分岐年齢まで一目でわかる計算ツールです。">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:site_name" content="年金受給額シミュレーター">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="年金受給額シミュレーター【無料】繰上げ・繰下げ比較">
+<meta name="twitter:description" content="年金受給額を無料でシミュレーション。国民年金・厚生年金の受給見込み額、繰上げ・繰下げ受給の比較、損益分岐年齢まで一目でわかる計算ツールです。">
+<style>
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --green-dark: #1b5e20;
+  --green-mid: #2e7d32;
+  --green-light: #e8f5e9;
+  --green-pale: #f1f8f2;
+  --navy-dark: #0d2137;
+  --navy-mid: #1a3a5c;
+  --navy-light: #e3eaf2;
+  --gray-50: #fafafa;
+  --gray-100: #f5f5f5;
+  --gray-200: #eeeeee;
+  --gray-300: #e0e0e0;
+  --gray-600: #757575;
+  --gray-700: #616161;
+  --gray-800: #424242;
+  --gray-900: #212121;
+  --red: #c62828;
+  --orange: #e65100;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
+  --shadow-md: 0 4px 6px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.06);
+  --shadow-lg: 0 10px 25px rgba(0,0,0,0.08), 0 6px 12px rgba(0,0,0,0.06);
+  --radius: 12px;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+  background: #ffffff;
+  color: var(--gray-900);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px 16px 40px;
+}
+
+header {
+  text-align: center;
+  padding: 32px 0 24px;
+}
+
+header h1 {
+  font-size: clamp(1.4rem, 5vw, 2rem);
+  font-weight: 800;
+  color: var(--navy-mid);
+  letter-spacing: -0.02em;
+  margin-bottom: 8px;
+}
+
+header p {
+  font-size: 0.95rem;
+  color: var(--gray-600);
+}
+
+.card {
+  background: #fff;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-md);
+  padding: 24px;
+  margin-bottom: 20px;
+}
+
+.card-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--navy-mid);
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--green-light);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.card-title .icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background: var(--green-mid);
+  color: #fff;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--gray-800);
+  margin-bottom: 6px;
+}
+
+.form-group .hint {
+  font-size: 0.78rem;
+  color: var(--gray-600);
+  margin-bottom: 4px;
+}
+
+.slider-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.slider-row input[type="range"] {
+  flex: 1;
+  height: 6px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: var(--gray-200);
+  border-radius: 3px;
+  outline: none;
+}
+
+.slider-row input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  background: var(--green-mid);
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.slider-row input[type="range"]::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  background: var(--green-mid);
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.slider-row input[type="number"] {
+  width: 100px;
+  padding: 8px 10px;
+  border: 1.5px solid var(--gray-300);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  text-align: right;
+  font-weight: 600;
+  color: var(--gray-900);
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.slider-row input[type="number"]:focus {
+  border-color: var(--green-mid);
+}
+
+.slider-row .unit {
+  font-size: 0.85rem;
+  color: var(--gray-600);
+  white-space: nowrap;
+  min-width: 24px;
+}
+
+select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1.5px solid var(--gray-300);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  color: var(--gray-900);
+  background: #fff;
+  outline: none;
+  transition: border-color 0.2s;
+  cursor: pointer;
+}
+
+select:focus {
+  border-color: var(--green-mid);
+}
+
+.radio-group {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.radio-group label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border: 1.5px solid var(--gray-300);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.radio-group label:has(input:checked) {
+  border-color: var(--green-mid);
+  background: var(--green-light);
+  color: var(--green-dark);
+}
+
+.radio-group input[type="radio"] {
+  accent-color: var(--green-mid);
+}
+
+.result-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.result-box {
+  background: var(--green-pale);
+  border-radius: 10px;
+  padding: 16px;
+  text-align: center;
+  border: 1px solid var(--green-light);
+}
+
+.result-box.navy {
+  background: var(--navy-light);
+  border-color: #c5d5e8;
+}
+
+.result-box .label {
+  font-size: 0.8rem;
+  color: var(--gray-600);
+  margin-bottom: 4px;
+}
+
+.result-box .value {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--green-dark);
+}
+
+.result-box.navy .value {
+  color: var(--navy-dark);
+}
+
+.result-box .sub {
+  font-size: 0.78rem;
+  color: var(--gray-600);
+  margin-top: 2px;
+}
+
+.highlight-box {
+  background: linear-gradient(135deg, var(--green-mid), var(--navy-mid));
+  color: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.highlight-box .label {
+  font-size: 0.85rem;
+  opacity: 0.9;
+  margin-bottom: 4px;
+}
+
+.highlight-box .value {
+  font-size: 2rem;
+  font-weight: 800;
+}
+
+.highlight-box .sub {
+  font-size: 0.82rem;
+  opacity: 0.85;
+  margin-top: 4px;
+}
+
+canvas {
+  width: 100%;
+  height: auto;
+  display: block;
+  margin: 16px 0;
+}
+
+.table-wrap {
+  overflow-x: auto;
+  margin: 16px 0;
+  -webkit-overflow-scrolling: touch;
+}
+
+.table-wrap table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+  min-width: 600px;
+}
+
+.table-wrap th, .table-wrap td {
+  padding: 8px 10px;
+  text-align: right;
+  border-bottom: 1px solid var(--gray-200);
+  white-space: nowrap;
+}
+
+.table-wrap th {
+  background: var(--navy-mid);
+  color: #fff;
+  font-weight: 600;
+  position: sticky;
+  top: 0;
+}
+
+.table-wrap th:first-child,
+.table-wrap td:first-child {
+  text-align: center;
+}
+
+.table-wrap tr:hover {
+  background: var(--green-pale);
+}
+
+.table-wrap tr.highlight {
+  background: var(--green-light);
+  font-weight: 700;
+}
+
+.table-wrap .best {
+  color: var(--green-dark);
+  font-weight: 700;
+}
+
+.table-wrap .loss {
+  color: var(--red);
+}
+
+.breakeven-badge {
+  display: inline-block;
+  background: var(--green-mid);
+  color: #fff;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.affiliate-banner {
+  display: block;
+  background: linear-gradient(135deg, var(--green-pale), var(--navy-light));
+  border: 2px solid var(--green-mid);
+  border-radius: var(--radius);
+  padding: 20px;
+  text-align: center;
+  text-decoration: none;
+  color: var(--gray-900);
+  margin: 20px 0;
+  transition: all 0.3s;
+}
+
+.affiliate-banner:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
+
+.affiliate-banner .af-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--navy-mid);
+  margin-bottom: 4px;
+}
+
+.affiliate-banner .af-desc {
+  font-size: 0.82rem;
+  color: var(--gray-600);
+}
+
+.affiliate-banner .af-btn {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 8px 24px;
+  background: var(--green-mid);
+  color: #fff;
+  border-radius: 6px;
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+.disclaimer {
+  background: #fff8e1;
+  border: 1px solid #ffe082;
+  border-radius: 8px;
+  padding: 14px 16px;
+  font-size: 0.8rem;
+  color: var(--gray-700);
+  line-height: 1.6;
+  margin-top: 20px;
+}
+
+.disclaimer strong {
+  color: var(--orange);
+}
+
+footer {
+  text-align: center;
+  padding: 24px 0;
+  font-size: 0.78rem;
+  color: var(--gray-600);
+}
+
+.hidden {
+  display: none;
+}
+
+@media (max-width: 600px) {
+  .card { padding: 18px 14px; }
+  .result-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .result-box .value { font-size: 1.2rem; }
+  .highlight-box .value { font-size: 1.6rem; }
+  .slider-row input[type="number"] { width: 80px; }
+  .radio-group { gap: 8px; }
+  .radio-group label { padding: 6px 12px; font-size: 0.85rem; }
+}
+
+@media (max-width: 400px) {
+  .result-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+  <h1>年金受給額シミュレーター</h1>
+  <p>繰上げ・繰下げ受給の比較と損益分岐年齢がわかる</p>
+</header>
+
+<!-- 基本情報 -->
+<div class="card">
+  <div class="card-title"><span class="icon">1</span> 基本情報</div>
+
+  <div class="form-group">
+    <label>現在の年齢</label>
+    <div class="slider-row">
+      <input type="range" id="ageSlider" min="20" max="74" value="40">
+      <input type="number" id="ageInput" min="20" max="74" value="40">
+      <span class="unit">歳</span>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>性別</label>
+    <div class="radio-group">
+      <label><input type="radio" name="gender" value="male" checked> 男性</label>
+      <label><input type="radio" name="gender" value="female"> 女性</label>
+    </div>
+    <div class="hint" style="margin-top:6px">※ 平均寿命の参考に使用（男性 81歳 / 女性 87歳）</div>
+  </div>
+
+  <div class="form-group">
+    <label>加入種別</label>
+    <div class="radio-group">
+      <label><input type="radio" name="type" value="both" checked> 厚生年金あり（会社員・公務員）</label>
+      <label><input type="radio" name="type" value="kokumin"> 国民年金のみ（自営業・フリーランス）</label>
+    </div>
+  </div>
+</div>
+
+<!-- 国民年金 -->
+<div class="card">
+  <div class="card-title"><span class="icon">2</span> 国民年金（基礎年金）</div>
+
+  <div class="form-group">
+    <label>国民年金 加入月数</label>
+    <div class="hint">20歳から60歳まで全期間加入で480月（満額）</div>
+    <div class="slider-row">
+      <input type="range" id="kokuminMonthsSlider" min="0" max="480" value="480" step="1">
+      <input type="number" id="kokuminMonthsInput" min="0" max="480" value="480">
+      <span class="unit">月</span>
+    </div>
+    <div class="hint" style="margin-top:4px">= <span id="kokuminYears">40</span>年</div>
+  </div>
+</div>
+
+<!-- 厚生年金 -->
+<div class="card" id="koseiCard">
+  <div class="card-title"><span class="icon">3</span> 厚生年金（報酬比例部分）</div>
+
+  <div class="form-group">
+    <label>平均標準報酬月額</label>
+    <div class="hint">現役時代の平均的な月収（賞与含む年収 / 12）</div>
+    <div class="slider-row">
+      <input type="range" id="salarySlider" min="15" max="65" value="35" step="1">
+      <input type="number" id="salaryInput" min="15" max="65" value="35">
+      <span class="unit">万円</span>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>厚生年金 加入月数</label>
+    <div class="hint">会社員・公務員として勤務した総月数</div>
+    <div class="slider-row">
+      <input type="range" id="koseiMonthsSlider" min="0" max="480" value="360" step="1">
+      <input type="number" id="koseiMonthsInput" min="0" max="480" value="360">
+      <span class="unit">月</span>
+    </div>
+    <div class="hint" style="margin-top:4px">= <span id="koseiYears">30</span>年</div>
+  </div>
+</div>
+
+<!-- 受給結果 -->
+<div class="card">
+  <div class="card-title"><span class="icon">4</span> 年金受給見込み額（65歳受給の場合）</div>
+
+  <div class="result-grid">
+    <div class="result-box">
+      <div class="label">国民年金（年額）</div>
+      <div class="value" id="kokuminAnnual">--</div>
+      <div class="sub" id="kokuminMonthly">月額 --</div>
+    </div>
+    <div class="result-box navy" id="koseiResultBox">
+      <div class="label">厚生年金（年額）</div>
+      <div class="value" id="koseiAnnual">--</div>
+      <div class="sub" id="koseiMonthly">月額 --</div>
+    </div>
+  </div>
+
+  <div class="highlight-box">
+    <div class="label">合計年金受給額（65歳 年額）</div>
+    <div class="value" id="totalAnnual">--</div>
+    <div class="sub" id="totalMonthly">月額 --</div>
+  </div>
+</div>
+
+<!-- アフィリエイト枠1 -->
+<a href="#" class="affiliate-banner" rel="nofollow noopener" target="_blank">
+  <div class="af-title">老後の資金計画を無料相談【マネードクター】</div>
+  <div class="af-desc">FPが年金の不足額と対策をアドバイス / 何度でも無料 / オンライン対応</div>
+  <div class="af-btn">無料で相談する</div>
+</a>
+
+<!-- 繰上げ・繰下げ比較 -->
+<div class="card">
+  <div class="card-title"><span class="icon">5</span> 繰上げ・繰下げ受給の比較</div>
+
+  <div class="form-group">
+    <label>想定寿命（何歳まで生きると仮定するか）</label>
+    <div class="slider-row">
+      <input type="range" id="lifeSlider" min="65" max="100" value="85">
+      <input type="number" id="lifeInput" min="65" max="100" value="85">
+      <span class="unit">歳</span>
+    </div>
+  </div>
+
+  <p style="font-size:0.85rem;color:var(--gray-700);margin-bottom:12px;">
+    繰上げ（60~64歳）: 1ヶ月あたり <strong style="color:var(--red)">0.4%減額</strong>（最大24%減）<br>
+    繰下げ（66~75歳）: 1ヶ月あたり <strong style="color:var(--green-dark)">0.7%増額</strong>（最大84%増）
+  </p>
+
+  <div class="result-grid" id="comparisonCards"></div>
+
+  <!-- 損益分岐 -->
+  <div id="breakevenInfo" style="margin-top:16px;padding:16px;background:var(--green-pale);border-radius:10px;"></div>
+</div>
+
+<!-- グラフ -->
+<div class="card">
+  <div class="card-title"><span class="icon">6</span> 受給開始年齢別 年間受給額</div>
+  <canvas id="barChart" width="860" height="400"></canvas>
+</div>
+
+<!-- 総受給額比較表 -->
+<div class="card">
+  <div class="card-title"><span class="icon">7</span> 総受給額比較表（累計）</div>
+  <p style="font-size:0.82rem;color:var(--gray-600);margin-bottom:12px;">各受給開始年齢で、何歳時点で65歳開始を上回るか（損益分岐年齢）を確認できます。</p>
+  <div class="table-wrap">
+    <table id="compTable">
+      <thead>
+        <tr>
+          <th>到達年齢</th>
+          <th>60歳</th>
+          <th>62歳</th>
+          <th>65歳</th>
+          <th>67歳</th>
+          <th>70歳</th>
+          <th>75歳</th>
+        </tr>
+      </thead>
+      <tbody id="compTableBody"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- 累計推移グラフ -->
+<div class="card">
+  <div class="card-title"><span class="icon">8</span> 累計受給額の推移</div>
+  <canvas id="lineChart" width="860" height="420"></canvas>
+</div>
+
+<!-- アフィリエイト枠2 -->
+<a href="#" class="affiliate-banner" rel="nofollow noopener" target="_blank">
+  <div class="af-title">iDeCoで節税しながら老後資金を積立【SBI証券】</div>
+  <div class="af-desc">運営管理手数料0円 / 掛金全額が所得控除 / 厳選ファンドが充実</div>
+  <div class="af-btn">SBI証券でiDeCoを始める</div>
+</a>
+
+<div class="disclaimer">
+  <strong>ご注意:</strong> この計算は概算です。実際の年金額は加入記録・制度改正・物価スライド等により異なります。正確な情報は日本年金機構の「ねんきんネット」や専門家（社会保険労務士・FP）にご相談ください。計算式は2024年度の水準（満額 795,000円/年、乗率 5.481/1000）を使用しています。
+</div>
+
+<footer>
+  &copy; 2026 年金受給額シミュレーター
+</footer>
+
+</div>
+
+<script>
+(function(){
+  'use strict';
+
+  // --- Constants ---
+  var KOKUMIN_FULL = 795000; // 国民年金満額（年額）
+  var RATE = 5.481 / 1000;  // 厚生年金乗率
+  var KURIAGE_RATE = 0.004;  // 繰上げ減額率/月
+  var KURISAGE_RATE = 0.007; // 繰下げ増額率/月
+  var START_AGES = [60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75];
+  var TABLE_AGES = [60, 62, 65, 67, 70, 75];
+
+  // --- DOM references ---
+  var ageSlider = document.getElementById('ageSlider');
+  var ageInput = document.getElementById('ageInput');
+  var kokuminMonthsSlider = document.getElementById('kokuminMonthsSlider');
+  var kokuminMonthsInput = document.getElementById('kokuminMonthsInput');
+  var salarySlider = document.getElementById('salarySlider');
+  var salaryInput = document.getElementById('salaryInput');
+  var koseiMonthsSlider = document.getElementById('koseiMonthsSlider');
+  var koseiMonthsInput = document.getElementById('koseiMonthsInput');
+  var lifeSlider = document.getElementById('lifeSlider');
+  var lifeInput = document.getElementById('lifeInput');
+
+  // --- Sync slider/input pairs ---
+  function syncPair(slider, input, cb) {
+    slider.addEventListener('input', function() {
+      input.value = slider.value;
+      if (cb) cb();
+      calculate();
+    });
+    input.addEventListener('input', function() {
+      var v = parseInt(input.value);
+      var mn = parseInt(slider.min);
+      var mx = parseInt(slider.max);
+      if (!isNaN(v)) {
+        if (v < mn) v = mn;
+        if (v > mx) v = mx;
+        slider.value = v;
+      }
+      if (cb) cb();
+      calculate();
+    });
+  }
+
+  function updateKokuminYears() {
+    document.getElementById('kokuminYears').textContent = (parseInt(kokuminMonthsInput.value) / 12).toFixed(1);
+  }
+  function updateKoseiYears() {
+    document.getElementById('koseiYears').textContent = (parseInt(koseiMonthsInput.value) / 12).toFixed(1);
+  }
+
+  syncPair(ageSlider, ageInput);
+  syncPair(kokuminMonthsSlider, kokuminMonthsInput, updateKokuminYears);
+  syncPair(salarySlider, salaryInput);
+  syncPair(koseiMonthsSlider, koseiMonthsInput, updateKoseiYears);
+  syncPair(lifeSlider, lifeInput);
+
+  // Radio change
+  document.querySelectorAll('input[name="type"]').forEach(function(r) {
+    r.addEventListener('change', calculate);
+  });
+  document.querySelectorAll('input[name="gender"]').forEach(function(r) {
+    r.addEventListener('change', function() {
+      var gender = document.querySelector('input[name="gender"]:checked').value;
+      lifeSlider.value = gender === 'male' ? 81 : 87;
+      lifeInput.value = lifeSlider.value;
+      calculate();
+    });
+  });
+
+  // --- Calculation ---
+  function getType() {
+    return document.querySelector('input[name="type"]:checked').value;
+  }
+
+  function calcKokumin(months) {
+    return Math.round(KOKUMIN_FULL * (months / 480));
+  }
+
+  function calcKosei(salaryMan, months) {
+    return Math.round(salaryMan * 10000 * RATE * months);
+  }
+
+  function calcAdjustment(startAge) {
+    if (startAge < 65) {
+      var months = (65 - startAge) * 12;
+      return 1 - (KURIAGE_RATE * months);
+    } else if (startAge > 65) {
+      var months = (startAge - 65) * 12;
+      return 1 + (KURISAGE_RATE * months);
+    }
+    return 1;
+  }
+
+  function calcAnnual(base, startAge) {
+    return Math.round(base * calcAdjustment(startAge));
+  }
+
+  function calcTotal(annual, startAge, endAge) {
+    var years = endAge - startAge;
+    if (years < 0) return 0;
+    return annual * years;
+  }
+
+  function fmt(n) {
+    if (n === 0) return '0';
+    if (Math.abs(n) >= 10000) {
+      return (n / 10000).toFixed(1).replace(/\.0$/, '') + '万';
+    }
+    return n.toLocaleString();
+  }
+
+  function fmtYen(n) {
+    return n.toLocaleString() + '円';
+  }
+
+  function fmtMan(n) {
+    var man = n / 10000;
+    if (man >= 1) {
+      return man.toFixed(1).replace(/\.0$/, '') + '万円';
+    }
+    return n.toLocaleString() + '円';
+  }
+
+  function calculate() {
+    var type = getType();
+    var kokuminMonths = parseInt(kokuminMonthsInput.value) || 0;
+    var salaryMan = parseInt(salaryInput.value) || 0;
+    var koseiMonths = parseInt(koseiMonthsInput.value) || 0;
+    var lifeAge = parseInt(lifeInput.value) || 85;
+
+    // Show/hide kosei card
+    var koseiCard = document.getElementById('koseiCard');
+    var koseiResultBox = document.getElementById('koseiResultBox');
+    if (type === 'kokumin') {
+      koseiCard.classList.add('hidden');
+      koseiResultBox.classList.add('hidden');
+    } else {
+      koseiCard.classList.remove('hidden');
+      koseiResultBox.classList.remove('hidden');
+    }
+
+    var kokuminBase = calcKokumin(kokuminMonths);
+    var koseiBase = type === 'both' ? calcKosei(salaryMan, koseiMonths) : 0;
+    var base65 = kokuminBase + koseiBase;
+
+    // 65歳受給表示
+    document.getElementById('kokuminAnnual').textContent = fmtMan(kokuminBase);
+    document.getElementById('kokuminMonthly').textContent = '月額 ' + fmtMan(Math.round(kokuminBase / 12));
+    document.getElementById('koseiAnnual').textContent = fmtMan(koseiBase);
+    document.getElementById('koseiMonthly').textContent = '月額 ' + fmtMan(Math.round(koseiBase / 12));
+    document.getElementById('totalAnnual').textContent = fmtMan(base65);
+    document.getElementById('totalMonthly').textContent = '月額 ' + fmtMan(Math.round(base65 / 12));
+
+    // 各開始年齢の年額を計算
+    var annuals = {};
+    START_AGES.forEach(function(age) {
+      annuals[age] = calcAnnual(base65, age);
+    });
+
+    // 比較カード（60, 62, 65, 70, 75歳）
+    var compAges = [60, 62, 65, 70, 75];
+    var cardsHTML = '';
+    compAges.forEach(function(age) {
+      var annual = annuals[age];
+      var total = calcTotal(annual, age, lifeAge);
+      var adj = calcAdjustment(age);
+      var adjLabel = '';
+      if (age < 65) {
+        adjLabel = '<span style="color:var(--red)">' + ((1 - adj) * 100).toFixed(1) + '%減額</span>';
+      } else if (age > 65) {
+        adjLabel = '<span style="color:var(--green-dark)">' + ((adj - 1) * 100).toFixed(1) + '%増額</span>';
+      } else {
+        adjLabel = '<span style="color:var(--gray-600)">基準額</span>';
+      }
+      var isNavy = age >= 66;
+      cardsHTML += '<div class="result-box' + (isNavy ? ' navy' : '') + '">' +
+        '<div class="label">' + age + '歳開始 ' + adjLabel + '</div>' +
+        '<div class="value">' + fmtMan(annual) + '</div>' +
+        '<div class="sub">年額 / ' + lifeAge + '歳まで累計: ' + fmtMan(total) + '</div>' +
+        '</div>';
+    });
+    document.getElementById('comparisonCards').innerHTML = cardsHTML;
+
+    // 損益分岐年齢の算出
+    var breakevenHTML = '<div style="font-size:0.9rem;font-weight:700;color:var(--navy-mid);margin-bottom:10px;">損益分岐年齢</div>';
+    var breakevenAges = {};
+    [60, 62, 70, 75].forEach(function(age) {
+      if (age === 65) return;
+      var a1 = annuals[age];
+      var a65 = annuals[65];
+      // 累計: a1*(t - age) = a65*(t - 65) → t = (a65*65 - a1*age)/(a65 - a1)
+      if (age < 65) {
+        // 繰上げは先にもらうので、65歳開始が追いつく年齢
+        // a_age * (t - age) = a_65 * (t - 65)
+        if (a65 !== a1) {
+          var t = (a65 * 65 - a1 * age) / (a65 - a1);
+          breakevenAges[age] = Math.ceil(t);
+        }
+      } else {
+        // 繰下げは遅くもらう。繰下げが65歳開始を追い越す年齢
+        if (a1 !== a65) {
+          var t = (a1 * age - a65 * 65) / (a1 - a65);
+          breakevenAges[age] = Math.ceil(t);
+        }
+      }
+    });
+
+    [60, 62, 70, 75].forEach(function(age) {
+      var be = breakevenAges[age];
+      var label = age + '歳開始 vs 65歳開始:';
+      if (be && be > 0 && be <= 120) {
+        if (age < 65) {
+          breakevenHTML += '<div style="margin-bottom:6px;font-size:0.85rem;">' + label + ' <span class="breakeven-badge">' + be + '歳</span> 以降は65歳開始の方が得</div>';
+        } else {
+          breakevenHTML += '<div style="margin-bottom:6px;font-size:0.85rem;">' + label + ' <span class="breakeven-badge">' + be + '歳</span> 以降は' + age + '歳開始の方が得</div>';
+        }
+      }
+    });
+
+    document.getElementById('breakevenInfo').innerHTML = breakevenHTML;
+
+    // 棒グラフ
+    drawBarChart(annuals);
+
+    // 比較表
+    drawCompTable(annuals, lifeAge);
+
+    // 累計推移グラフ
+    drawLineChart(annuals, lifeAge);
+  }
+
+  // --- Bar Chart ---
+  function drawBarChart(annuals) {
+    var canvas = document.getElementById('barChart');
+    var dpr = window.devicePixelRatio || 1;
+    var w = canvas.clientWidth || 860;
+    var h = 400;
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
+    var ctx = canvas.getContext('2d');
+    ctx.scale(dpr, dpr);
+
+    ctx.clearRect(0, 0, w, h);
+
+    var padLeft = 70, padRight = 20, padTop = 30, padBottom = 50;
+    var chartW = w - padLeft - padRight;
+    var chartH = h - padTop - padBottom;
+
+    var ages = START_AGES;
+    var vals = ages.map(function(a) { return annuals[a]; });
+    var maxVal = Math.max.apply(null, vals) * 1.15;
+    if (maxVal === 0) maxVal = 1;
+
+    var barW = Math.min(chartW / ages.length * 0.7, 40);
+    var gap = chartW / ages.length;
+
+    // Grid
+    ctx.strokeStyle = '#e0e0e0';
+    ctx.lineWidth = 0.5;
+    var gridLines = 5;
+    for (var i = 0; i <= gridLines; i++) {
+      var y = padTop + chartH - (chartH * i / gridLines);
+      ctx.beginPath();
+      ctx.moveTo(padLeft, y);
+      ctx.lineTo(w - padRight, y);
+      ctx.stroke();
+
+      ctx.fillStyle = '#757575';
+      ctx.font = '11px sans-serif';
+      ctx.textAlign = 'right';
+      var labelVal = maxVal * i / gridLines;
+      ctx.fillText(fmtMan(Math.round(labelVal)), padLeft - 8, y + 4);
+    }
+
+    // Bars
+    ages.forEach(function(age, idx) {
+      var val = annuals[age];
+      var barH = (val / maxVal) * chartH;
+      var x = padLeft + gap * idx + (gap - barW) / 2;
+      var y = padTop + chartH - barH;
+
+      // Color
+      if (age < 65) {
+        ctx.fillStyle = age === 60 ? '#ef5350' : '#ff7043';
+      } else if (age === 65) {
+        ctx.fillStyle = '#1a3a5c';
+      } else {
+        var intensity = Math.min((age - 65) / 10, 1);
+        var r = Math.round(46 * (1 - intensity) + 27 * intensity);
+        var g = Math.round(125 * (1 - intensity) + 94 * intensity);
+        var b = Math.round(50 * (1 - intensity) + 32 * intensity);
+        ctx.fillStyle = 'rgb(' + r + ',' + g + ',' + b + ')';
+      }
+
+      // Rounded bar top
+      var radius = Math.min(barW / 2, 4);
+      ctx.beginPath();
+      ctx.moveTo(x, padTop + chartH);
+      ctx.lineTo(x, y + radius);
+      ctx.arcTo(x, y, x + radius, y, radius);
+      ctx.arcTo(x + barW, y, x + barW, y + radius, radius);
+      ctx.lineTo(x + barW, padTop + chartH);
+      ctx.closePath();
+      ctx.fill();
+
+      // Value on top
+      ctx.fillStyle = '#424242';
+      ctx.font = 'bold 10px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(fmtMan(val), x + barW / 2, y - 6);
+
+      // Label
+      ctx.fillStyle = age === 65 ? '#1a3a5c' : '#616161';
+      ctx.font = (age === 65 ? 'bold ' : '') + '11px sans-serif';
+      ctx.fillText(age + '歳', x + barW / 2, padTop + chartH + 18);
+    });
+
+    // Axis
+    ctx.strokeStyle = '#bdbdbd';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(padLeft, padTop);
+    ctx.lineTo(padLeft, padTop + chartH);
+    ctx.lineTo(w - padRight, padTop + chartH);
+    ctx.stroke();
+
+    // Title
+    ctx.fillStyle = '#1a3a5c';
+    ctx.font = 'bold 13px sans-serif';
+    ctx.textAlign = 'left';
+    ctx.fillText('受給開始年齢別 年間受給額', padLeft, 18);
+  }
+
+  // --- Comparison Table ---
+  function drawCompTable(annuals, lifeAge) {
+    var tbody = document.getElementById('compTableBody');
+    var tableAges = TABLE_AGES;
+    var annualsByAge = {};
+    tableAges.forEach(function(a) { annualsByAge[a] = annuals[a]; });
+
+    var rows = '';
+    var maxAge = Math.min(lifeAge, 100);
+    for (var age = 65; age <= maxAge; age++) {
+      var cells = '<td>' + age + '歳</td>';
+      var totals = [];
+      tableAges.forEach(function(startAge) {
+        var total = calcTotal(annualsByAge[startAge], startAge, age);
+        totals.push({ startAge: startAge, total: total });
+      });
+
+      var maxTotal = Math.max.apply(null, totals.map(function(t) { return t.total; }));
+      var base65Total = calcTotal(annualsByAge[65], 65, age);
+
+      totals.forEach(function(item) {
+        var cls = '';
+        if (item.total === maxTotal && item.total > 0) cls = ' class="best"';
+        if (item.total < base65Total && item.startAge !== 65) cls = '';
+        cells += '<td' + cls + '>' + fmtMan(item.total) + '</td>';
+      });
+
+      var isHighlight = (age === lifeAge || age % 5 === 0);
+      rows += '<tr' + (isHighlight ? ' class="highlight"' : '') + '>' + cells + '</tr>';
+    }
+    tbody.innerHTML = rows;
+  }
+
+  // --- Line Chart (Cumulative) ---
+  function drawLineChart(annuals, lifeAge) {
+    var canvas = document.getElementById('lineChart');
+    var dpr = window.devicePixelRatio || 1;
+    var w = canvas.clientWidth || 860;
+    var h = 420;
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
+    var ctx = canvas.getContext('2d');
+    ctx.scale(dpr, dpr);
+
+    ctx.clearRect(0, 0, w, h);
+
+    var padLeft = 80, padRight = 30, padTop = 40, padBottom = 60;
+    var chartW = w - padLeft - padRight;
+    var chartH = h - padTop - padBottom;
+
+    var drawAges = [60, 62, 65, 70, 75];
+    var colors = {
+      60: '#ef5350',
+      62: '#ff7043',
+      65: '#1a3a5c',
+      70: '#2e7d32',
+      75: '#1b5e20'
+    };
+    var labels = {
+      60: '60歳',
+      62: '62歳',
+      65: '65歳',
+      70: '70歳',
+      75: '75歳'
+    };
+
+    var endAge = Math.min(Math.max(lifeAge, 80), 100);
+    var minAge = 60;
+
+    // Calculate all cumulative values
+    var allData = {};
+    var globalMax = 0;
+    drawAges.forEach(function(startAge) {
+      var annual = annuals[startAge];
+      allData[startAge] = [];
+      for (var age = minAge; age <= endAge; age++) {
+        var total = calcTotal(annual, startAge, age);
+        allData[startAge].push({ age: age, total: total });
+        if (total > globalMax) globalMax = total;
+      }
+    });
+    if (globalMax === 0) globalMax = 1;
+    globalMax *= 1.1;
+
+    // Grid
+    ctx.strokeStyle = '#e8e8e8';
+    ctx.lineWidth = 0.5;
+    var gridLines = 5;
+    for (var i = 0; i <= gridLines; i++) {
+      var y = padTop + chartH - (chartH * i / gridLines);
+      ctx.beginPath();
+      ctx.moveTo(padLeft, y);
+      ctx.lineTo(w - padRight, y);
+      ctx.stroke();
+
+      ctx.fillStyle = '#757575';
+      ctx.font = '11px sans-serif';
+      ctx.textAlign = 'right';
+      ctx.fillText(fmtMan(Math.round(globalMax * i / gridLines)), padLeft - 8, y + 4);
+    }
+
+    // X-axis labels
+    for (var age = minAge; age <= endAge; age += 5) {
+      var x = padLeft + chartW * (age - minAge) / (endAge - minAge);
+      ctx.fillStyle = '#757575';
+      ctx.font = '11px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(age + '歳', x, padTop + chartH + 20);
+
+      ctx.strokeStyle = '#eeeeee';
+      ctx.beginPath();
+      ctx.moveTo(x, padTop);
+      ctx.lineTo(x, padTop + chartH);
+      ctx.stroke();
+    }
+
+    // Life age vertical line
+    var lifeX = padLeft + chartW * (lifeAge - minAge) / (endAge - minAge);
+    ctx.strokeStyle = '#bdbdbd';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([4, 4]);
+    ctx.beginPath();
+    ctx.moveTo(lifeX, padTop);
+    ctx.lineTo(lifeX, padTop + chartH);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = '#757575';
+    ctx.font = 'bold 11px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('想定寿命 ' + lifeAge + '歳', lifeX, padTop + chartH + 38);
+
+    // Lines
+    drawAges.forEach(function(startAge) {
+      var data = allData[startAge];
+      ctx.strokeStyle = colors[startAge];
+      ctx.lineWidth = startAge === 65 ? 3 : 2;
+      ctx.beginPath();
+      var started = false;
+      data.forEach(function(d) {
+        var x = padLeft + chartW * (d.age - minAge) / (endAge - minAge);
+        var y = padTop + chartH - (d.total / globalMax) * chartH;
+        if (!started) { ctx.moveTo(x, y); started = true; }
+        else { ctx.lineTo(x, y); }
+      });
+      ctx.stroke();
+
+      // Label at end
+      var last = data[data.length - 1];
+      var lx = padLeft + chartW * (last.age - minAge) / (endAge - minAge);
+      var ly = padTop + chartH - (last.total / globalMax) * chartH;
+      ctx.fillStyle = colors[startAge];
+      ctx.font = 'bold 11px sans-serif';
+      ctx.textAlign = 'left';
+      ctx.fillText(labels[startAge], lx + 4, ly - 4);
+    });
+
+    // Breakeven dots
+    drawAges.forEach(function(startAge) {
+      if (startAge === 65) return;
+      var data65 = allData[65];
+      var dataS = allData[startAge];
+      for (var i = 1; i < dataS.length; i++) {
+        var age = minAge + i;
+        var t65 = data65[i].total;
+        var tS = dataS[i].total;
+        var t65prev = data65[i - 1].total;
+        var tSprev = dataS[i - 1].total;
+        // Check crossing
+        if (startAge < 65) {
+          // 65歳開始が繰上げを追い越す
+          if (t65prev <= tSprev && t65 > tS) {
+            var x = padLeft + chartW * (age - minAge) / (endAge - minAge);
+            var y = padTop + chartH - (t65 / globalMax) * chartH;
+            ctx.beginPath();
+            ctx.arc(x, y, 5, 0, Math.PI * 2);
+            ctx.fillStyle = colors[startAge];
+            ctx.fill();
+            ctx.strokeStyle = '#fff';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+          }
+        } else {
+          // 繰下げが65歳開始を追い越す
+          if (tSprev <= t65prev && tS > t65) {
+            var x = padLeft + chartW * (age - minAge) / (endAge - minAge);
+            var y = padTop + chartH - (tS / globalMax) * chartH;
+            ctx.beginPath();
+            ctx.arc(x, y, 5, 0, Math.PI * 2);
+            ctx.fillStyle = colors[startAge];
+            ctx.fill();
+            ctx.strokeStyle = '#fff';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+          }
+        }
+      }
+    });
+
+    // Axis
+    ctx.strokeStyle = '#bdbdbd';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(padLeft, padTop);
+    ctx.lineTo(padLeft, padTop + chartH);
+    ctx.lineTo(w - padRight, padTop + chartH);
+    ctx.stroke();
+
+    // Title
+    ctx.fillStyle = '#1a3a5c';
+    ctx.font = 'bold 13px sans-serif';
+    ctx.textAlign = 'left';
+    ctx.fillText('累計受給額の推移（受給開始年齢別）', padLeft, 22);
+
+    // Legend
+    var legendX = padLeft + 10;
+    var legendY = padTop + 14;
+    drawAges.forEach(function(startAge, idx) {
+      var lx = legendX + idx * 70;
+      ctx.fillStyle = colors[startAge];
+      ctx.fillRect(lx, legendY - 8, 14, 3);
+      ctx.fillStyle = '#424242';
+      ctx.font = '10px sans-serif';
+      ctx.textAlign = 'left';
+      ctx.fillText(labels[startAge], lx + 18, legendY - 3);
+    });
+  }
+
+  // Initial calculation
+  calculate();
+
+  // Resize handler
+  var resizeTimer;
+  window.addEventListener('resize', function() {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(calculate, 200);
+  });
+
+})();
+</script>
+</body>
+</html>

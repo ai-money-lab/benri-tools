@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>退職金計算シミュレーター - 手取り額・税金を自動計算</title>
+<meta name="description" content="勤続年数・退職理由・最終月給を入力するだけで退職金の手取り額・税金・退職所得控除を自動計算。退職金の運用シミュレーションも可能。">
+<meta property="og:title" content="退職金計算シミュレーター - 手取り額・税金を自動計算">
+<meta property="og:description" content="勤続年数・退職理由・最終月給を入力するだけで退職金の手取り額・税金・退職所得控除を自動計算。退職金の運用シミュレーションも可能。">
+<meta property="og:type" content="website">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Hiragino Kaku Gothic ProN',Meiryo,sans-serif;background:#f5f7fa;color:#333;line-height:1.6;min-width:320px}
+.container{max-width:900px;margin:0 auto;padding:16px}
+h1{text-align:center;color:#1a3a5c;font-size:clamp(1.3rem,4vw,1.8rem);margin:16px 0 8px;font-weight:700}
+.subtitle{text-align:center;color:#667;font-size:.85rem;margin-bottom:24px}
+.card{background:#fff;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,.08);padding:24px;margin-bottom:20px}
+.card h2{color:#1a3a5c;font-size:1.1rem;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid #e8f5e9}
+.input-group{margin-bottom:20px}
+.input-group label{display:block;font-weight:600;margin-bottom:6px;font-size:.9rem;color:#444}
+.input-group .hint{font-size:.75rem;color:#999;margin-top:2px}
+.input-row{display:flex;align-items:center;gap:12px}
+.input-row input[type=range]{flex:1;accent-color:#2e7d32;height:6px}
+.input-row input[type=number]{width:120px;padding:8px 10px;border:1px solid #ccc;border-radius:6px;font-size:1rem;text-align:right}
+.input-row input[type=number]:focus{outline:none;border-color:#2e7d32;box-shadow:0 0 0 3px rgba(46,125,50,.15)}
+.input-row .unit{font-size:.85rem;color:#888;white-space:nowrap}
+.radio-group{display:flex;gap:8px;flex-wrap:wrap}
+.radio-group label{display:flex;align-items:center;gap:6px;padding:8px 16px;border:2px solid #ddd;border-radius:8px;cursor:pointer;font-weight:500;font-size:.9rem;transition:all .2s}
+.radio-group label:hover{border-color:#2e7d32}
+.radio-group input[type=radio]{display:none}
+.radio-group input[type=radio]:checked+span{color:#2e7d32}
+.radio-group label:has(input:checked){border-color:#2e7d32;background:#e8f5e9}
+.result-box{background:linear-gradient(135deg,#e8f5e9 0%,#f1f8e9 100%);border-radius:12px;padding:20px;text-align:center;margin-bottom:16px}
+.result-box .amount{font-size:clamp(1.8rem,6vw,2.6rem);font-weight:800;color:#2e7d32}
+.result-box .label{font-size:.85rem;color:#555;margin-bottom:4px}
+.result-box .sub{font-size:.95rem;color:#666;margin-top:4px}
+.breakdown{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-top:16px}
+.breakdown-item{background:#fafafa;border-radius:8px;padding:14px;text-align:center;border:1px solid #eee}
+.breakdown-item .val{font-size:1.2rem;font-weight:700;color:#1a3a5c}
+.breakdown-item .lbl{font-size:.78rem;color:#888;margin-top:2px}
+.breakdown-item.tax .val{color:#c62828}
+.chart-wrap{width:100%;margin:16px 0}
+.chart-wrap canvas{width:100%;height:auto;display:block}
+.affiliate-box{background:linear-gradient(135deg,#e8f5e9 0%,#f1f8e9 100%);border:2px solid #2e7d32;border-radius:12px;padding:20px;text-align:center;margin:20px 0}
+.affiliate-box .af-title{font-size:1rem;font-weight:700;color:#1a3a5c;margin-bottom:8px}
+.affiliate-box .af-text{font-size:.85rem;color:#666;margin-bottom:12px}
+.affiliate-box a{display:inline-block;background:#2e7d32;color:#fff;text-decoration:none;padding:12px 32px;border-radius:8px;font-weight:700;font-size:1rem;transition:background .2s}
+.affiliate-box a:hover{background:#1b5e20}
+.sim-row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.sim-row .input-group{flex:1;min-width:200px;margin-bottom:0}
+.table-wrap{overflow-x:auto;margin-top:16px}
+table{width:100%;border-collapse:collapse;font-size:.85rem}
+th,td{padding:8px 10px;text-align:right;border-bottom:1px solid #eee}
+th{background:#f5f7fa;color:#555;font-weight:600;position:sticky;top:0}
+td:first-child,th:first-child{text-align:center}
+tr:hover{background:#f9fdf9}
+.note{background:#fff3e0;border-radius:8px;padding:12px 16px;font-size:.78rem;color:#888;margin-top:16px;text-align:center}
+.note strong{color:#e65100}
+footer{text-align:center;color:#aaa;font-size:.75rem;padding:24px 0 16px}
+.badge{display:inline-block;background:#1a3a5c;color:#fff;font-size:.7rem;padding:2px 8px;border-radius:4px;margin-left:6px;vertical-align:middle}
+.sep{height:1px;background:#eee;margin:20px 0}
+@media(max-width:480px){
+  .input-row{flex-wrap:wrap}
+  .input-row input[type=range]{width:100%;flex:unset}
+  .input-row input[type=number]{width:100%}
+  .card{padding:16px}
+  .breakdown{grid-template-columns:1fr 1fr}
+  .radio-group{flex-direction:column}
+  .radio-group label{justify-content:center}
+  .sim-row{flex-direction:column}
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>退職金計算シミュレーター</h1>
+  <p class="subtitle">勤続年数と月給を入力するだけで手取り額・税金を即算出</p>
+
+  <!-- 入力セクション -->
+  <div class="card">
+    <h2>基本情報を入力</h2>
+
+    <div class="input-group">
+      <label>勤続年数</label>
+      <div class="input-row">
+        <input type="range" id="yearsRange" min="1" max="45" step="1" value="20">
+        <input type="number" id="yearsInput" min="1" max="45" step="1" value="20">
+        <span class="unit">年</span>
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label>最終月給（基本給）</label>
+      <div class="input-row">
+        <input type="range" id="salaryRange" min="15" max="100" step="1" value="35">
+        <input type="number" id="salaryInput" min="15" max="100" step="1" value="35">
+        <span class="unit">万円</span>
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label>退職理由</label>
+      <div class="radio-group" id="reasonGroup">
+        <label><input type="radio" name="reason" value="voluntary"><span>自己都合</span></label>
+        <label><input type="radio" name="reason" value="company" checked><span>会社都合</span></label>
+        <label><input type="radio" name="reason" value="retirement"><span>定年退職</span></label>
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label>退職金制度</label>
+      <div class="radio-group" id="systemGroup">
+        <label><input type="radio" name="system" value="salary" checked><span>基本給連動型</span></label>
+        <label><input type="radio" name="system" value="point"><span>ポイント制</span></label>
+        <label><input type="radio" name="system" value="fixed"><span>定額制</span></label>
+      </div>
+      <p class="hint" id="systemHint">基本給連動型: 最終月給 x 支給率 x 退職理由係数で計算</p>
+    </div>
+  </div>
+
+  <!-- メイン結果 -->
+  <div class="card">
+    <h2>計算結果 <span class="badge">リアルタイム</span></h2>
+    <div class="result-box">
+      <div class="label">手取り退職金（税引後）</div>
+      <div class="amount" id="netAmount">0 万円</div>
+      <div class="sub" id="grossSub">退職金総額: 0 万円</div>
+    </div>
+
+    <div class="breakdown">
+      <div class="breakdown-item">
+        <div class="val" id="bdGross">0万円</div>
+        <div class="lbl">退職金総額</div>
+      </div>
+      <div class="breakdown-item">
+        <div class="val" id="bdDeduction">0万円</div>
+        <div class="lbl">退職所得控除額</div>
+      </div>
+      <div class="breakdown-item">
+        <div class="val" id="bdTaxableIncome">0万円</div>
+        <div class="lbl">退職所得（課税対象）</div>
+      </div>
+      <div class="breakdown-item tax">
+        <div class="val" id="bdIncomeTax">0万円</div>
+        <div class="lbl">所得税+復興特別所得税</div>
+      </div>
+      <div class="breakdown-item tax">
+        <div class="val" id="bdResidentTax">0万円</div>
+        <div class="lbl">住民税</div>
+      </div>
+      <div class="breakdown-item">
+        <div class="val" id="bdNet">0万円</div>
+        <div class="lbl">手取り額</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- アフィリエイト枠1 -->
+  <div class="affiliate-box">
+    <div class="af-title">退職金の運用を無料相談【マネードクター】</div>
+    <div class="af-text">FPに何度でも無料相談OK / 退職金の最適な運用プランを提案 / オンライン対応</div>
+    <a href="#">無料で相談する</a>
+  </div>
+
+  <!-- 勤続年数別グラフ -->
+  <div class="card">
+    <h2>勤続年数別 退職金推移</h2>
+    <p style="font-size:.8rem;color:#888;margin-bottom:8px;">現在の月給・退職理由・制度で、勤続年数ごとの退職金(税引前)の推移を表示</p>
+    <div class="chart-wrap">
+      <canvas id="barChart" width="800" height="380"></canvas>
+    </div>
+  </div>
+
+  <!-- 退職金支給率テーブル -->
+  <div class="card">
+    <h2>退職金支給率テーブル（基本給連動型参考）</h2>
+    <div class="table-wrap">
+      <table id="rateTable">
+        <thead>
+          <tr><th>勤続年数</th><th>支給率</th><th>自己都合係数</th><th>会社都合係数</th><th>定年係数</th></tr>
+        </thead>
+        <tbody id="rateBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 運用シミュレーション -->
+  <div class="card">
+    <h2>退職金運用シミュレーション</h2>
+    <p style="font-size:.8rem;color:#888;margin-bottom:12px;">手取り退職金を運用した場合の資産推移をシミュレーション</p>
+    <div class="sim-row">
+      <div class="input-group">
+        <label>年利回り（想定）</label>
+        <div class="input-row">
+          <input type="range" id="returnRange" min="1" max="10" step="0.5" value="3">
+          <input type="number" id="returnInput" min="0.1" max="20" step="0.1" value="3">
+          <span class="unit">%</span>
+        </div>
+      </div>
+      <div class="input-group">
+        <label>運用期間</label>
+        <div class="input-row">
+          <input type="range" id="periodRange" min="1" max="30" step="1" value="15">
+          <input type="number" id="periodInput" min="1" max="30" step="1" value="15">
+          <span class="unit">年</span>
+        </div>
+      </div>
+    </div>
+    <div class="result-box" style="background:linear-gradient(135deg,#e3f2fd 0%,#e8eaf6 100%)">
+      <div class="label">運用後の資産額</div>
+      <div class="amount" style="color:#1a3a5c" id="investResult">0 万円</div>
+      <div class="sub" id="investGain">運用益: 0 万円</div>
+    </div>
+    <div class="chart-wrap">
+      <canvas id="investChart" width="800" height="340"></canvas>
+    </div>
+  </div>
+
+  <!-- アフィリエイト枠2 -->
+  <div class="affiliate-box">
+    <div class="af-title">退職金でNISA積立を始める【SBI証券】</div>
+    <div class="af-text">業界最安水準の手数料 / 新NISA対応 / 退職金の一部を非課税で運用</div>
+    <a href="#">無料で口座開設する</a>
+  </div>
+
+  <div class="note">
+    <strong>※ 注意:</strong> この計算は概算です。正確な情報は専門家にご相談ください。
+    退職金の金額は企業ごとに異なります。税額は2024年度の税率に基づいて計算しています。
+  </div>
+
+  <footer>&copy; 2026 退職金計算シミュレーター</footer>
+</div>
+
+<script>
+(function(){
+'use strict';
+
+/* ===== 支給率テーブル（基本給連動型） ===== */
+var RATE_TABLE = {
+  1:1.0,2:2.0,3:3.0,4:4.0,5:5.5,6:6.5,7:7.5,8:9.0,9:10.0,10:11.5,
+  11:13.0,12:14.5,13:16.0,14:17.5,15:19.5,16:21.0,17:23.0,18:25.0,19:27.0,20:29.5,
+  21:32.0,22:34.5,23:37.0,24:39.5,25:42.5,26:45.0,27:48.0,28:51.0,29:54.0,30:57.5,
+  31:60.0,32:62.5,33:65.0,34:67.0,35:69.0,36:70.5,37:72.0,38:73.0,39:74.0,40:75.0,
+  41:75.5,42:76.0,43:76.5,44:77.0,45:77.5
+};
+
+/* 退職理由係数 */
+var REASON_COEFF = { voluntary:0.6, company:1.0, retirement:1.0 };
+
+/* ポイント制 基準ポイント(勤続年数あたり) */
+function pointValue(years){
+  var pts = 0;
+  for(var i=1;i<=years;i++){
+    if(i<=5) pts+=10;
+    else if(i<=10) pts+=15;
+    else if(i<=20) pts+=20;
+    else if(i<=30) pts+=25;
+    else pts+=30;
+  }
+  return pts;
+}
+
+/* 定額制テーブル(万円) */
+function fixedAmount(years){
+  if(years<=3) return years*15;
+  if(years<=5) return 45+(years-3)*25;
+  if(years<=10) return 95+(years-5)*35;
+  if(years<=20) return 270+(years-10)*50;
+  if(years<=30) return 770+(years-20)*60;
+  return 1370+(years-30)*50;
+}
+
+/* ===== 退職金総額(万円) ===== */
+function calcGross(years, salary, reason, system){
+  var coeff = REASON_COEFF[reason] || 1.0;
+  if(system==='salary'){
+    var rate = RATE_TABLE[years] || 0;
+    return salary * (rate/10) * coeff;
+  } else if(system==='point'){
+    var pts = pointValue(years);
+    var pointUnit = 1.0; // 1ポイント=1万円
+    return pts * pointUnit * coeff;
+  } else {
+    return fixedAmount(years) * coeff;
+  }
+}
+
+/* ===== 退職所得控除(万円) ===== */
+function calcDeduction(years){
+  if(years<=0) return 0;
+  if(years<=20) return Math.max(40 * years, 80);
+  return 800 + 70 * (years - 20);
+}
+
+/* ===== 所得税の税率テーブル(課税所得:万円) ===== */
+function calcIncomeTax(taxableIncome){
+  // taxableIncome は万円
+  var t = taxableIncome * 10000; // 円に変換
+  if(t<=0) return 0;
+  var tax=0;
+  if(t<=1950000) tax=t*0.05;
+  else if(t<=3300000) tax=t*0.10-97500;
+  else if(t<=6950000) tax=t*0.20-427500;
+  else if(t<=9000000) tax=t*0.23-636000;
+  else if(t<=18000000) tax=t*0.33-1536000;
+  else if(t<=40000000) tax=t*0.40-2796000;
+  else tax=t*0.45-4796000;
+  // 復興特別所得税 2.1%
+  tax = tax * 1.021;
+  return Math.floor(tax) / 10000; // 万円
+}
+
+/* ===== 住民税(一律10%) ===== */
+function calcResidentTax(taxableIncome){
+  var t = taxableIncome * 10000;
+  if(t<=0) return 0;
+  return Math.floor(t * 0.10) / 10000;
+}
+
+/* ===== DOM取得 ===== */
+var $ = function(id){ return document.getElementById(id); };
+
+var yearsRange = $('yearsRange'), yearsInput = $('yearsInput');
+var salaryRange = $('salaryRange'), salaryInput = $('salaryInput');
+var returnRange = $('returnRange'), returnInput = $('returnInput');
+var periodRange = $('periodRange'), periodInput = $('periodInput');
+
+/* スライダーと数値入力の同期 */
+function sync(range, input, cb){
+  range.addEventListener('input', function(){
+    input.value = range.value;
+    cb && cb();
+    update();
+  });
+  input.addEventListener('input', function(){
+    var v = parseFloat(input.value);
+    var mn = parseFloat(range.min), mx = parseFloat(range.max);
+    if(!isNaN(v)){
+      if(v<mn) v=mn; if(v>mx) v=mx;
+      range.value = v;
+    }
+    update();
+  });
+}
+
+sync(yearsRange, yearsInput);
+sync(salaryRange, salaryInput);
+sync(returnRange, returnInput);
+sync(periodRange, periodInput);
+
+/* ラジオボタン */
+document.querySelectorAll('input[name="reason"],input[name="system"]').forEach(function(r){
+  r.addEventListener('change', function(){
+    updateSystemHint();
+    update();
+  });
+});
+
+function getRadio(name){
+  var el = document.querySelector('input[name="'+name+'"]:checked');
+  return el ? el.value : '';
+}
+
+function updateSystemHint(){
+  var sys = getRadio('system');
+  var hint = $('systemHint');
+  if(sys==='salary') hint.textContent = '基本給連動型: 最終月給 x 支給率 x 退職理由係数で計算';
+  else if(sys==='point') hint.textContent = 'ポイント制: 勤続年数に応じたポイント x 1万円 x 退職理由係数で計算';
+  else hint.textContent = '定額制: 勤続年数に応じた定額テーブル x 退職理由係数で計算';
+}
+
+/* ===== 数値フォーマット ===== */
+function fmt(v){
+  if(Math.abs(v) >= 10000){
+    return (v/10000).toFixed(1).replace(/\.0$/,'') + '億';
+  }
+  if(Math.abs(v) >= 1){
+    return v.toFixed(1).replace(/\.0$/,'');
+  }
+  return v.toFixed(2);
+}
+function fmtMan(v){ return fmt(v) + '万円'; }
+function fmtComma(v){
+  var s = Math.round(v).toString();
+  return s.replace(/\B(?=(\d{3})+(?!\d))/g,',');
+}
+
+/* ===== メイン更新 ===== */
+function update(){
+  var years = parseInt(yearsInput.value) || 1;
+  var salary = parseFloat(salaryInput.value) || 15;
+  var reason = getRadio('reason');
+  var system = getRadio('system');
+
+  var gross = calcGross(years, salary, reason, system);
+  var deduction = calcDeduction(years);
+  var taxableIncome = Math.max((gross - deduction) / 2, 0);
+  var incomeTax = calcIncomeTax(taxableIncome);
+  var residentTax = calcResidentTax(taxableIncome);
+  var totalTax = incomeTax + residentTax;
+  var net = gross - totalTax;
+
+  $('netAmount').textContent = fmtMan(net);
+  $('grossSub').textContent = '退職金総額: ' + fmtMan(gross);
+  $('bdGross').textContent = fmtMan(gross);
+  $('bdDeduction').textContent = fmtMan(deduction);
+  $('bdTaxableIncome').textContent = fmtMan(taxableIncome);
+  $('bdIncomeTax').textContent = fmtMan(incomeTax);
+  $('bdResidentTax').textContent = fmtMan(residentTax);
+  $('bdNet').textContent = fmtMan(net);
+
+  drawBarChart(salary, reason, system);
+  updateInvestment(net);
+  buildRateTable();
+}
+
+/* ===== 棒グラフ: 勤続年数別退職金推移 ===== */
+function drawBarChart(salary, reason, system){
+  var canvas = $('barChart');
+  var dpr = window.devicePixelRatio || 1;
+  var w = canvas.parentElement.clientWidth;
+  var h = 380;
+  canvas.width = w * dpr;
+  canvas.height = h * dpr;
+  canvas.style.width = w + 'px';
+  canvas.style.height = h + 'px';
+  var ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+
+  // データ生成 5年刻み + 現在値
+  var currentYears = parseInt(yearsInput.value) || 1;
+  var labels = [];
+  var values = [];
+  for(var y=5;y<=45;y+=5){
+    labels.push(y);
+    values.push(calcGross(y, salary, reason, system));
+  }
+  // 現在値追加(重複しない場合)
+  if(labels.indexOf(currentYears)===-1){
+    labels.push(currentYears);
+    values.push(calcGross(currentYears, salary, reason, system));
+    // ソート
+    var pairs = labels.map(function(l,i){return{l:l,v:values[i]};});
+    pairs.sort(function(a,b){return a.l-b.l;});
+    labels = pairs.map(function(p){return p.l;});
+    values = pairs.map(function(p){return p.v;});
+  }
+
+  var maxVal = Math.max.apply(null, values) * 1.15;
+  if(maxVal<=0) maxVal=100;
+
+  var padL=60, padR=20, padT=30, padB=50;
+  var chartW = w - padL - padR;
+  var chartH = h - padT - padB;
+  var barW = Math.min(chartW / labels.length * 0.6, 50);
+  var gap = chartW / labels.length;
+
+  ctx.clearRect(0,0,w,h);
+
+  // グリッド
+  ctx.strokeStyle='#eee';
+  ctx.lineWidth=1;
+  var gridCount=5;
+  for(var i=0;i<=gridCount;i++){
+    var gy = padT + chartH - (chartH * i / gridCount);
+    ctx.beginPath();ctx.moveTo(padL,gy);ctx.lineTo(w-padR,gy);ctx.stroke();
+    ctx.fillStyle='#999';ctx.font='11px sans-serif';ctx.textAlign='right';
+    ctx.fillText(Math.round(maxVal*i/gridCount)+'万', padL-8, gy+4);
+  }
+
+  // バー描画
+  for(var i=0;i<labels.length;i++){
+    var x = padL + gap*i + (gap-barW)/2;
+    var barH = (values[i]/maxVal)*chartH;
+    var y = padT + chartH - barH;
+
+    var isCurrent = labels[i] === currentYears;
+    if(isCurrent){
+      ctx.fillStyle='#2e7d32';
+    } else {
+      ctx.fillStyle='#a5d6a7';
+    }
+    // 角丸バー
+    roundRect(ctx, x, y, barW, barH, 4);
+    ctx.fill();
+
+    // 値ラベル
+    ctx.fillStyle = isCurrent ? '#2e7d32' : '#666';
+    ctx.font = (isCurrent ? 'bold ' : '') + '11px sans-serif';
+    ctx.textAlign='center';
+    ctx.fillText(fmt(values[i])+'万', x+barW/2, y-6);
+
+    // X軸ラベル
+    ctx.fillStyle = isCurrent ? '#2e7d32' : '#666';
+    ctx.font = (isCurrent ? 'bold ' : '') + '12px sans-serif';
+    ctx.fillText(labels[i]+'年', x+barW/2, padT+chartH+20);
+
+    if(isCurrent){
+      ctx.fillStyle='#2e7d32';
+      ctx.fillText('▲ 現在', x+barW/2, padT+chartH+36);
+    }
+  }
+}
+
+function roundRect(ctx,x,y,w,h,r){
+  if(h<r*2) r=h/2;
+  ctx.beginPath();
+  ctx.moveTo(x+r,y);
+  ctx.lineTo(x+w-r,y);
+  ctx.quadraticCurveTo(x+w,y,x+w,y+r);
+  ctx.lineTo(x+w,y+h);
+  ctx.lineTo(x,y+h);
+  ctx.lineTo(x,y+r);
+  ctx.quadraticCurveTo(x,y,x+r,y);
+  ctx.closePath();
+}
+
+/* ===== 運用シミュレーション ===== */
+function updateInvestment(principal){
+  var rate = (parseFloat(returnInput.value) || 3) / 100;
+  var period = parseInt(periodInput.value) || 15;
+  var data = [principal];
+  for(var i=1;i<=period;i++){
+    data.push(data[i-1]*(1+rate));
+  }
+  var final = data[period];
+  var gain = final - principal;
+  $('investResult').textContent = fmtMan(final);
+  $('investGain').textContent = '運用益: +' + fmtMan(gain) + '（元本 ' + fmtMan(principal) + '）';
+
+  drawInvestChart(data, principal, period);
+}
+
+function drawInvestChart(data, principal, period){
+  var canvas = $('investChart');
+  var dpr = window.devicePixelRatio || 1;
+  var w = canvas.parentElement.clientWidth;
+  var h = 340;
+  canvas.width = w * dpr;
+  canvas.height = h * dpr;
+  canvas.style.width = w + 'px';
+  canvas.style.height = h + 'px';
+  var ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+
+  var padL=70, padR=20, padT=30, padB=50;
+  var chartW = w - padL - padR;
+  var chartH = h - padT - padB;
+  var maxVal = Math.max.apply(null, data) * 1.1;
+  if(maxVal<=0) maxVal=100;
+
+  ctx.clearRect(0,0,w,h);
+
+  // グリッド
+  ctx.strokeStyle='#eee';ctx.lineWidth=1;
+  var gridCount=5;
+  for(var i=0;i<=gridCount;i++){
+    var gy = padT + chartH - (chartH * i / gridCount);
+    ctx.beginPath();ctx.moveTo(padL,gy);ctx.lineTo(w-padR,gy);ctx.stroke();
+    ctx.fillStyle='#999';ctx.font='11px sans-serif';ctx.textAlign='right';
+    ctx.fillText(fmtComma(Math.round(maxVal*i/gridCount))+'万', padL-8, gy+4);
+  }
+
+  // 元本ライン
+  var principalY = padT + chartH - (principal/maxVal)*chartH;
+  ctx.strokeStyle='#ccc';ctx.setLineDash([5,3]);ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(padL,principalY);ctx.lineTo(w-padR,principalY);ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle='#999';ctx.font='10px sans-serif';ctx.textAlign='left';
+  ctx.fillText('元本 '+fmtMan(principal), padL+4, principalY-5);
+
+  // 面グラフ + ライン
+  var stepX = chartW / period;
+  // 面
+  ctx.beginPath();
+  ctx.moveTo(padL, padT+chartH);
+  for(var i=0;i<=period;i++){
+    var x = padL + stepX*i;
+    var y = padT + chartH - (data[i]/maxVal)*chartH;
+    ctx.lineTo(x, y);
+  }
+  ctx.lineTo(padL+chartW, padT+chartH);
+  ctx.closePath();
+  var grad = ctx.createLinearGradient(0, padT, 0, padT+chartH);
+  grad.addColorStop(0, 'rgba(26,58,92,0.25)');
+  grad.addColorStop(1, 'rgba(26,58,92,0.03)');
+  ctx.fillStyle = grad;
+  ctx.fill();
+
+  // ライン
+  ctx.beginPath();
+  for(var i=0;i<=period;i++){
+    var x = padL + stepX*i;
+    var y = padT + chartH - (data[i]/maxVal)*chartH;
+    if(i===0) ctx.moveTo(x,y);
+    else ctx.lineTo(x,y);
+  }
+  ctx.strokeStyle='#1a3a5c';ctx.lineWidth=2.5;ctx.stroke();
+
+  // ドット
+  for(var i=0;i<=period;i++){
+    var x = padL + stepX*i;
+    var y = padT + chartH - (data[i]/maxVal)*chartH;
+    if(i===0||i===period||i%5===0){
+      ctx.beginPath();ctx.arc(x,y,4,0,Math.PI*2);
+      ctx.fillStyle='#1a3a5c';ctx.fill();
+      ctx.fillStyle='#1a3a5c';ctx.font='10px sans-serif';ctx.textAlign='center';
+      ctx.fillText(fmt(data[i])+'万', x, y-10);
+    }
+  }
+
+  // X軸ラベル
+  for(var i=0;i<=period;i++){
+    if(i===0||i===period||i%5===0){
+      var x = padL + stepX*i;
+      ctx.fillStyle='#666';ctx.font='11px sans-serif';ctx.textAlign='center';
+      ctx.fillText(i+'年後', x, padT+chartH+20);
+    }
+  }
+}
+
+/* ===== 支給率テーブル ===== */
+function buildRateTable(){
+  var body = $('rateBody');
+  var currentYears = parseInt(yearsInput.value) || 1;
+  var html = '';
+  var milestones = [1,3,5,10,15,20,25,30,35,40,45];
+  if(milestones.indexOf(currentYears)===-1){
+    milestones.push(currentYears);
+    milestones.sort(function(a,b){return a-b;});
+  }
+  for(var i=0;i<milestones.length;i++){
+    var y = milestones[i];
+    var rate = RATE_TABLE[y] || 0;
+    var isCurrent = y === currentYears;
+    html += '<tr' + (isCurrent ? ' style="background:#e8f5e9;font-weight:700"' : '') + '>';
+    html += '<td>' + y + '年' + (isCurrent ? ' ←' : '') + '</td>';
+    html += '<td>' + rate.toFixed(1) + '</td>';
+    html += '<td>' + (rate * REASON_COEFF.voluntary / 10).toFixed(2) + '</td>';
+    html += '<td>' + (rate * REASON_COEFF.company / 10).toFixed(2) + '</td>';
+    html += '<td>' + (rate * REASON_COEFF.retirement / 10).toFixed(2) + '</td>';
+    html += '</tr>';
+  }
+  body.innerHTML = html;
+}
+
+/* ===== リサイズ対応 ===== */
+var resizeTimer;
+window.addEventListener('resize', function(){
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(update, 150);
+});
+
+/* ===== 初期描画 ===== */
+updateSystemHint();
+update();
+
+})();
+</script>
+</body>
+</html>

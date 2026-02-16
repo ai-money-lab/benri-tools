@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>不動産投資利回り計算機 - 表面・実質利回りを即算出</title>
+<meta name="description" content="物件価格・家賃収入・経費を入力するだけで表面利回り・実質利回り・キャッシュフローを自動計算。不動産投資の収益性を簡単シミュレーション。">
+<meta property="og:title" content="不動産投資利回り計算機 - 表面・実質利回りを即算出">
+<meta property="og:description" content="物件価格・家賃収入・経費を入力するだけで表面利回り・実質利回り・キャッシュフローを自動計算。不動産投資の収益性を簡単シミュレーション。">
+<meta property="og:type" content="website">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Hiragino Kaku Gothic ProN',Meiryo,sans-serif;background:#f5f7fa;color:#333;line-height:1.6;min-width:320px}
+.container{max-width:840px;margin:0 auto;padding:16px}
+h1{text-align:center;color:#1a3a5c;font-size:clamp(1.3rem,4vw,1.8rem);margin:16px 0 8px;font-weight:700}
+.subtitle{text-align:center;color:#667;font-size:.85rem;margin-bottom:24px}
+.card{background:#fff;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,.08);padding:24px;margin-bottom:20px}
+.card h2{color:#1a3a5c;font-size:1.1rem;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid #e8f5e9}
+.input-group{margin-bottom:18px}
+.input-group label{display:block;font-weight:600;margin-bottom:6px;font-size:.9rem;color:#444}
+.input-row{display:flex;align-items:center;gap:12px}
+.input-row input[type=range]{flex:1;accent-color:#2e7d32}
+.input-row input[type=number]{width:130px;padding:8px 10px;border:1px solid #ccc;border-radius:6px;font-size:1rem;text-align:right}
+.input-row .unit{font-size:.85rem;color:#888;white-space:nowrap}
+.result-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:16px}
+.result-card{border-radius:12px;padding:20px;text-align:center}
+.result-card.primary{background:linear-gradient(135deg,#e8f5e9 0%,#f1f8e9 100%)}
+.result-card.secondary{background:linear-gradient(135deg,#e3f2fd 0%,#e8eaf6 100%)}
+.result-card.warning{background:linear-gradient(135deg,#fff8e1 0%,#fff3e0 100%)}
+.result-card .val{font-size:clamp(1.6rem,5vw,2.2rem);font-weight:800}
+.result-card.primary .val{color:#2e7d32}
+.result-card.secondary .val{color:#1565c0}
+.result-card.warning .val{color:#e65100}
+.result-card .lbl{font-size:.8rem;color:#666;margin-bottom:4px}
+.result-card .sub{font-size:.85rem;color:#888;margin-top:2px}
+.breakdown{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-top:16px}
+.breakdown-item{background:#fafafa;border-radius:8px;padding:12px;text-align:center;border:1px solid #eee}
+.breakdown-item .v{font-size:1.15rem;font-weight:700;color:#1a3a5c}
+.breakdown-item .l{font-size:.75rem;color:#888;margin-top:2px}
+.chart-container{position:relative;width:100%;max-width:700px;margin:20px auto}
+.chart-container canvas{width:100%;height:auto}
+.affiliate-box{background:linear-gradient(135deg,#e8f5e9 0%,#e3f2fd 100%);border:2px solid #43a047;border-radius:12px;padding:20px;text-align:center;margin:20px 0}
+.affiliate-box .af-title{font-size:1rem;font-weight:700;color:#1a3a5c;margin-bottom:8px}
+.affiliate-box .af-text{font-size:.85rem;color:#666;margin-bottom:12px}
+.affiliate-box a{display:inline-block;background:#2e7d32;color:#fff;text-decoration:none;padding:12px 32px;border-radius:8px;font-weight:700;font-size:1rem;transition:background .2s}
+.affiliate-box a:hover{background:#1b5e20}
+.table-wrap{overflow-x:auto;margin-top:16px}
+table{width:100%;border-collapse:collapse;font-size:.85rem}
+th,td{padding:8px 10px;text-align:right;border-bottom:1px solid #eee}
+th{background:#f5f7fa;color:#555;font-weight:600}
+td:first-child,th:first-child{text-align:center}
+tr:hover{background:#f9fdf9}
+.note{background:#fff3e0;border-radius:8px;padding:12px 16px;font-size:.78rem;color:#888;margin-top:16px;text-align:center}
+footer{text-align:center;color:#aaa;font-size:.75rem;padding:24px 0 16px}
+@media(max-width:480px){
+  .input-row{flex-wrap:wrap}
+  .input-row input[type=range]{width:100%;flex:unset}
+  .input-row input[type=number]{width:100%}
+  .card{padding:16px}
+  .result-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>不動産投資利回り計算機</h1>
+  <p class="subtitle">物件価格・家賃収入・経費から表面/実質利回り・キャッシュフローを即計算</p>
+
+  <div class="card">
+    <h2>物件情報</h2>
+    <div class="input-group">
+      <label>物件価格</label>
+      <div class="input-row">
+        <input type="range" id="priceRange" min="500" max="20000" step="100" value="3000">
+        <input type="number" id="priceInput" min="100" max="100000" step="10" value="3000">
+        <span class="unit">万円</span>
+      </div>
+    </div>
+    <div class="input-group">
+      <label>月額家賃収入（満室想定）</label>
+      <div class="input-row">
+        <input type="range" id="rentRange" min="1" max="200" step="1" value="25">
+        <input type="number" id="rentInput" min="1" max="1000" step="1" value="25">
+        <span class="unit">万円/月</span>
+      </div>
+    </div>
+    <div class="input-group">
+      <label>空室率</label>
+      <div class="input-row">
+        <input type="range" id="vacancyRange" min="0" max="30" step="1" value="5">
+        <input type="number" id="vacancyInput" min="0" max="50" step="1" value="5">
+        <span class="unit">%</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>経費・ローン</h2>
+    <div class="input-group">
+      <label>年間経費（管理費・修繕積立・固定資産税・保険等）</label>
+      <div class="input-row">
+        <input type="range" id="expenseRange" min="0" max="500" step="5" value="60">
+        <input type="number" id="expenseInput" min="0" max="2000" step="1" value="60">
+        <span class="unit">万円/年</span>
+      </div>
+    </div>
+    <div class="input-group">
+      <label>購入時諸費用（物件価格の何%）</label>
+      <div class="input-row">
+        <input type="range" id="initCostRange" min="0" max="15" step="0.5" value="7">
+        <input type="number" id="initCostInput" min="0" max="20" step="0.1" value="7">
+        <span class="unit">%</span>
+      </div>
+    </div>
+    <div class="input-group">
+      <label>自己資金比率</label>
+      <div class="input-row">
+        <input type="range" id="downRange" min="0" max="100" step="5" value="20">
+        <input type="number" id="downInput" min="0" max="100" step="1" value="20">
+        <span class="unit">%</span>
+      </div>
+    </div>
+    <div class="input-group">
+      <label>ローン金利</label>
+      <div class="input-row">
+        <input type="range" id="rateRange" min="0.1" max="5" step="0.1" value="1.5">
+        <input type="number" id="rateInput" min="0" max="10" step="0.1" value="1.5">
+        <span class="unit">%</span>
+      </div>
+    </div>
+    <div class="input-group">
+      <label>ローン期間</label>
+      <div class="input-row">
+        <input type="range" id="termRange" min="1" max="35" step="1" value="30">
+        <input type="number" id="termInput" min="1" max="45" step="1" value="30">
+        <span class="unit">年</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="result-grid">
+    <div class="result-card primary">
+      <div class="lbl">表面利回り</div>
+      <div class="val" id="grossYield">-</div>
+      <div class="sub" id="grossSub"></div>
+    </div>
+    <div class="result-card secondary">
+      <div class="lbl">実質利回り（NOI利回り）</div>
+      <div class="val" id="netYield">-</div>
+      <div class="sub" id="netSub"></div>
+    </div>
+    <div class="result-card warning">
+      <div class="lbl">自己資金利回り（CCR）</div>
+      <div class="val" id="ccr">-</div>
+      <div class="sub" id="ccrSub"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>収支内訳（年間）</h2>
+    <div class="breakdown" id="breakdownGrid"></div>
+  </div>
+
+  <div class="card">
+    <h2>キャッシュフロー推移（30年）</h2>
+    <div class="chart-container"><canvas id="cfChart" width="700" height="350"></canvas></div>
+  </div>
+
+  <div class="affiliate-box">
+    <div class="af-title">不動産投資の無料相談【RENOSY】</div>
+    <div class="af-text">AIが厳選した物件を紹介 / 管理はおまかせ / 初回面談でPayPayポイント贈呈</div>
+    <a href="#">無料で資料請求する</a>
+  </div>
+
+  <div class="card">
+    <h2>利回り早見表</h2>
+    <div class="table-wrap">
+      <table id="yieldTable">
+        <thead><tr><th>物件価格</th><th>月額家賃</th><th>表面利回り</th><th>実質利回り</th><th>年間CF</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="affiliate-box">
+    <div class="af-title">不動産投資のプロに無料相談【マネードクター】</div>
+    <div class="af-text">FPに何度でも無料相談OK / 不動産を含む資産運用プランを提案 / オンライン対応</div>
+    <a href="#">無料で相談する</a>
+  </div>
+
+  <p class="note">※ この計算は概算です。正確な情報は専門家にご相談ください。実際の収益は空室率変動、修繕費、金利変動、物件の減価等により異なります。</p>
+  <footer>&copy; 2025 不動産投資利回り計算機</footer>
+</div>
+
+<script>
+(function(){
+  const $=id=>document.getElementById(id);
+  const pairs=[['priceRange','priceInput'],['rentRange','rentInput'],['vacancyRange','vacancyInput'],['expenseRange','expenseInput'],['initCostRange','initCostInput'],['downRange','downInput'],['rateRange','rateInput'],['termRange','termInput']];
+  pairs.forEach(([r,n])=>{
+    $(r).addEventListener('input',()=>{$(n).value=$(r).value;calc()});
+    $(n).addEventListener('input',()=>{$(r).value=$(n).value;calc()});
+  });
+
+  function fmt(n){return Math.round(n).toLocaleString('ja-JP')}
+  function fmtMan(n){const m=n/10000;return m>=100?Math.round(m).toLocaleString()+'万円':m.toFixed(1)+'万円'}
+
+  function pmt(rate,nper,pv){
+    if(rate===0)return pv/nper;
+    const r=rate/12;const n=nper*12;
+    return pv*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1);
+  }
+
+  function calc(){
+    const price=parseFloat($('priceInput').value)*10000||30000000;
+    const rent=parseFloat($('rentInput').value)*10000||250000;
+    const vacancy=parseFloat($('vacancyInput').value)/100||0.05;
+    const expense=parseFloat($('expenseInput').value)*10000||600000;
+    const initCostRate=parseFloat($('initCostInput').value)/100||0.07;
+    const downRate=parseFloat($('downInput').value)/100||0.2;
+    const loanRate=parseFloat($('rateInput').value)/100||0.015;
+    const term=parseInt($('termInput').value)||30;
+
+    const annualRentGross=rent*12;
+    const annualRentNet=annualRentGross*(1-vacancy);
+    const noi=annualRentNet-expense;
+    const totalCost=price*(1+initCostRate);
+    const downPayment=price*downRate+price*initCostRate;
+    const loanAmount=price*(1-downRate);
+    const monthlyPayment=loanAmount>0?pmt(loanRate,term,loanAmount):0;
+    const annualDebt=monthlyPayment*12;
+    const annualCF=noi-annualDebt;
+
+    const grossYield=annualRentGross/price*100;
+    const netYield=noi/totalCost*100;
+    const ccrVal=downPayment>0?annualCF/downPayment*100:0;
+
+    $('grossYield').textContent=grossYield.toFixed(2)+'%';
+    $('grossSub').textContent='年間家賃 '+fmtMan(annualRentGross)+' / 物件価格 '+fmtMan(price);
+    $('netYield').textContent=netYield.toFixed(2)+'%';
+    $('netSub').textContent='NOI '+fmtMan(noi)+' / 総投資額 '+fmtMan(totalCost);
+    $('ccr').textContent=ccrVal.toFixed(2)+'%';
+    $('ccrSub').textContent='年間CF '+fmtMan(annualCF)+' / 自己資金 '+fmtMan(downPayment);
+
+    const grid=$('breakdownGrid');
+    grid.innerHTML=[
+      {l:'年間家賃収入（満室）',v:fmtMan(annualRentGross)},
+      {l:'空室損失',v:'-'+fmtMan(annualRentGross*vacancy)},
+      {l:'実効賃料収入',v:fmtMan(annualRentNet)},
+      {l:'年間経費',v:'-'+fmtMan(expense)},
+      {l:'NOI（営業純利益）',v:fmtMan(noi)},
+      {l:'年間ローン返済',v:'-'+fmtMan(annualDebt)},
+      {l:'年間キャッシュフロー',v:fmtMan(annualCF)},
+      {l:'月間キャッシュフロー',v:fmtMan(annualCF/12)},
+    ].map(i=>'<div class="breakdown-item"><div class="v">'+i.v+'</div><div class="l">'+i.l+'</div></div>').join('');
+
+    drawCFChart(noi,annualDebt,loanAmount,loanRate,term);
+    buildTable(vacancy,expense,initCostRate,downRate,loanRate,term);
+  }
+
+  function drawCFChart(noi,annualDebt,loanAmount,loanRate,term){
+    const canvas=$('cfChart');
+    const dpr=window.devicePixelRatio||1;
+    const W=700,H=350;
+    canvas.width=W*dpr;canvas.height=H*dpr;
+    const ctx=canvas.getContext('2d');
+    ctx.scale(dpr,dpr);ctx.clearRect(0,0,W,H);
+
+    const years=[];let cumCF=0;let balance=loanAmount;const monthlyRate=loanRate/12;
+    for(let y=0;y<=term&&y<=30;y++){
+      const cf=noi-annualDebt;
+      cumCF+=y===0?0:cf;
+      years.push({year:y,cf:y===0?0:cf,cumCF,balance});
+      // reduce balance
+      for(let m=0;m<12;m++){
+        const interest=balance*monthlyRate;
+        const principal=annualDebt/12-interest;
+        balance=Math.max(0,balance-principal);
+      }
+    }
+
+    const mL=60,mR=20,mT=40,mB=50;
+    const cW=W-mL-mR,cH=H-mT-mB;
+    const maxY=Math.max(...years.map(y=>y.cumCF),1);
+    const minY=Math.min(...years.map(y=>y.cumCF),0);
+    const range=maxY-minY||1;
+
+    // grid
+    ctx.strokeStyle='#eee';ctx.fillStyle='#999';ctx.font='11px sans-serif';ctx.textAlign='right';
+    for(let i=0;i<=4;i++){
+      const val=minY+(range*i/4);
+      const y=mT+cH-(val-minY)/range*cH;
+      ctx.beginPath();ctx.moveTo(mL,y);ctx.lineTo(W-mR,y);ctx.stroke();
+      ctx.fillText(Math.round(val/10000)+'万',mL-5,y+4);
+    }
+
+    // zero line
+    if(minY<0&&maxY>0){
+      const zy=mT+cH-(0-minY)/range*cH;
+      ctx.strokeStyle='#999';ctx.setLineDash([4,4]);
+      ctx.beginPath();ctx.moveTo(mL,zy);ctx.lineTo(W-mR,zy);ctx.stroke();
+      ctx.setLineDash([]);
+    }
+
+    // bars (annual CF)
+    const barW=Math.max(6,cW/years.length*0.5);
+    years.forEach((d,i)=>{
+      if(i===0)return;
+      const x=mL+(i/years.length)*cW;
+      const zy=mT+cH-(0-minY)/range*cH;
+      const vy=mT+cH-(d.cf-minY)/range*cH;
+      ctx.fillStyle=d.cf>=0?'rgba(46,125,50,0.3)':'rgba(230,81,0,0.3)';
+      ctx.fillRect(x-barW/2,Math.min(zy,vy),barW,Math.abs(vy-zy));
+    });
+
+    // cumulative CF line
+    ctx.strokeStyle='#2e7d32';ctx.lineWidth=2.5;ctx.beginPath();
+    years.forEach((d,i)=>{
+      const x=mL+(i/years.length)*cW;
+      const y=mT+cH-(d.cumCF-minY)/range*cH;
+      i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+    });
+    ctx.stroke();
+
+    // x labels
+    ctx.fillStyle='#666';ctx.font='11px sans-serif';ctx.textAlign='center';
+    years.forEach((d,i)=>{
+      if(i%5===0||i===years.length-1){
+        const x=mL+(i/years.length)*cW;
+        ctx.fillText(d.year+'年',x,H-mB+20);
+      }
+    });
+
+    // legend
+    ctx.font='12px sans-serif';ctx.textAlign='left';
+    ctx.fillStyle='rgba(46,125,50,0.3)';ctx.fillRect(mL,8,14,14);
+    ctx.fillStyle='#333';ctx.fillText('年間CF',mL+20,19);
+    ctx.strokeStyle='#2e7d32';ctx.lineWidth=2.5;
+    ctx.beginPath();ctx.moveTo(mL+120,15);ctx.lineTo(mL+140,15);ctx.stroke();
+    ctx.fillStyle='#333';ctx.fillText('累計CF',mL+146,19);
+  }
+
+  function buildTable(vacancy,expense,initCostRate,downRate,loanRate,term){
+    const cases=[
+      {price:1000,rent:7},{price:1500,rent:10},{price:2000,rent:13},
+      {price:3000,rent:20},{price:3000,rent:25},{price:5000,rent:35},
+      {price:5000,rent:42},{price:8000,rent:55},{price:10000,rent:70},{price:15000,rent:100}
+    ];
+    const tbody=document.querySelector('#yieldTable tbody');
+    tbody.innerHTML=cases.map(c=>{
+      const p=c.price*10000;const r=c.rent*10000;
+      const annG=r*12;const annN=annG*(1-vacancy);
+      const exp=(expense/(parseFloat($('priceInput').value)*10000||30000000))*p;
+      const noi=annN-exp;
+      const totalC=p*(1+initCostRate);
+      const dp=p*downRate+p*initCostRate;
+      const loan=p*(1-downRate);
+      const mp=loan>0?pmt(loanRate,term,loan):0;
+      const ad=mp*12;const cf=noi-ad;
+      return '<tr><td>'+c.price+'万円</td><td>'+c.rent+'万円</td><td>'+(annG/p*100).toFixed(2)+'%</td><td>'+(noi/totalC*100).toFixed(2)+'%</td><td>'+Math.round(cf/10000)+'万円</td></tr>';
+    }).join('');
+  }
+
+  calc();
+})();
+</script>
+</body>
+</html>

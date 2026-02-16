@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>失業保険計算機 - 基本手当日額・給付日数・総額を自動計算</title>
+<meta name="description" content="年齢・退職理由・被保険者期間・月収を入力するだけで失業保険（雇用保険）の基本手当日額・所定給付日数・給付総額を自動計算。給付スケジュールも表示。">
+<meta property="og:title" content="失業保険計算機 - 基本手当日額・給付日数・総額を自動計算">
+<meta property="og:description" content="年齢・退職理由・被保険者期間・月収を入力するだけで失業保険の基本手当日額・所定給付日数・給付総額を自動計算。給付スケジュールのタイムラインも表示。">
+<meta property="og:type" content="website">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Hiragino Kaku Gothic ProN',Meiryo,sans-serif;background:#f5f7fa;color:#333;line-height:1.6;min-width:320px}
+.container{max-width:900px;margin:0 auto;padding:16px}
+h1{text-align:center;color:#1a3a5c;font-size:clamp(1.3rem,4vw,1.8rem);margin:16px 0 8px;font-weight:700}
+.subtitle{text-align:center;color:#667;font-size:.85rem;margin-bottom:24px}
+.card{background:#fff;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,.08);padding:24px;margin-bottom:20px}
+.card h2{color:#1a3a5c;font-size:1.1rem;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid #e8f5e9}
+.card h2 .icon{margin-right:6px}
+.input-group{margin-bottom:20px}
+.input-group label{display:block;font-weight:600;margin-bottom:6px;font-size:.9rem;color:#444}
+.input-group .hint{font-size:.75rem;color:#999;margin-top:2px}
+.input-row{display:flex;align-items:center;gap:12px}
+.input-row input[type=range]{flex:1;accent-color:#2e7d32;height:6px}
+.input-row input[type=number]{width:130px;padding:8px 10px;border:1px solid #ccc;border-radius:6px;font-size:1rem;text-align:right;transition:border-color .2s}
+.input-row input[type=number]:focus{outline:none;border-color:#2e7d32;box-shadow:0 0 0 2px rgba(46,125,50,.15)}
+.input-row .unit{font-size:.85rem;color:#888;white-space:nowrap}
+.radio-group{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.radio-group label{display:flex;align-items:center;gap:6px;font-weight:400;padding:8px 16px;border:2px solid #ddd;border-radius:8px;cursor:pointer;transition:all .2s;font-size:.9rem;background:#fafafa}
+.radio-group label:hover{border-color:#2e7d32;background:#f1f8e9}
+.radio-group input[type=radio]{accent-color:#2e7d32;width:16px;height:16px}
+.radio-group input[type=radio]:checked+span{color:#2e7d32;font-weight:600}
+.radio-group label:has(input:checked){border-color:#2e7d32;background:#e8f5e9}
+.select-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.select-row select{padding:8px 12px;border:1px solid #ccc;border-radius:6px;font-size:.95rem;flex:1;max-width:260px;transition:border-color .2s}
+.select-row select:focus{outline:none;border-color:#2e7d32;box-shadow:0 0 0 2px rgba(46,125,50,.15)}
+.result-box{background:linear-gradient(135deg,#e8f5e9 0%,#f1f8e9 100%);border-radius:12px;padding:20px;text-align:center;margin-bottom:16px}
+.result-box .label{font-size:.85rem;color:#555;margin-bottom:4px}
+.result-box .amount{font-size:clamp(1.8rem,6vw,2.6rem);font-weight:800;color:#2e7d32}
+.result-box .sub{font-size:.95rem;color:#666;margin-top:4px}
+.result-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:16px}
+.result-item{background:#fafafa;border-radius:8px;padding:14px;text-align:center;border:1px solid #eee}
+.result-item .val{font-size:1.3rem;font-weight:700;color:#1a3a5c}
+.result-item .lbl{font-size:.78rem;color:#888;margin-top:2px}
+.timeline{position:relative;padding:20px 0 20px 30px;margin:16px 0}
+.timeline::before{content:'';position:absolute;left:14px;top:0;bottom:0;width:3px;background:linear-gradient(180deg,#2e7d32,#1a3a5c);border-radius:2px}
+.timeline-item{position:relative;margin-bottom:24px;padding-left:24px}
+.timeline-item::before{content:'';position:absolute;left:-22px;top:4px;width:14px;height:14px;border-radius:50%;border:3px solid #2e7d32;background:#fff;z-index:1}
+.timeline-item.active::before{background:#2e7d32}
+.timeline-item.navy::before{border-color:#1a3a5c}
+.timeline-item.navy.active::before{background:#1a3a5c}
+.timeline-item .tl-title{font-weight:700;font-size:.95rem;color:#1a3a5c}
+.timeline-item .tl-date{font-size:.8rem;color:#2e7d32;font-weight:600;margin-top:2px}
+.timeline-item .tl-desc{font-size:.82rem;color:#888;margin-top:2px}
+.chart-container{width:100%;margin:16px 0}
+.chart-container canvas{width:100%;height:auto;display:block}
+.affiliate-box{background:linear-gradient(135deg,#e8f5e9 0%,#e3f2fd 100%);border:2px solid #2e7d32;border-radius:12px;padding:20px;text-align:center;margin:20px 0}
+.affiliate-box .af-title{font-size:1rem;font-weight:700;color:#1a3a5c;margin-bottom:8px}
+.affiliate-box .af-text{font-size:.85rem;color:#666;margin-bottom:12px}
+.affiliate-box a{display:inline-block;color:#fff;text-decoration:none;padding:12px 32px;border-radius:8px;font-weight:700;font-size:1rem;transition:all .2s;margin:4px}
+.affiliate-box a.btn-green{background:#2e7d32}
+.affiliate-box a.btn-green:hover{background:#1b5e20;box-shadow:0 4px 12px rgba(46,125,50,.3)}
+.affiliate-box a.btn-navy{background:#1a3a5c}
+.affiliate-box a.btn-navy:hover{background:#0d2137;box-shadow:0 4px 12px rgba(26,58,92,.3)}
+.table-wrap{overflow-x:auto;margin-top:16px;-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse;font-size:.8rem;min-width:500px}
+th,td{padding:7px 8px;text-align:center;border-bottom:1px solid #eee}
+th{background:#f5f7fa;color:#555;font-weight:600;position:sticky;top:0;white-space:nowrap}
+td{white-space:nowrap}
+tr:hover{background:#f9fdf9}
+.highlight-cell{background:#e8f5e9;font-weight:700;color:#2e7d32}
+.tab-bar{display:flex;gap:4px;margin-bottom:16px;border-bottom:2px solid #e0e0e0;padding-bottom:0}
+.tab-btn{padding:10px 20px;border:none;background:transparent;cursor:pointer;font-size:.9rem;font-weight:600;color:#888;border-bottom:3px solid transparent;margin-bottom:-2px;transition:all .2s}
+.tab-btn.active{color:#2e7d32;border-bottom-color:#2e7d32}
+.tab-btn:hover{color:#1a3a5c}
+.tab-content{display:none}
+.tab-content.active{display:block}
+.note{background:#fff3e0;border-radius:8px;padding:12px 16px;font-size:.78rem;color:#888;margin-top:16px;text-align:center;line-height:1.7}
+.badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:.72rem;font-weight:600;margin-left:6px}
+.badge-green{background:#e8f5e9;color:#2e7d32}
+.badge-navy{background:#e3f2fd;color:#1a3a5c}
+.badge-orange{background:#fff3e0;color:#e65100}
+footer{text-align:center;color:#aaa;font-size:.75rem;padding:24px 0 16px}
+@media(max-width:600px){
+  .input-row{flex-wrap:wrap}
+  .input-row input[type=range]{width:100%;flex:unset}
+  .input-row input[type=number]{width:100%}
+  .card{padding:16px}
+  .result-grid{grid-template-columns:1fr 1fr}
+  .radio-group{flex-direction:column}
+  .radio-group label{width:100%}
+  .tab-btn{padding:8px 12px;font-size:.82rem}
+  .affiliate-box a{display:block;margin:6px 0}
+  table{font-size:.72rem}
+}
+@media(max-width:380px){
+  .result-grid{grid-template-columns:1fr}
+  .container{padding:10px}
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>失業保険計算機</h1>
+  <p class="subtitle">退職時の失業手当（雇用保険 基本手当）を自動シミュレーション</p>
+
+  <!-- Input Card -->
+  <div class="card">
+    <h2><span class="icon">&#128221;</span>基本情報を入力</h2>
+
+    <div class="input-group">
+      <label>年齢</label>
+      <div class="select-row">
+        <select id="ageGroup" onchange="calc()">
+          <option value="29">~29歳</option>
+          <option value="34">30~34歳</option>
+          <option value="44" selected>35~44歳</option>
+          <option value="59">45~59歳</option>
+          <option value="64">60~64歳</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label>退職理由</label>
+      <div class="radio-group">
+        <label><input type="radio" name="reason" value="voluntary" checked onchange="calc()"><span>自己都合</span></label>
+        <label><input type="radio" name="reason" value="company" onchange="calc()"><span>会社都合</span></label>
+        <label><input type="radio" name="reason" value="special" onchange="calc()"><span>特定理由</span></label>
+      </div>
+      <div class="hint" id="reasonHint">自己都合：自分の意思で退職した場合</div>
+    </div>
+
+    <div class="input-group">
+      <label>被保険者期間</label>
+      <div class="input-row">
+        <input type="range" id="periodRange" min="1" max="30" step="1" value="10" oninput="syncPeriod(this.value)">
+        <input type="number" id="periodInput" min="1" max="40" step="1" value="10" oninput="syncPeriodNum(this.value)">
+        <span class="unit">年</span>
+      </div>
+      <div class="hint">雇用保険に加入していた期間（複数社合算可）</div>
+    </div>
+
+    <div class="input-group">
+      <label>退職前6ヶ月の月収（額面・平均）</label>
+      <div class="input-row">
+        <input type="range" id="salaryRange" min="10" max="80" step="1" value="30" oninput="syncSalary(this.value)">
+        <input type="number" id="salaryInput" min="5" max="200" step="1" value="30" oninput="syncSalaryNum(this.value)">
+        <span class="unit">万円</span>
+      </div>
+      <div class="hint">残業代・通勤手当を含む総支給額（賞与は含まない）</div>
+    </div>
+  </div>
+
+  <!-- Result Card -->
+  <div class="card" id="resultCard">
+    <h2><span class="icon">&#128200;</span>計算結果</h2>
+    <div class="result-box">
+      <div class="label">給付総額（概算）</div>
+      <div class="amount" id="totalAmount">--</div>
+      <div class="sub" id="totalSub"></div>
+    </div>
+    <div class="result-grid">
+      <div class="result-item">
+        <div class="lbl">賃金日額</div>
+        <div class="val" id="dailyWage">--</div>
+      </div>
+      <div class="result-item">
+        <div class="lbl">給付率</div>
+        <div class="val" id="benefitRate">--</div>
+      </div>
+      <div class="result-item">
+        <div class="lbl">基本手当日額</div>
+        <div class="val" id="dailyBenefit">--</div>
+      </div>
+      <div class="result-item">
+        <div class="lbl">所定給付日数</div>
+        <div class="val" id="totalDays">--</div>
+      </div>
+    </div>
+
+    <!-- Canvas Chart -->
+    <div class="chart-container" style="margin-top:24px">
+      <canvas id="barChart" width="800" height="300"></canvas>
+    </div>
+  </div>
+
+  <!-- Affiliate 1 -->
+  <div class="affiliate-box">
+    <div class="af-title">退職後の転職を徹底サポート【ピタテン】</div>
+    <div class="af-text">失業保険の受給中に、プロのアドバイザーが次のキャリアを一緒に見つけます。未経験OKの正社員求人多数。</div>
+    <a href="#" class="btn-green" rel="nofollow noopener" target="_blank">無料で転職相談する</a>
+  </div>
+
+  <!-- Timeline Card -->
+  <div class="card">
+    <h2><span class="icon">&#128197;</span>給付スケジュール</h2>
+    <div id="timeline" class="timeline"></div>
+  </div>
+
+  <!-- Lookup Table Card -->
+  <div class="card">
+    <h2><span class="icon">&#128209;</span>給付日数 早見表</h2>
+    <div class="tab-bar">
+      <button class="tab-btn active" onclick="showTab('voluntary-tab',this)">自己都合</button>
+      <button class="tab-btn" onclick="showTab('company-tab',this)">会社都合</button>
+      <button class="tab-btn" onclick="showTab('special-tab',this)">特定理由</button>
+    </div>
+    <div id="voluntary-tab" class="tab-content active"></div>
+    <div id="company-tab" class="tab-content"></div>
+    <div id="special-tab" class="tab-content"></div>
+  </div>
+
+  <!-- Affiliate 2 -->
+  <div class="affiliate-box">
+    <div class="af-title">20代・第二新卒の転職なら【UZUZ】</div>
+    <div class="af-text">給付期間中にキャリアカウンセラーと相談。登録無料・確定率87%の転職サポート。</div>
+    <a href="#" class="btn-navy" rel="nofollow noopener" target="_blank">無料で会員登録する</a>
+  </div>
+
+  <div class="note">
+    ※ この計算は概算です。正確な情報はハローワークまたは社会保険労務士等の専門家にご相談ください。<br>
+    ※ 2025年4月時点の制度に基づいて計算しています。制度改正により変更される場合があります。<br>
+    ※ 実際の基本手当日額には上限額・下限額が適用されます。
+  </div>
+
+  <footer>&copy; 2025 失業保険計算機</footer>
+</div>
+
+<script>
+(function(){
+"use strict";
+
+/* ========== Constants ========== */
+
+// 基本手当日額の上限（2024年8月～ / 年齢区分別）
+var CAP = {
+  29: 6945,
+  34: 7715,
+  44: 8490,
+  59: 8490,
+  64: 7177
+};
+
+// 基本手当日額の下限
+var FLOOR = 2196;
+
+// 賃金日額の下限・上限
+var WAGE_FLOOR = 2746;
+var WAGE_CAPS = {
+  29: 13890,
+  34: 15430,
+  44: 16980,
+  59: 16980,
+  64: 16210
+};
+
+/* ========== 所定給付日数テーブル ========== */
+
+// 自己都合（全年齢共通）
+// key = 被保険者期間の区分 (years)
+var VOLUNTARY_DAYS = {
+  // 1年未満: 0 (受給資格なし)
+  0: 0,
+  1: 90,   // 1年以上5年未満
+  5: 90,   // 1年以上5年未満→same
+  10: 120, // 10年以上20年未満
+  20: 150  // 20年以上
+};
+
+function getVoluntaryDays(years) {
+  if (years < 1) return 0;
+  if (years < 10) return 90;
+  if (years < 20) return 120;
+  return 150;
+}
+
+// 会社都合（年齢×被保険者期間）
+// [age][periodBucket] = days
+var COMPANY_TABLE = {
+  29: { 0:0, 1:90, 5:120, 10:180, 20:0 },  // ~29歳は20年以上が事実上ないが180
+  34: { 0:0, 1:90, 5:180, 10:210, 20:240 },
+  44: { 0:0, 1:90, 5:180, 10:240, 20:270 },
+  59: { 0:0, 1:90, 5:180, 10:270, 20:330 },
+  64: { 0:0, 1:90, 5:150, 10:210, 20:240 }
+};
+
+function getCompanyDays(age, years) {
+  if (years < 1) return 0;
+  var row = COMPANY_TABLE[age];
+  if (years < 5) return row[1];
+  if (years < 10) return row[5];
+  if (years < 20) return row[10];
+  // 20年以上 - 29歳は現実的にないが念のため
+  if (age === 29) return row[10]; // 180日
+  return row[20];
+}
+
+// 特定理由離職者は会社都合と同じ給付日数テーブルを適用
+function getSpecialDays(age, years) {
+  return getCompanyDays(age, years);
+}
+
+/* ========== 給付率計算 ========== */
+
+function calcBenefitRate(dailyWage, age) {
+  // 60~64歳は別計算
+  if (age === 64) {
+    if (dailyWage < 5200) return 0.80;
+    if (dailyWage <= 11490) {
+      // 80% → 45% に逓減
+      return 0.80 - (dailyWage - 5200) * 0.35 / (11490 - 5200);
+    }
+    return 0.45;
+  }
+  // ~59歳
+  if (dailyWage < 2746) return 0.80;
+  if (dailyWage <= 5200) return 0.80;
+  if (dailyWage <= 12580) {
+    // 80% → 50% に逓減
+    return 0.80 - (dailyWage - 5200) * 0.30 / (12580 - 5200);
+  }
+  return 0.50;
+}
+
+function calcDailyBenefit(dailyWage, age) {
+  var rate = calcBenefitRate(dailyWage, age);
+  var benefit = Math.floor(dailyWage * rate);
+  // 上限チェック
+  var cap = CAP[age];
+  if (benefit > cap) benefit = cap;
+  // 下限チェック
+  if (benefit < FLOOR) benefit = FLOOR;
+  return benefit;
+}
+
+/* ========== Sync Helpers ========== */
+
+window.syncPeriod = function(v) {
+  document.getElementById('periodInput').value = v;
+  calc();
+};
+window.syncPeriodNum = function(v) {
+  v = Math.max(1, Math.min(40, parseInt(v) || 1));
+  document.getElementById('periodRange').value = Math.min(v, 30);
+  calc();
+};
+window.syncSalary = function(v) {
+  document.getElementById('salaryInput').value = v;
+  calc();
+};
+window.syncSalaryNum = function(v) {
+  v = Math.max(5, Math.min(200, parseInt(v) || 5));
+  document.getElementById('salaryRange').value = Math.min(v, 80);
+  calc();
+};
+
+/* ========== Reason Hint ========== */
+function updateReasonHint() {
+  var reason = document.querySelector('input[name="reason"]:checked').value;
+  var hint = document.getElementById('reasonHint');
+  if (reason === 'voluntary') {
+    hint.textContent = '自己都合：自分の意思で退職した場合（給付制限2ヶ月あり）';
+  } else if (reason === 'company') {
+    hint.textContent = '会社都合：解雇・倒産・リストラ等（給付制限なし）';
+  } else {
+    hint.textContent = '特定理由：契約期間満了・病気等やむを得ない理由（給付制限なし）';
+  }
+}
+
+document.querySelectorAll('input[name="reason"]').forEach(function(el) {
+  el.addEventListener('change', updateReasonHint);
+});
+
+/* ========== Main Calculation ========== */
+
+function fmt(n) {
+  return n.toLocaleString('ja-JP');
+}
+
+window.calc = function() {
+  var age = parseInt(document.getElementById('ageGroup').value);
+  var reason = document.querySelector('input[name="reason"]:checked').value;
+  var years = parseInt(document.getElementById('periodInput').value) || 1;
+  var monthlySalary = (parseInt(document.getElementById('salaryInput').value) || 5) * 10000;
+
+  // 賃金日額 = 退職前6ヶ月の総賃金 / 180
+  var dailyWage = Math.floor(monthlySalary * 6 / 180);
+
+  // 賃金日額の上限・下限チェック
+  var wageCap = WAGE_CAPS[age];
+  if (dailyWage > wageCap) dailyWage = wageCap;
+  if (dailyWage < WAGE_FLOOR) dailyWage = WAGE_FLOOR;
+
+  // 給付率
+  var rate = calcBenefitRate(dailyWage, age);
+
+  // 基本手当日額
+  var dailyBenefit = calcDailyBenefit(dailyWage, age);
+
+  // 所定給付日数
+  var days;
+  if (reason === 'voluntary') {
+    days = getVoluntaryDays(years);
+  } else if (reason === 'company') {
+    days = getCompanyDays(age, years);
+  } else {
+    days = getSpecialDays(age, years);
+  }
+
+  // 給付総額
+  var total = dailyBenefit * days;
+
+  // 表示更新
+  document.getElementById('dailyWage').textContent = fmt(dailyWage) + '円';
+  document.getElementById('benefitRate').textContent = (rate * 100).toFixed(1) + '%';
+  document.getElementById('dailyBenefit').textContent = fmt(dailyBenefit) + '円';
+  document.getElementById('totalDays').textContent = days + '日';
+
+  if (days === 0) {
+    document.getElementById('totalAmount').textContent = '受給資格なし';
+    document.getElementById('totalSub').textContent = '被保険者期間が1年未満のため受給できません';
+  } else {
+    document.getElementById('totalAmount').textContent = fmt(total) + '円';
+    var months = Math.ceil(days / 28);
+    document.getElementById('totalSub').textContent = '約' + months + '回の認定日で受給（28日ごと）';
+  }
+
+  // チャート描画
+  drawBarChart(dailyWage, dailyBenefit, rate, days, total, monthlySalary);
+
+  // タイムライン更新
+  buildTimeline(reason, days, dailyBenefit);
+
+  // 早見表のハイライト更新
+  highlightTables(age, years, reason);
+};
+
+/* ========== Bar Chart ========== */
+
+function drawBarChart(dailyWage, dailyBenefit, rate, days, total, monthlySalary) {
+  var canvas = document.getElementById('barChart');
+  var dpr = window.devicePixelRatio || 1;
+  var cw = canvas.parentElement.offsetWidth;
+  var ch = 280;
+  canvas.width = cw * dpr;
+  canvas.height = ch * dpr;
+  canvas.style.width = cw + 'px';
+  canvas.style.height = ch + 'px';
+  var ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  ctx.clearRect(0, 0, cw, ch);
+
+  if (days === 0) {
+    ctx.fillStyle = '#aaa';
+    ctx.font = '14px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('受給資格がないため表示できません', cw / 2, ch / 2);
+    return;
+  }
+
+  // 月額比較チャート: 在職時月収 vs 失業手当月額
+  var monthlyBenefit = dailyBenefit * 28; // 28日分
+  var maxVal = Math.max(monthlySalary, monthlyBenefit) * 1.15;
+
+  var padL = 60, padR = 40, padT = 40, padB = 50;
+  var chartW = cw - padL - padR;
+  var chartH = ch - padT - padB;
+  var barW = Math.min(chartW * 0.25, 80);
+  var gap = chartW * 0.15;
+  var x1 = padL + chartW / 2 - gap / 2 - barW;
+  var x2 = padL + chartW / 2 + gap / 2;
+
+  // Title
+  ctx.fillStyle = '#1a3a5c';
+  ctx.font = 'bold 13px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('月収と失業手当の比較', cw / 2, 22);
+
+  // Y-axis
+  ctx.strokeStyle = '#e0e0e0';
+  ctx.lineWidth = 1;
+  for (var i = 0; i <= 4; i++) {
+    var y = padT + chartH - (chartH * i / 4);
+    ctx.beginPath();
+    ctx.moveTo(padL, y);
+    ctx.lineTo(cw - padR, y);
+    ctx.stroke();
+    ctx.fillStyle = '#999';
+    ctx.font = '11px sans-serif';
+    ctx.textAlign = 'right';
+    var label = Math.round(maxVal * i / 4 / 10000);
+    ctx.fillText(label + '万', padL - 6, y + 4);
+  }
+
+  // Bar 1 - Monthly Salary
+  var h1 = (monthlySalary / maxVal) * chartH;
+  var grad1 = ctx.createLinearGradient(x1, padT + chartH - h1, x1, padT + chartH);
+  grad1.addColorStop(0, '#1a3a5c');
+  grad1.addColorStop(1, '#2d5f8a');
+  ctx.fillStyle = grad1;
+  roundRect(ctx, x1, padT + chartH - h1, barW, h1, 6);
+  ctx.fill();
+
+  // Bar 2 - Monthly Benefit
+  var h2 = (monthlyBenefit / maxVal) * chartH;
+  var grad2 = ctx.createLinearGradient(x2, padT + chartH - h2, x2, padT + chartH);
+  grad2.addColorStop(0, '#2e7d32');
+  grad2.addColorStop(1, '#4caf50');
+  ctx.fillStyle = grad2;
+  roundRect(ctx, x2, padT + chartH - h2, barW, h2, 6);
+  ctx.fill();
+
+  // Labels
+  ctx.fillStyle = '#1a3a5c';
+  ctx.font = 'bold 12px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('在職時月収', x1 + barW / 2, padT + chartH + 18);
+  ctx.fillText(fmt(monthlySalary) + '円', x1 + barW / 2, padT + chartH + 34);
+
+  ctx.fillStyle = '#2e7d32';
+  ctx.fillText('失業手当(月)', x2 + barW / 2, padT + chartH + 18);
+  ctx.fillText(fmt(monthlyBenefit) + '円', x2 + barW / 2, padT + chartH + 34);
+
+  // Value on top
+  ctx.fillStyle = '#1a3a5c';
+  ctx.font = 'bold 13px sans-serif';
+  ctx.fillText(Math.round(monthlySalary / 10000) + '万円', x1 + barW / 2, padT + chartH - h1 - 8);
+  ctx.fillStyle = '#2e7d32';
+  ctx.fillText(Math.round(monthlyBenefit / 10000) + '万円', x2 + barW / 2, padT + chartH - h2 - 8);
+
+  // Replacement ratio
+  var replRate = ((monthlyBenefit / monthlySalary) * 100).toFixed(1);
+  ctx.fillStyle = '#e65100';
+  ctx.font = 'bold 12px sans-serif';
+  ctx.fillText('手取り比率: 約' + replRate + '%', cw / 2, padT + chartH - Math.max(h1, h2) - 28);
+}
+
+function roundRect(ctx, x, y, w, h, r) {
+  if (h < 0) { y += h; h = -h; }
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.lineTo(x + w - r, y);
+  ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+  ctx.lineTo(x + w, y + h);
+  ctx.lineTo(x, y + h);
+  ctx.lineTo(x, y + r);
+  ctx.quadraticCurveTo(x, y, x + r, y);
+  ctx.closePath();
+}
+
+/* ========== Timeline ========== */
+
+function buildTimeline(reason, days, dailyBenefit) {
+  var el = document.getElementById('timeline');
+  if (days === 0) {
+    el.innerHTML = '<p style="color:#999;font-size:.85rem;padding:8px">被保険者期間1年未満は受給資格がありません。</p>';
+    return;
+  }
+
+  var today = new Date();
+  var items = [];
+
+  // Step 1: 退職日
+  items.push({
+    title: '退職日',
+    date: formatDate(today),
+    desc: '離職票を受け取る',
+    active: true,
+    navy: false
+  });
+
+  // Step 2: ハローワーク手続き（退職後 ~10日）
+  var hwDate = addDays(today, 10);
+  items.push({
+    title: 'ハローワークで手続き',
+    date: formatDate(hwDate) + '頃',
+    desc: '求職申込み・受給資格決定',
+    active: true,
+    navy: true
+  });
+
+  // Step 3: 待期期間 7日
+  var waitEnd = addDays(hwDate, 7);
+  items.push({
+    title: '待期期間（7日間）',
+    date: formatDate(hwDate) + ' ~ ' + formatDate(waitEnd),
+    desc: '全ての求職者に共通。この間は支給なし。',
+    active: false,
+    navy: false
+  });
+
+  // Step 4: 給付制限（自己都合のみ）
+  var payStart;
+  if (reason === 'voluntary') {
+    var restrictEnd = addDays(waitEnd, 60); // 2ヶ月
+    items.push({
+      title: '給付制限期間（2ヶ月）',
+      date: formatDate(waitEnd) + ' ~ ' + formatDate(restrictEnd),
+      desc: '自己都合退職の場合、2ヶ月間は支給なし（5年以内に2回以上の自己都合退職は3ヶ月）',
+      active: false,
+      navy: false
+    });
+    payStart = restrictEnd;
+  } else {
+    payStart = waitEnd;
+    items.push({
+      title: '給付制限なし',
+      date: formatDate(waitEnd) + ' ~',
+      desc: '会社都合・特定理由の場合、待期期間終了後すぐに支給開始',
+      active: true,
+      navy: false
+    });
+  }
+
+  // Step 5: 支給開始
+  var payEnd = addDays(payStart, days);
+  items.push({
+    title: '支給開始',
+    date: formatDate(payStart) + ' ~',
+    desc: '基本手当日額 ' + fmt(dailyBenefit) + '円 x ' + days + '日分',
+    active: true,
+    navy: false
+  });
+
+  // Step 6: 初回認定日
+  var firstNintei = addDays(payStart, 28);
+  items.push({
+    title: '初回認定日',
+    date: formatDate(firstNintei) + '頃',
+    desc: 'ハローワークで失業認定を受ける（以後28日ごと）',
+    active: false,
+    navy: true
+  });
+
+  // Step 7: 支給終了
+  items.push({
+    title: '支給終了',
+    date: formatDate(payEnd) + '頃',
+    desc: '所定給付日数の全' + days + '日分を受給完了',
+    active: true,
+    navy: true
+  });
+
+  var html = '';
+  items.forEach(function(item) {
+    var cls = 'timeline-item';
+    if (item.active) cls += ' active';
+    if (item.navy) cls += ' navy';
+    html += '<div class="' + cls + '">';
+    html += '<div class="tl-title">' + item.title + '</div>';
+    html += '<div class="tl-date">' + item.date + '</div>';
+    html += '<div class="tl-desc">' + item.desc + '</div>';
+    html += '</div>';
+  });
+  el.innerHTML = html;
+}
+
+function addDays(date, n) {
+  var d = new Date(date);
+  d.setDate(d.getDate() + n);
+  return d;
+}
+
+function formatDate(d) {
+  return d.getFullYear() + '/' + (d.getMonth() + 1) + '/' + d.getDate();
+}
+
+/* ========== Lookup Tables ========== */
+
+function buildTables() {
+  // 自己都合
+  var volHtml = '<div class="table-wrap"><table>';
+  volHtml += '<tr><th>被保険者期間</th><th>1年未満</th><th>1年以上<br>5年未満</th><th>5年以上<br>10年未満</th><th>10年以上<br>20年未満</th><th>20年以上</th></tr>';
+  volHtml += '<tr><td>全年齢共通</td>';
+  volHtml += '<td>-</td><td>90日</td><td>90日</td><td>120日</td><td>150日</td>';
+  volHtml += '</tr></table></div>';
+  document.getElementById('voluntary-tab').innerHTML = volHtml;
+
+  // 会社都合
+  var ages = [{k:29,l:'~29歳'},{k:34,l:'30~34歳'},{k:44,l:'35~44歳'},{k:59,l:'45~59歳'},{k:64,l:'60~64歳'}];
+  var compHtml = '<div class="table-wrap"><table>';
+  compHtml += '<tr><th>年齢 \\ 期間</th><th>1年未満</th><th>1年以上<br>5年未満</th><th>5年以上<br>10年未満</th><th>10年以上<br>20年未満</th><th>20年以上</th></tr>';
+  ages.forEach(function(a) {
+    var r = COMPANY_TABLE[a.k];
+    compHtml += '<tr><td>' + a.l + '</td>';
+    compHtml += '<td>' + (r[0] || '-') + '</td>';
+    compHtml += '<td>' + r[1] + '日</td>';
+    compHtml += '<td>' + r[5] + '日</td>';
+    compHtml += '<td>' + r[10] + '日</td>';
+    if (a.k === 29) {
+      compHtml += '<td>-</td>';
+    } else {
+      compHtml += '<td>' + r[20] + '日</td>';
+    }
+    compHtml += '</tr>';
+  });
+  compHtml += '</table></div>';
+  document.getElementById('company-tab').innerHTML = compHtml;
+
+  // 特定理由（会社都合と同じ）
+  var specHtml = '<div class="table-wrap"><table>';
+  specHtml += '<tr><th>年齢 \\ 期間</th><th>1年未満</th><th>1年以上<br>5年未満</th><th>5年以上<br>10年未満</th><th>10年以上<br>20年未満</th><th>20年以上</th></tr>';
+  ages.forEach(function(a) {
+    var r = COMPANY_TABLE[a.k];
+    specHtml += '<tr><td>' + a.l + '</td>';
+    specHtml += '<td>' + (r[0] || '-') + '</td>';
+    specHtml += '<td>' + r[1] + '日</td>';
+    specHtml += '<td>' + r[5] + '日</td>';
+    specHtml += '<td>' + r[10] + '日</td>';
+    if (a.k === 29) {
+      specHtml += '<td>-</td>';
+    } else {
+      specHtml += '<td>' + r[20] + '日</td>';
+    }
+    specHtml += '</tr>';
+  });
+  specHtml += '</table></div>';
+  document.getElementById('special-tab').innerHTML = specHtml;
+}
+
+function highlightTables(age, years, reason) {
+  // Determine the column index (1-5) based on years
+  var col;
+  if (years < 1) col = 1;
+  else if (years < 5) col = 2;
+  else if (years < 10) col = 3;
+  else if (years < 20) col = 4;
+  else col = 5;
+
+  // Determine the row index based on age
+  var ageMap = {29:0, 34:1, 44:2, 59:3, 64:4};
+  var rowIdx = ageMap[age];
+
+  // Clear all highlights
+  document.querySelectorAll('.highlight-cell').forEach(function(el) {
+    el.classList.remove('highlight-cell');
+  });
+
+  // Highlight in the active tab
+  var tabId;
+  if (reason === 'voluntary') tabId = 'voluntary-tab';
+  else if (reason === 'company') tabId = 'company-tab';
+  else tabId = 'special-tab';
+
+  var tab = document.getElementById(tabId);
+  var rows = tab.querySelectorAll('tr');
+  // For voluntary, only 1 data row (index 1), use col
+  if (reason === 'voluntary') {
+    if (rows.length > 1) {
+      var cells = rows[1].querySelectorAll('td');
+      if (cells[col]) cells[col].classList.add('highlight-cell');
+    }
+  } else {
+    // rowIdx + 1 because first row is header
+    var targetRow = rows[rowIdx + 1];
+    if (targetRow) {
+      var cells = targetRow.querySelectorAll('td');
+      if (cells[col]) cells[col].classList.add('highlight-cell');
+    }
+  }
+}
+
+/* ========== Tabs ========== */
+
+window.showTab = function(tabId, btn) {
+  document.querySelectorAll('.tab-content').forEach(function(el) { el.classList.remove('active'); });
+  document.querySelectorAll('.tab-btn').forEach(function(el) { el.classList.remove('active'); });
+  document.getElementById(tabId).classList.add('active');
+  btn.classList.add('active');
+};
+
+/* ========== Init ========== */
+
+buildTables();
+calc();
+
+// Resize handler for canvas
+var resizeTimer;
+window.addEventListener('resize', function() {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(calc, 150);
+});
+
+})();
+</script>
+</body>
+</html>

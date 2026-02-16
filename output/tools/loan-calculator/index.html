@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>住宅ローン返済シミュレーター【無料】</title>
+<meta name="description" content="住宅ローンの返済額を無料でシミュレーション。借入額・金利・返済期間を入力するだけで、月々の返済額や総返済額、利息総額を瞬時に計算。元利均等・元金均等の両方式に対応。年次返済スケジュール表とグラフで返済計画を可視化できます。">
+<meta name="keywords" content="住宅ローン,返済シミュレーション,ローン計算,借入額,金利,返済期間,元利均等,元金均等">
+<meta property="og:title" content="住宅ローン返済シミュレーター【無料】">
+<meta property="og:description" content="借入額・金利・返済期間を入力するだけで月々の返済額・総返済額・利息総額を瞬時に計算。元利均等・元金均等の両方式に対応した無料の住宅ローン返済シミュレーターです。">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:site_name" content="住宅ローン返済シミュレーター">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="住宅ローン返済シミュレーター【無料】">
+<meta name="twitter:description" content="借入額・金利・返済期間を入力するだけで月々の返済額・総返済額・利息総額を瞬時に計算。無料の住宅ローン返済シミュレーター。">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--green:#2e7d32;--green-light:#4caf50;--green-pale:#e8f5e9;--green-dark:#1b5e20;--shadow:0 2px 12px rgba(0,0,0,.08);--shadow-lg:0 4px 24px rgba(0,0,0,.12);--radius:12px;--gray:#f5f5f5;--text:#333;--text-light:#666;--border:#e0e0e0}
+html{font-size:16px;scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;background:#fff;color:var(--text);line-height:1.7;min-height:100vh}
+a{color:var(--green);text-decoration:none}
+
+/* Header */
+.header{background:linear-gradient(135deg,var(--green-dark),var(--green));color:#fff;text-align:center;padding:2rem 1rem 1.8rem}
+.header h1{font-size:1.6rem;font-weight:700;margin-bottom:.4rem}
+.header p{font-size:.9rem;opacity:.9}
+
+/* Container */
+.container{max-width:900px;margin:0 auto;padding:0 1rem 2rem}
+
+/* Card */
+.card{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);padding:1.5rem;margin-top:1.5rem}
+.card-title{font-size:1.15rem;font-weight:700;color:var(--green-dark);margin-bottom:1.2rem;padding-bottom:.6rem;border-bottom:2px solid var(--green-pale);display:flex;align-items:center;gap:.5rem}
+.card-title::before{content:"";display:inline-block;width:4px;height:1.15rem;background:var(--green);border-radius:2px}
+
+/* Input Group */
+.input-group{margin-bottom:1.4rem}
+.input-group:last-child{margin-bottom:0}
+.input-label{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.5rem;font-weight:600;font-size:.95rem}
+.input-label .unit{font-weight:400;color:var(--text-light);font-size:.85rem}
+.slider-row{display:flex;align-items:center;gap:.75rem}
+.slider-row input[type=range]{flex:1;-webkit-appearance:none;appearance:none;height:6px;border-radius:3px;background:var(--border);outline:none;cursor:pointer}
+.slider-row input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:22px;height:22px;border-radius:50%;background:var(--green);cursor:pointer;border:3px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.2)}
+.slider-row input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:var(--green);cursor:pointer;border:3px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.2)}
+.slider-row .num-input{width:100px;padding:.45rem .5rem;border:1.5px solid var(--border);border-radius:8px;font-size:1rem;text-align:right;font-family:inherit;transition:border-color .2s}
+.slider-row .num-input:focus{outline:none;border-color:var(--green)}
+
+/* Radio */
+.radio-group{display:flex;gap:.75rem;margin-top:.3rem;flex-wrap:wrap}
+.radio-group label{flex:1;min-width:140px;display:flex;align-items:center;justify-content:center;gap:.4rem;padding:.65rem 1rem;border:2px solid var(--border);border-radius:8px;cursor:pointer;font-weight:600;font-size:.9rem;transition:all .2s;text-align:center}
+.radio-group label:has(input:checked){border-color:var(--green);background:var(--green-pale);color:var(--green-dark)}
+.radio-group input{display:none}
+
+/* Result boxes */
+.results-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem}
+.result-box{background:var(--green-pale);border-radius:10px;padding:1rem;text-align:center}
+.result-box.primary{background:var(--green);color:#fff;grid-column:1/-1}
+.result-box .label{font-size:.8rem;font-weight:600;margin-bottom:.3rem}
+.result-box.primary .label{opacity:.9}
+.result-box .value{font-size:1.5rem;font-weight:800}
+.result-box.primary .value{font-size:2rem}
+.result-box .sub{font-size:.75rem;margin-top:.2rem;opacity:.7}
+
+/* Table */
+.table-wrap{overflow-x:auto;margin-top:.5rem;border-radius:8px;border:1px solid var(--border)}
+.table-wrap table{width:100%;border-collapse:collapse;font-size:.85rem;min-width:560px}
+.table-wrap th{background:var(--green);color:#fff;padding:.6rem .5rem;font-weight:600;position:sticky;top:0;white-space:nowrap}
+.table-wrap td{padding:.55rem .5rem;border-bottom:1px solid #eee;text-align:right}
+.table-wrap tr:nth-child(even){background:#fafafa}
+.table-wrap td:first-child{text-align:center;font-weight:600}
+.schedule-container{max-height:480px;overflow-y:auto}
+
+/* Chart */
+.chart-container{position:relative;width:100%;max-width:700px;margin:1rem auto 0}
+.chart-container canvas{width:100%!important;height:auto!important}
+.chart-legend{display:flex;justify-content:center;gap:1.5rem;margin-top:.75rem;font-size:.85rem;flex-wrap:wrap}
+.chart-legend span{display:flex;align-items:center;gap:.3rem}
+.chart-legend .dot{width:12px;height:12px;border-radius:3px;display:inline-block}
+
+/* CTA */
+.cta-section{display:flex;gap:1rem;margin-top:1rem;flex-wrap:wrap}
+.cta-btn{flex:1;min-width:220px;display:block;text-align:center;padding:1rem 1.5rem;border-radius:10px;font-size:1rem;font-weight:700;color:#fff;transition:all .2s;box-shadow:var(--shadow)}
+.cta-btn:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg)}
+.cta-btn.loan{background:linear-gradient(135deg,var(--green),var(--green-light))}
+.cta-btn.insurance{background:linear-gradient(135deg,#e65100,#ff9800)}
+
+/* Footer */
+.footer{text-align:center;padding:1.5rem 1rem;margin-top:2rem;border-top:1px solid var(--border);color:var(--text-light);font-size:.8rem}
+.footer .disclaimer{background:var(--gray);border-radius:8px;padding:1rem;margin-bottom:1rem;line-height:1.6}
+
+/* Responsive */
+@media(max-width:600px){
+  .header h1{font-size:1.3rem}
+  .results-grid{grid-template-columns:1fr 1fr}
+  .result-box.primary{grid-column:1/-1}
+  .result-box .value{font-size:1.2rem}
+  .result-box.primary .value{font-size:1.6rem}
+  .card{padding:1.1rem}
+  .slider-row .num-input{width:80px;font-size:.9rem}
+  .cta-btn{min-width:100%;font-size:.95rem}
+}
+@media(max-width:380px){
+  .results-grid{grid-template-columns:1fr}
+  .header{padding:1.4rem .8rem 1.2rem}
+  .header h1{font-size:1.15rem}
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <h1>住宅ローン返済シミュレーター</h1>
+  <p>借入条件を入力して、返済プランをすぐに確認できます</p>
+</header>
+
+<div class="container">
+
+  <!-- Input Card -->
+  <div class="card">
+    <div class="card-title">借入条件を入力</div>
+
+    <div class="input-group">
+      <div class="input-label">借入額 <span class="unit">（万円）</span></div>
+      <div class="slider-row">
+        <input type="range" id="amountRange" min="100" max="10000" step="10" value="3000">
+        <input type="number" class="num-input" id="amountNum" min="100" max="10000" step="10" value="3000">
+      </div>
+    </div>
+
+    <div class="input-group">
+      <div class="input-label">金利 <span class="unit">（%）</span></div>
+      <div class="slider-row">
+        <input type="range" id="rateRange" min="0.1" max="5.0" step="0.1" value="0.5">
+        <input type="number" class="num-input" id="rateNum" min="0.1" max="5.0" step="0.1" value="0.5">
+      </div>
+    </div>
+
+    <div class="input-group">
+      <div class="input-label">返済期間 <span class="unit">（年）</span></div>
+      <div class="slider-row">
+        <input type="range" id="termRange" min="5" max="40" step="1" value="35">
+        <input type="number" class="num-input" id="termNum" min="5" max="40" step="1" value="35">
+      </div>
+    </div>
+
+    <div class="input-group">
+      <div class="input-label">ボーナス返済 <span class="unit">（万円）</span></div>
+      <div class="slider-row">
+        <input type="range" id="bonusRange" min="0" max="500" step="10" value="0">
+        <input type="number" class="num-input" id="bonusNum" min="0" max="500" step="10" value="0">
+      </div>
+    </div>
+
+    <div class="input-group">
+      <div class="input-label">返済方式</div>
+      <div class="radio-group">
+        <label><input type="radio" name="method" value="equal_payment" checked>元利均等返済</label>
+        <label><input type="radio" name="method" value="equal_principal">元金均等返済</label>
+      </div>
+    </div>
+  </div>
+
+  <!-- Results Card -->
+  <div class="card">
+    <div class="card-title">シミュレーション結果</div>
+    <div class="results-grid">
+      <div class="result-box primary">
+        <div class="label">月々の返済額</div>
+        <div class="value" id="monthlyPayment">-</div>
+        <div class="sub" id="monthlyNote"></div>
+      </div>
+      <div class="result-box">
+        <div class="label">総返済額</div>
+        <div class="value" id="totalPayment">-</div>
+      </div>
+      <div class="result-box">
+        <div class="label">利息総額</div>
+        <div class="value" id="totalInterest">-</div>
+      </div>
+      <div class="result-box">
+        <div class="label">利息割合</div>
+        <div class="value" id="interestRatio">-</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chart Card -->
+  <div class="card">
+    <div class="card-title">元金・利息の内訳グラフ</div>
+    <div class="chart-container">
+      <canvas id="chart"></canvas>
+    </div>
+    <div class="chart-legend">
+      <span><span class="dot" style="background:#2e7d32"></span> 元金</span>
+      <span><span class="dot" style="background:#81c784"></span> 利息</span>
+    </div>
+  </div>
+
+  <!-- Schedule Card -->
+  <div class="card">
+    <div class="card-title">年次返済スケジュール</div>
+    <div class="schedule-container">
+      <div class="table-wrap">
+        <table id="scheduleTable">
+          <thead>
+            <tr>
+              <th>年目</th>
+              <th>年間返済額</th>
+              <th>うち元金</th>
+              <th>うち利息</th>
+              <th>残高</th>
+            </tr>
+          </thead>
+          <tbody id="scheduleBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Affiliate CTA -->
+  <div class="card">
+    <div class="card-title">住宅ローン選びに役立つ情報</div>
+    <p style="font-size:.9rem;color:var(--text-light);margin-bottom:1rem">金利や条件は金融機関によって異なります。複数のローンを比較して最適なプランを見つけましょう。</p>
+    <div class="cta-section">
+      <a href="#" class="cta-btn loan">住宅ローンを一括比較【モゲチェック】</a>
+      <a href="#" class="cta-btn insurance">火災保険の無料見積【保険スクエアbang!】</a>
+    </div>
+  </div>
+
+</div>
+
+<footer class="footer">
+  <div class="disclaimer">この計算は概算です。実際の返済額は金融機関の条件により異なります。</div>
+  <p>&copy; 住宅ローン返済シミュレーター</p>
+</footer>
+
+<script>
+(function(){
+  'use strict';
+
+  /* ---- Element references ---- */
+  const els = {
+    amountRange: document.getElementById('amountRange'),
+    amountNum:   document.getElementById('amountNum'),
+    rateRange:   document.getElementById('rateRange'),
+    rateNum:     document.getElementById('rateNum'),
+    termRange:   document.getElementById('termRange'),
+    termNum:     document.getElementById('termNum'),
+    bonusRange:  document.getElementById('bonusRange'),
+    bonusNum:    document.getElementById('bonusNum'),
+    monthlyPayment: document.getElementById('monthlyPayment'),
+    monthlyNote:    document.getElementById('monthlyNote'),
+    totalPayment:   document.getElementById('totalPayment'),
+    totalInterest:  document.getElementById('totalInterest'),
+    interestRatio:  document.getElementById('interestRatio'),
+    scheduleBody:   document.getElementById('scheduleBody'),
+    chart:          document.getElementById('chart')
+  };
+
+  const methodRadios = document.querySelectorAll('input[name="method"]');
+
+  /* ---- Sync slider <-> number ---- */
+  function syncPair(range, num) {
+    range.addEventListener('input', function(){ num.value = this.value; calculate(); });
+    num.addEventListener('input', function(){
+      let v = parseFloat(this.value);
+      const mn = parseFloat(this.min), mx = parseFloat(this.max);
+      if(isNaN(v)) return;
+      if(v < mn) v = mn; if(v > mx) v = mx;
+      range.value = v; this.value = v; calculate();
+    });
+    num.addEventListener('change', function(){
+      let v = parseFloat(this.value);
+      const mn = parseFloat(this.min), mx = parseFloat(this.max);
+      if(isNaN(v) || v < mn) v = mn; if(v > mx) v = mx;
+      this.value = v; range.value = v; calculate();
+    });
+  }
+
+  syncPair(els.amountRange, els.amountNum);
+  syncPair(els.rateRange,   els.rateNum);
+  syncPair(els.termRange,   els.termNum);
+  syncPair(els.bonusRange,  els.bonusNum);
+  methodRadios.forEach(function(r){ r.addEventListener('change', calculate); });
+
+  /* ---- Format helpers ---- */
+  function fmtMan(v){ return Math.round(v).toLocaleString('ja-JP') + '万円'; }
+  function fmtYen(v){ return Math.round(v).toLocaleString('ja-JP') + '円'; }
+
+  /* ---- Main calculation ---- */
+  function calculate(){
+    const P_man    = parseFloat(els.amountNum.value);    // 万円
+    const rate_pct = parseFloat(els.rateNum.value);      // %
+    const years    = parseInt(els.termNum.value);
+    const bonus_man= parseFloat(els.bonusNum.value);     // 万円
+    const method   = document.querySelector('input[name="method"]:checked').value;
+
+    if(isNaN(P_man)||isNaN(rate_pct)||isNaN(years)||isNaN(bonus_man)) return;
+
+    const P_total = P_man * 10000;           // total principal in yen
+    const P_bonus = bonus_man * 10000;       // bonus portion in yen
+    const P_month_base = P_total - P_bonus;  // monthly portion principal
+    if(P_month_base <= 0){ els.monthlyPayment.textContent = '入力値を確認してください'; return; }
+
+    const r_month = rate_pct / 100 / 12;     // monthly interest rate
+    const n       = years * 12;              // total months
+    const r_bonus = rate_pct / 100 / 2;     // semi-annual rate for bonus (6 months)
+    const n_bonus = years * 2;              // number of bonus payments
+
+    let schedule = [];  // array of {year, principal, interest, balance}
+    let monthlyDisplay = 0;
+    let monthlyFirst = 0;
+    let totalPaid = 0;
+
+    if(method === 'equal_payment'){
+      /* ---- 元利均等返済 (Equal monthly payment / annuity) ---- */
+
+      // Monthly portion
+      let M_month;
+      if(r_month === 0){
+        M_month = P_month_base / n;
+      } else {
+        M_month = P_month_base * r_month * Math.pow(1 + r_month, n) / (Math.pow(1 + r_month, n) - 1);
+      }
+
+      // Bonus portion (semi-annual payments)
+      let M_bonus = 0;
+      if(P_bonus > 0){
+        if(r_bonus === 0){
+          M_bonus = P_bonus / n_bonus;
+        } else {
+          // For bonus: treat as semi-annual annuity with rate = annual_rate/2, periods = years*2
+          const r_b = rate_pct / 100 / 2;
+          const n_b = years * 2;
+          M_bonus = P_bonus * r_b * Math.pow(1 + r_b, n_b) / (Math.pow(1 + r_b, n_b) - 1);
+        }
+      }
+
+      monthlyDisplay = M_month;
+      monthlyFirst = M_month;
+
+      // Build annual schedule
+      let bal_month = P_month_base;
+      let bal_bonus = P_bonus;
+
+      for(let yr = 1; yr <= years; yr++){
+        let yr_principal = 0, yr_interest = 0;
+
+        // 12 monthly payments
+        for(let m = 1; m <= 12; m++){
+          let int_m = bal_month * r_month;
+          let prin_m = M_month - int_m;
+          if(prin_m > bal_month) prin_m = bal_month;
+          bal_month -= prin_m;
+          if(bal_month < 0) bal_month = 0;
+          yr_principal += prin_m;
+          yr_interest  += int_m;
+        }
+
+        // 2 bonus payments per year
+        if(P_bonus > 0){
+          for(let b = 0; b < 2; b++){
+            let r_b = rate_pct / 100 / 2;
+            let int_b = bal_bonus * r_b;
+            let prin_b = M_bonus - int_b;
+            if(prin_b > bal_bonus) prin_b = bal_bonus;
+            bal_bonus -= prin_b;
+            if(bal_bonus < 0) bal_bonus = 0;
+            yr_principal += prin_b;
+            yr_interest  += int_b;
+          }
+        }
+
+        totalPaid += yr_principal + yr_interest;
+        schedule.push({
+          year: yr,
+          principal: yr_principal,
+          interest: yr_interest,
+          balance: bal_month + bal_bonus
+        });
+      }
+
+    } else {
+      /* ---- 元金均等返済 (Equal principal) ---- */
+
+      const prin_month = P_month_base / n;  // fixed principal per month
+      const prin_bonus = P_bonus > 0 ? P_bonus / n_bonus : 0;
+
+      let bal_month = P_month_base;
+      let bal_bonus = P_bonus;
+
+      // First month payment for display
+      monthlyFirst = prin_month + bal_month * r_month;
+      monthlyDisplay = monthlyFirst;
+
+      for(let yr = 1; yr <= years; yr++){
+        let yr_principal = 0, yr_interest = 0;
+
+        for(let m = 1; m <= 12; m++){
+          let int_m = bal_month * r_month;
+          let p = prin_month;
+          if(p > bal_month) p = bal_month;
+          bal_month -= p;
+          if(bal_month < 0) bal_month = 0;
+          yr_principal += p;
+          yr_interest  += int_m;
+
+          // Track last month payment of first year for display
+          if(yr === 1 && m === 1){
+            monthlyDisplay = p + int_m;
+          }
+        }
+
+        if(P_bonus > 0){
+          for(let b = 0; b < 2; b++){
+            let r_b = rate_pct / 100 / 2;
+            let int_b = bal_bonus * r_b;
+            let p = prin_bonus;
+            if(p > bal_bonus) p = bal_bonus;
+            bal_bonus -= p;
+            if(bal_bonus < 0) bal_bonus = 0;
+            yr_principal += p;
+            yr_interest  += int_b;
+          }
+        }
+
+        totalPaid += yr_principal + yr_interest;
+        schedule.push({
+          year: yr,
+          principal: yr_principal,
+          interest: yr_interest,
+          balance: bal_month + bal_bonus
+        });
+      }
+    }
+
+    let totalInterest = totalPaid - P_total;
+    if(totalInterest < 0) totalInterest = 0;
+
+    /* ---- Update result display ---- */
+    els.monthlyPayment.textContent = fmtYen(monthlyDisplay);
+    if(method === 'equal_principal'){
+      // Show first and last month
+      let lastMonthPay = schedule.length > 0 ?
+        (schedule[schedule.length-1].principal + schedule[schedule.length-1].interest) / 12 : 0;
+      els.monthlyNote.textContent = '(初回 ' + fmtYen(monthlyFirst) + ')';
+    } else {
+      if(P_bonus > 0){
+        let r_b = rate_pct / 100 / 2;
+        let M_bonus_val = 0;
+        if(r_b === 0){ M_bonus_val = P_bonus / n_bonus; }
+        else { M_bonus_val = P_bonus * r_b * Math.pow(1+r_b, n_bonus)/(Math.pow(1+r_b, n_bonus)-1); }
+        els.monthlyNote.textContent = 'ボーナス時 +' + fmtYen(M_bonus_val) + ' /回';
+      } else {
+        els.monthlyNote.textContent = '';
+      }
+    }
+
+    els.totalPayment.textContent  = fmtMan(Math.round(totalPaid / 10000));
+    els.totalInterest.textContent = fmtMan(Math.round(totalInterest / 10000));
+    let ratio = P_total > 0 ? (totalInterest / P_total * 100) : 0;
+    els.interestRatio.textContent = ratio.toFixed(1) + '%';
+
+    /* ---- Schedule table ---- */
+    let html = '';
+    for(let i = 0; i < schedule.length; i++){
+      const s = schedule[i];
+      html += '<tr>' +
+        '<td>' + s.year + '</td>' +
+        '<td>' + fmtYen(s.principal + s.interest) + '</td>' +
+        '<td>' + fmtYen(s.principal) + '</td>' +
+        '<td>' + fmtYen(s.interest) + '</td>' +
+        '<td>' + fmtYen(s.balance) + '</td>' +
+        '</tr>';
+    }
+    els.scheduleBody.innerHTML = html;
+
+    /* ---- Draw chart ---- */
+    drawChart(schedule);
+  }
+
+  /* ---- Canvas chart (stacked bar) ---- */
+  function drawChart(schedule){
+    const canvas = els.chart;
+    const dpr = window.devicePixelRatio || 1;
+    const W = canvas.parentElement.clientWidth;
+    const H = Math.min(W * 0.55, 360);
+    canvas.width  = W * dpr;
+    canvas.height = H * dpr;
+    canvas.style.width  = W + 'px';
+    canvas.style.height = H + 'px';
+
+    const ctx = canvas.getContext('2d');
+    ctx.scale(dpr, dpr);
+    ctx.clearRect(0, 0, W, H);
+
+    if(!schedule.length) return;
+
+    const pad = {top:20, right:20, bottom:40, left:60};
+    const cw = W - pad.left - pad.right;
+    const ch = H - pad.top - pad.bottom;
+
+    // Find max
+    let maxVal = 0;
+    for(let i = 0; i < schedule.length; i++){
+      const total = schedule[i].principal + schedule[i].interest;
+      if(total > maxVal) maxVal = total;
+    }
+    if(maxVal === 0) maxVal = 1;
+
+    const n = schedule.length;
+    const barW = Math.max(2, (cw / n) * 0.7);
+    const gap  = (cw / n) - barW;
+
+    // Y-axis labels
+    ctx.fillStyle = '#999';
+    ctx.font = '11px sans-serif';
+    ctx.textAlign = 'right';
+    ctx.textBaseline = 'middle';
+    const yTicks = 5;
+    for(let i = 0; i <= yTicks; i++){
+      const v = maxVal * i / yTicks;
+      const y = pad.top + ch - (ch * i / yTicks);
+      ctx.fillText((v/10000).toFixed(0) + '万', pad.left - 8, y);
+      // Grid line
+      ctx.strokeStyle = '#eee';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(pad.left, y);
+      ctx.lineTo(W - pad.right, y);
+      ctx.stroke();
+    }
+
+    // Bars
+    for(let i = 0; i < n; i++){
+      const s = schedule[i];
+      const x = pad.left + i * (barW + gap) + gap / 2;
+
+      const hPrin = (s.principal / maxVal) * ch;
+      const hInt  = (s.interest  / maxVal) * ch;
+
+      // Principal (bottom)
+      ctx.fillStyle = '#2e7d32';
+      ctx.fillRect(x, pad.top + ch - hPrin - hInt, barW, hPrin);
+
+      // Interest (top)
+      ctx.fillStyle = '#81c784';
+      ctx.fillRect(x, pad.top + ch - hInt, barW, hInt);
+
+      // X labels (show every N years)
+      let showLabel = false;
+      if(n <= 15) showLabel = true;
+      else if(n <= 25) showLabel = (i % 2 === 0 || i === n - 1);
+      else showLabel = (i % 5 === 0 || i === n - 1);
+
+      if(showLabel){
+        ctx.fillStyle = '#999';
+        ctx.font = '10px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'top';
+        ctx.fillText(s.year + '年', x + barW / 2, pad.top + ch + 6);
+      }
+    }
+  }
+
+  /* ---- Responsive chart redraw ---- */
+  let resizeTimer;
+  window.addEventListener('resize', function(){
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(calculate, 150);
+  });
+
+  /* ---- Initial calculation ---- */
+  calculate();
+})();
+</script>
+
+</body>
+</html>

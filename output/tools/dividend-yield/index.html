@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>配当金利回り計算機【無料】年間配当・資産推移シミュレーション</title>
+<meta name="description" content="配当金利回り計算機。投資額・配当利回り・税率を入力するだけで年間配当金（税引前/税引後）、月換算配当金、配当再投資時の資産推移をリアルタイム計算。NISA非課税にも対応。">
+<meta name="keywords" content="配当金,利回り,計算機,高配当,NISA,配当再投資,シミュレーション,年間配当">
+<meta property="og:title" content="配当金利回り計算機【無料】年間配当・資産推移シミュレーション">
+<meta property="og:description" content="投資額・配当利回り・税率を入力するだけで年間配当金、月換算配当金、配当再投資時の資産推移をリアルタイム計算。NISA非課税にも対応した無料ツール。">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:site_name" content="配当金利回り計算機">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="配当金利回り計算機【無料】年間配当・資産推移シミュレーション">
+<meta name="twitter:description" content="投資額・配当利回り・税率を入力するだけで年間配当金、月換算配当金、配当再投資時の資産推移をリアルタイム計算。">
+<style>
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --green-dark: #1b5e20;
+  --green-mid: #2e7d32;
+  --green-light: #e8f5e9;
+  --green-pale: #f1f8e9;
+  --navy-dark: #0d253f;
+  --navy-mid: #1a3a5c;
+  --navy-light: #e3eaf2;
+  --navy-pale: #f0f4f8;
+  --gray-50: #fafafa;
+  --gray-100: #f5f5f5;
+  --gray-200: #eeeeee;
+  --gray-300: #e0e0e0;
+  --gray-600: #757575;
+  --gray-700: #616161;
+  --gray-800: #424242;
+  --gray-900: #212121;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
+  --shadow-md: 0 4px 6px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.06);
+  --shadow-lg: 0 10px 25px rgba(0,0,0,0.08), 0 6px 12px rgba(0,0,0,0.06);
+  --radius: 12px;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+  background: #ffffff;
+  color: var(--gray-900);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px 16px 40px;
+}
+
+header {
+  text-align: center;
+  padding: 32px 0 24px;
+}
+
+header h1 {
+  font-size: clamp(1.5rem, 5vw, 2rem);
+  font-weight: 800;
+  color: var(--green-dark);
+  letter-spacing: -0.02em;
+  margin-bottom: 8px;
+}
+
+header p {
+  font-size: 0.95rem;
+  color: var(--gray-600);
+}
+
+.card {
+  background: #fff;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-md);
+  padding: 24px;
+  margin-bottom: 20px;
+  border: 1px solid var(--gray-200);
+}
+
+.card-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--gray-800);
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--green-mid);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.card-title .icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.card-title .icon-green {
+  background: var(--green-light);
+  color: var(--green-mid);
+}
+
+.card-title .icon-navy {
+  background: var(--navy-light);
+  color: var(--navy-mid);
+}
+
+.input-group {
+  margin-bottom: 20px;
+}
+
+.input-group:last-child {
+  margin-bottom: 0;
+}
+
+.input-group label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--gray-700);
+  margin-bottom: 8px;
+}
+
+.slider-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.slider-row input[type="range"] {
+  flex: 1;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--gray-300);
+  outline: none;
+}
+
+.slider-row input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--green-mid);
+  cursor: pointer;
+  border: 3px solid #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+.slider-row input[type="range"]::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--green-mid);
+  cursor: pointer;
+  border: 3px solid #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+.num-input {
+  width: 130px;
+  padding: 8px 12px;
+  border: 2px solid var(--gray-300);
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  text-align: right;
+  color: var(--gray-900);
+  transition: border-color 0.2s;
+}
+
+.num-input:focus {
+  outline: none;
+  border-color: var(--green-mid);
+}
+
+.unit {
+  font-size: 0.85rem;
+  color: var(--gray-600);
+  min-width: 24px;
+}
+
+.radio-group {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.radio-group label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 16px;
+  border: 2px solid var(--gray-300);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.2s;
+  flex: 1;
+  min-width: 140px;
+  justify-content: center;
+}
+
+.radio-group label:has(input:checked) {
+  border-color: var(--green-mid);
+  background: var(--green-light);
+  color: var(--green-dark);
+}
+
+.radio-group input[type="radio"],
+.radio-group input[type="checkbox"] {
+  accent-color: var(--green-mid);
+}
+
+.toggle-group {
+  display: flex;
+  gap: 8px;
+}
+
+.toggle-group label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 16px;
+  border: 2px solid var(--gray-300);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.2s;
+  flex: 1;
+  justify-content: center;
+}
+
+.toggle-group label:has(input:checked) {
+  border-color: var(--green-mid);
+  background: var(--green-light);
+  color: var(--green-dark);
+}
+
+.toggle-group input {
+  accent-color: var(--green-mid);
+}
+
+/* Results */
+.result-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.result-item {
+  background: var(--navy-pale);
+  border-radius: 10px;
+  padding: 16px;
+  text-align: center;
+}
+
+.result-item.highlight {
+  background: linear-gradient(135deg, var(--green-mid), var(--navy-mid));
+  color: #fff;
+}
+
+.result-item .label {
+  font-size: 0.8rem;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.result-item.highlight .label {
+  color: rgba(255,255,255,0.85);
+}
+
+.result-item .value {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--navy-dark);
+}
+
+.result-item.highlight .value {
+  color: #fff;
+}
+
+.result-item .sub {
+  font-size: 0.75rem;
+  color: var(--gray-600);
+  margin-top: 2px;
+}
+
+.result-item.highlight .sub {
+  color: rgba(255,255,255,0.7);
+}
+
+/* Chart */
+.chart-container {
+  position: relative;
+  width: 100%;
+  margin-top: 8px;
+}
+
+.chart-container canvas {
+  width: 100% !important;
+  height: auto !important;
+}
+
+/* Table */
+.table-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+
+thead th {
+  background: var(--navy-mid);
+  color: #fff;
+  padding: 10px 12px;
+  font-weight: 600;
+  text-align: right;
+  white-space: nowrap;
+}
+
+thead th:first-child {
+  text-align: left;
+  border-radius: 8px 0 0 0;
+}
+
+thead th:last-child {
+  border-radius: 0 8px 0 0;
+}
+
+tbody td {
+  padding: 10px 12px;
+  text-align: right;
+  border-bottom: 1px solid var(--gray-200);
+}
+
+tbody td:first-child {
+  text-align: left;
+  font-weight: 600;
+  color: var(--navy-mid);
+}
+
+tbody tr:hover {
+  background: var(--green-light);
+}
+
+tbody tr:last-child td:first-child {
+  border-radius: 0 0 0 8px;
+}
+
+tbody tr:last-child td:last-child {
+  border-radius: 0 0 8px 0;
+}
+
+/* Target table */
+.target-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 12px;
+}
+
+.target-item {
+  background: var(--green-light);
+  border-radius: 10px;
+  padding: 16px;
+  text-align: center;
+  border: 1px solid rgba(46,125,50,0.15);
+}
+
+.target-item .target-label {
+  font-size: 0.8rem;
+  color: var(--gray-700);
+  margin-bottom: 4px;
+}
+
+.target-item .target-monthly {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--green-dark);
+  margin-bottom: 6px;
+}
+
+.target-item .target-required {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--navy-mid);
+}
+
+.target-item .target-note {
+  font-size: 0.72rem;
+  color: var(--gray-600);
+  margin-top: 2px;
+}
+
+/* Affiliate */
+.affiliate-box {
+  display: block;
+  background: linear-gradient(135deg, var(--green-mid), var(--navy-mid));
+  color: #fff;
+  text-decoration: none;
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  margin-bottom: 20px;
+  text-align: center;
+  box-shadow: var(--shadow-md);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.affiliate-box:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.affiliate-box .aff-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.affiliate-box .aff-desc {
+  font-size: 0.85rem;
+  opacity: 0.9;
+}
+
+.affiliate-box .aff-btn {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 8px 28px;
+  background: #fff;
+  color: var(--green-dark);
+  border-radius: 24px;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+/* Disclaimer */
+.disclaimer {
+  background: var(--gray-100);
+  border-radius: 8px;
+  padding: 16px;
+  font-size: 0.8rem;
+  color: var(--gray-600);
+  line-height: 1.6;
+  margin-top: 12px;
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 24px 0 16px;
+  font-size: 0.8rem;
+  color: var(--gray-600);
+}
+
+@media (max-width: 600px) {
+  .card {
+    padding: 18px 14px;
+  }
+
+  .result-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .result-item .value {
+    font-size: 1.2rem;
+  }
+
+  .num-input {
+    width: 100px;
+  }
+
+  .target-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .target-item {
+    padding: 12px 8px;
+  }
+
+  .target-item .target-monthly {
+    font-size: 0.95rem;
+  }
+
+  table {
+    font-size: 0.8rem;
+  }
+
+  thead th, tbody td {
+    padding: 8px 6px;
+  }
+}
+
+@media (max-width: 380px) {
+  .result-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .radio-group {
+    flex-direction: column;
+  }
+
+  .toggle-group {
+    flex-direction: column;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <header>
+    <h1>配当金利回り計算機</h1>
+    <p>投資額と利回りから配当金を即時計算。再投資シミュレーションも。</p>
+  </header>
+
+  <!-- Input Card -->
+  <div class="card">
+    <div class="card-title">
+      <span class="icon icon-green">&#9881;</span>
+      条件を入力
+    </div>
+
+    <div class="input-group">
+      <label>投資額</label>
+      <div class="slider-row">
+        <input type="range" id="investSlider" min="100000" max="100000000" step="100000" value="5000000">
+        <input type="number" id="investInput" class="num-input" min="100000" max="100000000" step="100000" value="5000000">
+        <span class="unit">円</span>
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label>配当利回り（年率）</label>
+      <div class="slider-row">
+        <input type="range" id="yieldSlider" min="0.1" max="10" step="0.1" value="4.0">
+        <input type="number" id="yieldInput" class="num-input" min="0.1" max="10" step="0.1" value="4.0">
+        <span class="unit">%</span>
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label>税率</label>
+      <div class="radio-group">
+        <label>
+          <input type="radio" name="taxType" value="0" checked> NISA（非課税）
+        </label>
+        <label>
+          <input type="radio" name="taxType" value="20.315"> 特定口座（20.315%）
+        </label>
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label>配当再投資</label>
+      <div class="toggle-group">
+        <label>
+          <input type="radio" name="reinvest" value="1" checked> 再投資する
+        </label>
+        <label>
+          <input type="radio" name="reinvest" value="0"> 再投資しない
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <!-- Results Card -->
+  <div class="card">
+    <div class="card-title">
+      <span class="icon icon-navy">&#128176;</span>
+      配当金シミュレーション結果
+    </div>
+    <div class="result-grid">
+      <div class="result-item highlight">
+        <div class="label">年間配当金（税引後）</div>
+        <div class="value" id="annualAfterTax">--</div>
+        <div class="sub" id="annualAfterTaxSub"></div>
+      </div>
+      <div class="result-item">
+        <div class="label">年間配当金（税引前）</div>
+        <div class="value" id="annualBeforeTax">--</div>
+      </div>
+      <div class="result-item highlight">
+        <div class="label">月換算配当金（税引後）</div>
+        <div class="value" id="monthlyAfterTax">--</div>
+      </div>
+      <div class="result-item">
+        <div class="label">税金額（年間）</div>
+        <div class="value" id="taxAmount">--</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Affiliate Box 1 -->
+  <a href="#" class="affiliate-box" rel="nofollow noopener" target="_blank">
+    <div class="aff-title">高配当株投資を始める【SBI証券】</div>
+    <div class="aff-desc">業界最安水準の手数料 / 新NISA非課税で配当を受取</div>
+    <span class="aff-btn">無料で口座開設</span>
+  </a>
+
+  <!-- Chart Card -->
+  <div class="card">
+    <div class="card-title">
+      <span class="icon icon-green">&#128200;</span>
+      資産推移グラフ（最大30年）
+    </div>
+    <div class="chart-container">
+      <canvas id="chartCanvas" width="760" height="400"></canvas>
+    </div>
+    <div id="chartLegend" style="display:flex;gap:16px;justify-content:center;margin-top:12px;font-size:0.82rem;flex-wrap:wrap;"></div>
+  </div>
+
+  <!-- Yield Table Card -->
+  <div class="card">
+    <div class="card-title">
+      <span class="icon icon-navy">&#128202;</span>
+      利回り別 年間配当金早見表
+    </div>
+    <div class="table-wrapper">
+      <table id="yieldTable">
+        <thead>
+          <tr>
+            <th>投資額</th>
+            <th>2%</th>
+            <th>3%</th>
+            <th>4%</th>
+            <th>5%</th>
+            <th>7%</th>
+          </tr>
+        </thead>
+        <tbody id="yieldTableBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Target Card -->
+  <div class="card">
+    <div class="card-title">
+      <span class="icon icon-green">&#127919;</span>
+      目標月額配当に必要な投資額
+    </div>
+    <div class="target-grid" id="targetGrid"></div>
+  </div>
+
+  <!-- Affiliate Box 2 -->
+  <a href="#" class="affiliate-box" rel="nofollow noopener" target="_blank">
+    <div class="aff-title">配当投資の最適プランを無料相談【マネードクター】</div>
+    <div class="aff-desc">FPに何度でも無料相談OK / オンライン対応 / 配当戦略をアドバイス</div>
+    <span class="aff-btn">無料で相談する</span>
+  </a>
+
+  <!-- Disclaimer -->
+  <div class="disclaimer">
+    ※ この計算は概算です。正確な情報は専門家にご相談ください。実際の配当金は企業の業績や配当方針により変動します。配当利回りは過去の実績であり、将来を保証するものではありません。税制は変更される場合があります。
+  </div>
+
+  <footer>配当金利回り計算機 &copy; 2025</footer>
+
+</div>
+
+<script>
+(function() {
+  'use strict';
+
+  // Elements
+  var investSlider = document.getElementById('investSlider');
+  var investInput = document.getElementById('investInput');
+  var yieldSlider = document.getElementById('yieldSlider');
+  var yieldInput = document.getElementById('yieldInput');
+  var canvas = document.getElementById('chartCanvas');
+  var ctx = canvas.getContext('2d');
+
+  // Format number with commas
+  function fmt(n) {
+    if (n >= 100000000) return (n / 100000000).toFixed(2).replace(/\.?0+$/, '') + '億';
+    if (n >= 10000) return Math.round(n).toLocaleString('ja-JP');
+    return Math.round(n).toLocaleString('ja-JP');
+  }
+
+  function fmtYen(n) {
+    return fmt(n) + '円';
+  }
+
+  function fmtManYen(n) {
+    if (n >= 100000000) return (n / 100000000).toFixed(2).replace(/\.?0+$/, '') + '億円';
+    if (n >= 10000) return (n / 10000).toFixed(1).replace(/\.0$/, '') + '万円';
+    return Math.round(n).toLocaleString('ja-JP') + '円';
+  }
+
+  // Get values
+  function getValues() {
+    var invest = parseFloat(investInput.value) || 5000000;
+    var yieldRate = parseFloat(yieldInput.value) || 4.0;
+    var taxRadios = document.querySelectorAll('input[name="taxType"]');
+    var taxRate = 0;
+    for (var i = 0; i < taxRadios.length; i++) {
+      if (taxRadios[i].checked) { taxRate = parseFloat(taxRadios[i].value); break; }
+    }
+    var reinvestRadios = document.querySelectorAll('input[name="reinvest"]');
+    var reinvest = true;
+    for (var j = 0; j < reinvestRadios.length; j++) {
+      if (reinvestRadios[j].checked) { reinvest = reinvestRadios[j].value === '1'; break; }
+    }
+    return { invest: invest, yieldRate: yieldRate, taxRate: taxRate, reinvest: reinvest };
+  }
+
+  // Sync sliders
+  investSlider.addEventListener('input', function() { investInput.value = this.value; calculate(); });
+  investInput.addEventListener('input', function() { investSlider.value = this.value; calculate(); });
+  yieldSlider.addEventListener('input', function() { yieldInput.value = this.value; calculate(); });
+  yieldInput.addEventListener('input', function() { yieldSlider.value = this.value; calculate(); });
+
+  var radios = document.querySelectorAll('input[name="taxType"], input[name="reinvest"]');
+  for (var r = 0; r < radios.length; r++) {
+    radios[r].addEventListener('change', calculate);
+  }
+
+  function calculate() {
+    var v = getValues();
+    var annualBefore = v.invest * (v.yieldRate / 100);
+    var taxAmt = annualBefore * (v.taxRate / 100);
+    var annualAfter = annualBefore - taxAmt;
+    var monthlyAfter = annualAfter / 12;
+
+    document.getElementById('annualBeforeTax').textContent = fmtYen(annualBefore);
+    document.getElementById('annualAfterTax').textContent = fmtYen(annualAfter);
+    document.getElementById('annualAfterTaxSub').textContent = v.taxRate === 0 ? 'NISA非課税' : '税率' + v.taxRate + '%適用';
+    document.getElementById('monthlyAfterTax').textContent = fmtYen(monthlyAfter);
+    document.getElementById('taxAmount').textContent = fmtYen(taxAmt);
+
+    drawChart(v);
+    buildYieldTable(v);
+    buildTargetGrid(v);
+  }
+
+  // ---- Chart ----
+  function drawChart(v) {
+    var dpr = window.devicePixelRatio || 1;
+    var displayW = canvas.parentElement.clientWidth;
+    var displayH = Math.min(400, displayW * 0.55);
+    canvas.style.width = displayW + 'px';
+    canvas.style.height = displayH + 'px';
+    canvas.width = displayW * dpr;
+    canvas.height = displayH * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    var pad = { top: 30, right: 20, bottom: 50, left: 70 };
+    var cw = displayW - pad.left - pad.right;
+    var ch = displayH - pad.top - pad.bottom;
+    var years = 30;
+    var netRate = (v.yieldRate / 100) * (1 - v.taxRate / 100);
+
+    // Data: reinvest vs no-reinvest
+    var dataReinvest = [v.invest];
+    var dataNoReinvest = [v.invest];
+    for (var y = 1; y <= years; y++) {
+      dataReinvest.push(dataReinvest[y - 1] * (1 + netRate));
+      dataNoReinvest.push(v.invest + v.invest * netRate * y);
+    }
+
+    var allVals = dataReinvest.concat(dataNoReinvest);
+    var maxVal = Math.max.apply(null, allVals);
+    var minVal = 0;
+
+    ctx.clearRect(0, 0, displayW, displayH);
+
+    // Background
+    ctx.fillStyle = '#fafafa';
+    ctx.fillRect(pad.left, pad.top, cw, ch);
+
+    // Grid lines
+    var gridCount = 5;
+    ctx.strokeStyle = '#e0e0e0';
+    ctx.lineWidth = 1;
+    ctx.font = '11px -apple-system, sans-serif';
+    ctx.fillStyle = '#757575';
+    ctx.textAlign = 'right';
+    for (var g = 0; g <= gridCount; g++) {
+      var gy = pad.top + ch - (ch / gridCount) * g;
+      var gVal = minVal + (maxVal - minVal) / gridCount * g;
+      ctx.beginPath();
+      ctx.moveTo(pad.left, gy);
+      ctx.lineTo(pad.left + cw, gy);
+      ctx.stroke();
+      ctx.fillText(fmtManYen(gVal), pad.left - 6, gy + 4);
+    }
+
+    // X-axis labels
+    ctx.textAlign = 'center';
+    ctx.fillStyle = '#757575';
+    var xSteps = [0, 5, 10, 15, 20, 25, 30];
+    for (var xi = 0; xi < xSteps.length; xi++) {
+      var xPos = pad.left + (cw / years) * xSteps[xi];
+      ctx.fillText(xSteps[xi] + '年', xPos, pad.top + ch + 20);
+    }
+
+    // X-axis title
+    ctx.fillStyle = '#616161';
+    ctx.font = '12px -apple-system, sans-serif';
+    ctx.fillText('経過年数', pad.left + cw / 2, pad.top + ch + 42);
+
+    // Draw lines
+    function drawLine(data, color, dashed) {
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 2.5;
+      ctx.lineJoin = 'round';
+      if (dashed) ctx.setLineDash([6, 4]);
+      else ctx.setLineDash([]);
+      ctx.beginPath();
+      for (var i = 0; i <= years; i++) {
+        var px = pad.left + (cw / years) * i;
+        var py = pad.top + ch - ((data[i] - minVal) / (maxVal - minVal)) * ch;
+        if (i === 0) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
+      }
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+
+    // Fill area under reinvest line
+    ctx.fillStyle = 'rgba(46,125,50,0.08)';
+    ctx.beginPath();
+    ctx.moveTo(pad.left, pad.top + ch);
+    for (var fi = 0; fi <= years; fi++) {
+      var fpx = pad.left + (cw / years) * fi;
+      var fpy = pad.top + ch - ((dataReinvest[fi] - minVal) / (maxVal - minVal)) * ch;
+      ctx.lineTo(fpx, fpy);
+    }
+    ctx.lineTo(pad.left + cw, pad.top + ch);
+    ctx.closePath();
+    ctx.fill();
+
+    drawLine(dataNoReinvest, '#1a3a5c', true);
+    drawLine(dataReinvest, '#2e7d32', false);
+
+    // Milestone dots at 10, 20, 30
+    var milestones = [10, 20, 30];
+    for (var mi = 0; mi < milestones.length; mi++) {
+      var my = milestones[mi];
+      var mx = pad.left + (cw / years) * my;
+
+      // Reinvest dot
+      var mry = pad.top + ch - ((dataReinvest[my] - minVal) / (maxVal - minVal)) * ch;
+      ctx.beginPath();
+      ctx.arc(mx, mry, 5, 0, Math.PI * 2);
+      ctx.fillStyle = '#2e7d32';
+      ctx.fill();
+      ctx.strokeStyle = '#fff';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      // Label
+      ctx.fillStyle = '#2e7d32';
+      ctx.font = 'bold 11px -apple-system, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(fmtManYen(dataReinvest[my]), mx, mry - 12);
+
+      // No-reinvest dot
+      var mny = pad.top + ch - ((dataNoReinvest[my] - minVal) / (maxVal - minVal)) * ch;
+      ctx.beginPath();
+      ctx.arc(mx, mny, 5, 0, Math.PI * 2);
+      ctx.fillStyle = '#1a3a5c';
+      ctx.fill();
+      ctx.strokeStyle = '#fff';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      ctx.fillStyle = '#1a3a5c';
+      ctx.fillText(fmtManYen(dataNoReinvest[my]), mx, mny + 20);
+    }
+
+    // Legend
+    document.getElementById('chartLegend').innerHTML =
+      '<span style="display:flex;align-items:center;gap:4px;">' +
+      '<span style="display:inline-block;width:20px;height:3px;background:#2e7d32;border-radius:2px;"></span>' +
+      '<span style="color:#2e7d32;font-weight:600;">再投資あり（複利）</span></span>' +
+      '<span style="display:flex;align-items:center;gap:4px;">' +
+      '<span style="display:inline-block;width:20px;height:3px;background:#1a3a5c;border-radius:2px;border-top:2px dashed #1a3a5c;height:0;"></span>' +
+      '<span style="color:#1a3a5c;font-weight:600;">再投資なし（単利）</span></span>';
+  }
+
+  // ---- Yield Table ----
+  function buildYieldTable(v) {
+    var investLevels = [1000000, 3000000, 5000000, 10000000, 30000000, 50000000, 100000000];
+    var yieldLevels = [2, 3, 4, 5, 7];
+    var taxMul = 1 - v.taxRate / 100;
+    var tbody = document.getElementById('yieldTableBody');
+    var html = '';
+    for (var i = 0; i < investLevels.length; i++) {
+      html += '<tr><td>' + fmtManYen(investLevels[i]) + '</td>';
+      for (var j = 0; j < yieldLevels.length; j++) {
+        var annual = investLevels[i] * (yieldLevels[j] / 100) * taxMul;
+        html += '<td>' + fmtManYen(annual) + '</td>';
+      }
+      html += '</tr>';
+    }
+    tbody.innerHTML = html;
+  }
+
+  // ---- Target Grid ----
+  function buildTargetGrid(v) {
+    var targets = [50000, 100000, 200000, 300000];
+    var taxMul = 1 - v.taxRate / 100;
+    var netYield = (v.yieldRate / 100) * taxMul;
+    var container = document.getElementById('targetGrid');
+    var html = '';
+    for (var i = 0; i < targets.length; i++) {
+      var monthly = targets[i];
+      var annualNeeded = monthly * 12;
+      var required = netYield > 0 ? annualNeeded / netYield : Infinity;
+      html += '<div class="target-item">' +
+        '<div class="target-label">月額配当</div>' +
+        '<div class="target-monthly">月' + fmtManYen(monthly) + '</div>' +
+        '<div class="target-required">必要投資額</div>' +
+        '<div class="target-monthly" style="color:#1a3a5c;">' + (required === Infinity ? '--' : fmtManYen(required)) + '</div>' +
+        '<div class="target-note">利回り' + v.yieldRate + '%' + (v.taxRate > 0 ? '・税引後' : '・NISA') + '</div>' +
+        '</div>';
+    }
+    container.innerHTML = html;
+  }
+
+  // Init
+  calculate();
+
+  // Resize
+  var resizeTimer;
+  window.addEventListener('resize', function() {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(function() { calculate(); }, 150);
+  });
+
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+nul
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Logs (keep directory, ignore contents)
+logs/*.log
+
+# Secrets
+.env
+*.key
+
+# Temp
+*.tmp
+*.bak
+
+# Playwright MCP cache
+.playwright-mcp/
+
+# Root screenshots (debug artifacts)
+*-full.png

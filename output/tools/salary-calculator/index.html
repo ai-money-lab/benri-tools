@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>年収手取り計算機 - 年収から手取り額を即算出</title>
+<meta name="description" content="年収を入力するだけで手取り額・社会保険料・税金を自動計算。転職・昇給時の手取り変化がひと目でわかるシミュレーター。">
+<meta property="og:title" content="年収手取り計算機 - 年収から手取り額を即算出">
+<meta property="og:description" content="年収を入力するだけで手取り額・社会保険料・税金を自動計算。転職・昇給時の手取り変化がひと目でわかるシミュレーター。">
+<meta property="og:type" content="website">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Hiragino Kaku Gothic ProN',Meiryo,sans-serif;background:#f5f7fa;color:#333;line-height:1.6;min-width:320px}
+.container{max-width:800px;margin:0 auto;padding:16px}
+h1{text-align:center;color:#1a3a5c;font-size:clamp(1.3rem,4vw,1.8rem);margin:16px 0 8px;font-weight:700}
+.subtitle{text-align:center;color:#667;font-size:.85rem;margin-bottom:24px}
+.card{background:#fff;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,.08);padding:24px;margin-bottom:20px}
+.card h2{color:#1a3a5c;font-size:1.1rem;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid #e8f5e9}
+.input-group{margin-bottom:20px}
+.input-group label{display:block;font-weight:600;margin-bottom:6px;font-size:.9rem;color:#444}
+.input-row{display:flex;align-items:center;gap:12px}
+.input-row input[type=range]{flex:1;accent-color:#2e7d32}
+.input-row input[type=number]{width:120px;padding:8px 10px;border:1px solid #ccc;border-radius:6px;font-size:1rem;text-align:right}
+.input-row .unit{font-size:.85rem;color:#888;white-space:nowrap}
+.select-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.select-row select{padding:8px 12px;border:1px solid #ccc;border-radius:6px;font-size:.95rem;flex:1;max-width:240px}
+.result-box{background:linear-gradient(135deg,#e8f5e9 0%,#f1f8e9 100%);border-radius:12px;padding:20px;text-align:center;margin-bottom:16px}
+.result-box .amount{font-size:clamp(1.8rem,6vw,2.6rem);font-weight:800;color:#2e7d32}
+.result-box .label{font-size:.85rem;color:#555;margin-bottom:4px}
+.result-box .sub{font-size:.95rem;color:#666;margin-top:4px}
+.breakdown{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-top:16px}
+.breakdown-item{background:#fafafa;border-radius:8px;padding:14px;text-align:center;border:1px solid #eee}
+.breakdown-item .val{font-size:1.3rem;font-weight:700;color:#1a3a5c}
+.breakdown-item .lbl{font-size:.78rem;color:#888;margin-top:2px}
+.chart-container{position:relative;width:100%;max-width:360px;margin:16px auto}
+.chart-container canvas{width:100%;height:auto}
+.bar-chart-container{width:100%;margin:16px 0}
+.bar-chart-container canvas{width:100%;height:auto}
+.affiliate-box{background:linear-gradient(135deg,#fff8e1 0%,#fff3e0 100%);border:2px solid #ffb74d;border-radius:12px;padding:20px;text-align:center;margin:20px 0}
+.affiliate-box .af-title{font-size:1rem;font-weight:700;color:#e65100;margin-bottom:8px}
+.affiliate-box .af-text{font-size:.85rem;color:#666;margin-bottom:12px}
+.affiliate-box a{display:inline-block;background:#ff6d00;color:#fff;text-decoration:none;padding:12px 32px;border-radius:8px;font-weight:700;font-size:1rem;transition:background .2s}
+.affiliate-box a:hover{background:#e65100}
+.note{background:#fff3e0;border-radius:8px;padding:12px 16px;font-size:.78rem;color:#888;margin-top:16px;text-align:center}
+.table-wrap{overflow-x:auto;margin-top:16px}
+table{width:100%;border-collapse:collapse;font-size:.85rem}
+th,td{padding:8px 10px;text-align:right;border-bottom:1px solid #eee}
+th{background:#f5f7fa;color:#555;font-weight:600;position:sticky;top:0}
+td:first-child,th:first-child{text-align:center}
+tr:hover{background:#f9fdf9}
+.highlight-row{background:#e8f5e9;font-weight:700}
+footer{text-align:center;color:#aaa;font-size:.75rem;padding:24px 0 16px}
+@media(max-width:480px){
+  .input-row{flex-wrap:wrap}
+  .input-row input[type=range]{width:100%;flex:unset}
+  .input-row input[type=number]{width:100%}
+  .card{padding:16px}
+  .breakdown{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>年収手取り計算機</h1>
+  <p class="subtitle">年収を入力するだけで手取り・税金・社会保険料を即算出</p>
+
+  <div class="card">
+    <h2>基本情報を入力</h2>
+    <div class="input-group">
+      <label>年収（額面）</label>
+      <div class="input-row">
+        <input type="range" id="salaryRange" min="100" max="3000" step="10" value="500">
+        <input type="number" id="salaryInput" min="100" max="9999" step="1" value="500">
+        <span class="unit">万円</span>
+      </div>
+    </div>
+    <div class="input-group">
+      <label>年齢</label>
+      <div class="select-row">
+        <select id="ageGroup">
+          <option value="under40">40歳未満</option>
+          <option value="over40">40歳以上65歳未満</option>
+        </select>
+      </div>
+    </div>
+    <div class="input-group">
+      <label>扶養人数（配偶者除く）</label>
+      <div class="input-row">
+        <input type="range" id="dependentsRange" min="0" max="5" step="1" value="0">
+        <input type="number" id="dependentsInput" min="0" max="10" step="1" value="0">
+        <span class="unit">人</span>
+      </div>
+    </div>
+    <div class="input-group">
+      <label>配偶者</label>
+      <div class="select-row">
+        <select id="spouse">
+          <option value="none">なし</option>
+          <option value="general">配偶者控除あり（収入103万円以下）</option>
+          <option value="special">配偶者特別控除あり（収入201万円以下）</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="result-box">
+    <div class="label">あなたの年間手取り額（概算）</div>
+    <div class="amount" id="takeHome">---</div>
+    <div class="sub" id="monthlyTakeHome"></div>
+  </div>
+
+  <div class="card">
+    <h2>内訳</h2>
+    <div class="breakdown" id="breakdownGrid"></div>
+    <div class="chart-container"><canvas id="pieChart" width="360" height="360"></canvas></div>
+  </div>
+
+  <div class="affiliate-box">
+    <div class="af-title">年収アップを目指すなら【LHH転職エージェント】</div>
+    <div class="af-text">アデコグループのハイクラス転職支援。年収・働き方・やりがいすべてにこだわる転職を無料サポート。</div>
+    <a href="#" rel="nofollow noopener" target="_blank">無料で転職相談する</a>
+  </div>
+
+  <div class="card">
+    <h2>年収別 手取り早見表</h2>
+    <div class="bar-chart-container"><canvas id="barChart" width="700" height="320"></canvas></div>
+    <div class="table-wrap">
+      <table id="comparisonTable">
+        <thead><tr><th>年収</th><th>手取り</th><th>税金計</th><th>社保計</th><th>手取り率</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="affiliate-box">
+    <div class="af-title">未経験からでも正社員転職【ピタテン】</div>
+    <div class="af-text">面談実施で手厚いサポート。未経験でも年収UP・正社員転職の実績多数。</div>
+    <a href="#" rel="nofollow noopener" target="_blank">無料で転職相談する</a>
+  </div>
+
+  <p class="note">※ この計算は概算です。正確な情報は専門家にご相談ください。実際の手取り額は勤務先の社会保険料率、住民税の自治体差、各種控除の適用状況等により異なります。</p>
+
+  <footer>&copy; 2025 年収手取り計算機</footer>
+</div>
+
+<script>
+(function(){
+  const $ = id => document.getElementById(id);
+
+  const salaryRange = $('salaryRange');
+  const salaryInput = $('salaryInput');
+  const ageGroup = $('ageGroup');
+  const dependentsRange = $('dependentsRange');
+  const dependentsInput = $('dependentsInput');
+  const spouse = $('spouse');
+
+  function syncInputs(range, num) {
+    range.addEventListener('input', () => { num.value = range.value; calc(); });
+    num.addEventListener('input', () => { range.value = num.value; calc(); });
+  }
+  syncInputs(salaryRange, salaryInput);
+  syncInputs(dependentsRange, dependentsInput);
+  ageGroup.addEventListener('change', calc);
+  spouse.addEventListener('change', calc);
+
+  function calcFor(salaryMan, age40, deps, sp) {
+    const salary = salaryMan * 10000;
+
+    // 健康保険料率 (協会けんぽ全国平均 約10%, 労使折半で5%)
+    const healthRate = 0.05;
+    // 介護保険料率 (40歳以上 約0.82% 折半)
+    const careRate = age40 ? 0.0082 : 0;
+    // 厚生年金保険料率 (18.3% 折半で9.15%)
+    const pensionRate = 0.0915;
+    // 雇用保険料率 (一般 0.6%)
+    const employmentRate = 0.006;
+
+    // 標準報酬月額上限考慮 (健保: 139万, 厚年: 65万)
+    const monthSalary = salary / 12;
+    const healthBase = Math.min(monthSalary, 1390000) * 12;
+    const pensionBase = Math.min(monthSalary, 650000) * 12;
+
+    const healthIns = Math.floor(healthBase * healthRate);
+    const careIns = Math.floor(healthBase * careRate);
+    const pensionIns = Math.floor(pensionBase * pensionRate);
+    const employmentIns = Math.floor(salary * employmentRate);
+
+    const socialTotal = healthIns + careIns + pensionIns + employmentIns;
+
+    // 給与所得控除
+    let deduction;
+    if (salary <= 1625000) deduction = 550000;
+    else if (salary <= 1800000) deduction = salary * 0.4 - 100000;
+    else if (salary <= 3600000) deduction = salary * 0.3 + 80000;
+    else if (salary <= 6600000) deduction = salary * 0.2 + 440000;
+    else if (salary <= 8500000) deduction = salary * 0.1 + 1100000;
+    else deduction = 1950000;
+
+    // 基礎控除
+    let basicDeduction = 480000;
+    if (salary > 24000000) basicDeduction = salary > 25000000 ? 0 : salary > 24500000 ? 160000 : 320000;
+
+    // 配偶者控除
+    let spouseDeduction = 0;
+    if (sp === 'general' && salary <= 10000000) spouseDeduction = 380000;
+    else if (sp === 'special' && salary <= 10000000) spouseDeduction = 260000;
+
+    // 扶養控除
+    const dependentDeduction = deps * 380000;
+
+    const totalDeduction = deduction + basicDeduction + spouseDeduction + dependentDeduction + socialTotal;
+    const taxableIncome = Math.max(0, salary - totalDeduction);
+
+    // 所得税
+    let incomeTax;
+    if (taxableIncome <= 1950000) incomeTax = taxableIncome * 0.05;
+    else if (taxableIncome <= 3300000) incomeTax = taxableIncome * 0.1 - 97500;
+    else if (taxableIncome <= 6950000) incomeTax = taxableIncome * 0.2 - 427500;
+    else if (taxableIncome <= 9000000) incomeTax = taxableIncome * 0.23 - 636000;
+    else if (taxableIncome <= 18000000) incomeTax = taxableIncome * 0.33 - 1536000;
+    else if (taxableIncome <= 40000000) incomeTax = taxableIncome * 0.40 - 2796000;
+    else incomeTax = taxableIncome * 0.45 - 4796000;
+    // 復興特別所得税
+    incomeTax = Math.floor(incomeTax * 1.021);
+
+    // 住民税 (課税所得 × 10% + 均等割5000)
+    const residentTaxDeduction = deduction + 430000 + spouseDeduction + dependentDeduction + socialTotal;
+    const residentTaxable = Math.max(0, salary - residentTaxDeduction);
+    const residentTax = Math.floor(residentTaxable * 0.1) + 5000;
+
+    const taxTotal = incomeTax + residentTax;
+    const takeHome = salary - socialTotal - taxTotal;
+
+    return { salary, takeHome, healthIns, careIns, pensionIns, employmentIns, socialTotal, incomeTax, residentTax, taxTotal };
+  }
+
+  function fmt(n) {
+    return Math.round(n).toLocaleString('ja-JP');
+  }
+  function fmtMan(n) {
+    const man = n / 10000;
+    if (man >= 100) return Math.round(man).toLocaleString('ja-JP') + '万円';
+    return man.toFixed(1) + '万円';
+  }
+
+  function calc() {
+    const s = parseInt(salaryInput.value) || 500;
+    const age40 = ageGroup.value === 'over40';
+    const deps = parseInt(dependentsInput.value) || 0;
+    const sp = spouse.value;
+
+    const r = calcFor(s, age40, deps, sp);
+
+    $('takeHome').textContent = fmtMan(r.takeHome);
+    $('monthlyTakeHome').textContent = '月額約 ' + fmtMan(r.takeHome / 12);
+
+    const grid = $('breakdownGrid');
+    grid.innerHTML = [
+      { lbl: '額面年収', val: fmtMan(r.salary) },
+      { lbl: '健康保険料', val: fmtMan(r.healthIns) },
+      { lbl: '介護保険料', val: fmtMan(r.careIns) },
+      { lbl: '厚生年金', val: fmtMan(r.pensionIns) },
+      { lbl: '雇用保険', val: fmtMan(r.employmentIns) },
+      { lbl: '所得税', val: fmtMan(r.incomeTax) },
+      { lbl: '住民税', val: fmtMan(r.residentTax) },
+      { lbl: '手取り率', val: (r.takeHome / r.salary * 100).toFixed(1) + '%' },
+    ].map(i => '<div class="breakdown-item"><div class="val">' + i.val + '</div><div class="lbl">' + i.lbl + '</div></div>').join('');
+
+    drawPie(r);
+    drawBar(s, age40, deps, sp);
+    buildTable(s, age40, deps, sp);
+  }
+
+  function drawPie(r) {
+    const canvas = $('pieChart');
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = 360 * dpr;
+    canvas.height = 360 * dpr;
+    const ctx = canvas.getContext('2d');
+    ctx.scale(dpr, dpr);
+    ctx.clearRect(0, 0, 360, 360);
+
+    const data = [
+      { label: '手取り', value: r.takeHome, color: '#2e7d32' },
+      { label: '社会保険料', value: r.socialTotal, color: '#1565c0' },
+      { label: '所得税', value: r.incomeTax, color: '#ef6c00' },
+      { label: '住民税', value: r.residentTax, color: '#f9a825' },
+    ];
+    const total = data.reduce((a, d) => a + d.value, 0);
+    const cx = 180, cy = 160, rad = 110;
+    let startAngle = -Math.PI / 2;
+
+    data.forEach(d => {
+      const slice = (d.value / total) * Math.PI * 2;
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.arc(cx, cy, rad, startAngle, startAngle + slice);
+      ctx.closePath();
+      ctx.fillStyle = d.color;
+      ctx.fill();
+
+      if (slice > 0.15) {
+        const mid = startAngle + slice / 2;
+        const tx = cx + Math.cos(mid) * (rad * 0.65);
+        const ty = cy + Math.sin(mid) * (rad * 0.65);
+        ctx.fillStyle = '#fff';
+        ctx.font = 'bold 13px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(d.label, tx, ty);
+        ctx.font = '11px sans-serif';
+        ctx.fillText((d.value / total * 100).toFixed(1) + '%', tx, ty + 16);
+      }
+      startAngle += slice;
+    });
+
+    // Legend
+    let ly = 300;
+    ctx.font = '12px sans-serif';
+    data.forEach((d, i) => {
+      const lx = (i % 2 === 0) ? 30 : 200;
+      if (i === 2) ly = 330;
+      ctx.fillStyle = d.color;
+      ctx.fillRect(lx, ly - 8, 12, 12);
+      ctx.fillStyle = '#333';
+      ctx.textAlign = 'left';
+      ctx.fillText(d.label + ' ' + fmtMan(d.value), lx + 18, ly);
+    });
+  }
+
+  function drawBar(currentSalary, age40, deps, sp) {
+    const canvas = $('barChart');
+    const dpr = window.devicePixelRatio || 1;
+    const W = 700, H = 320;
+    canvas.width = W * dpr;
+    canvas.height = H * dpr;
+    const ctx = canvas.getContext('2d');
+    ctx.scale(dpr, dpr);
+    ctx.clearRect(0, 0, W, H);
+
+    const salaries = [300, 400, 500, 600, 700, 800, 1000, 1200, 1500, 2000];
+    const results = salaries.map(s => calcFor(s, age40, deps, sp));
+    const maxVal = Math.max(...results.map(r => r.salary));
+
+    const marginL = 50, marginR = 20, marginT = 30, marginB = 50;
+    const chartW = W - marginL - marginR;
+    const chartH = H - marginT - marginB;
+    const barW = chartW / salaries.length * 0.7;
+    const gap = chartW / salaries.length;
+
+    // Y axis
+    ctx.strokeStyle = '#ddd';
+    ctx.fillStyle = '#999';
+    ctx.font = '11px sans-serif';
+    ctx.textAlign = 'right';
+    for (let i = 0; i <= 4; i++) {
+      const y = marginT + chartH - (chartH * i / 4);
+      const val = maxVal * i / 4;
+      ctx.beginPath();
+      ctx.moveTo(marginL, y);
+      ctx.lineTo(W - marginR, y);
+      ctx.stroke();
+      ctx.fillText(Math.round(val / 10000) + '万', marginL - 5, y + 4);
+    }
+
+    results.forEach((r, i) => {
+      const x = marginL + i * gap + (gap - barW) / 2;
+      const fullH = (r.salary / maxVal) * chartH;
+      const takeH = (r.takeHome / maxVal) * chartH;
+      const socialH = (r.socialTotal / maxVal) * chartH;
+      const taxH = (r.taxTotal / maxVal) * chartH;
+
+      const baseY = marginT + chartH;
+
+      // Take home
+      ctx.fillStyle = salaries[i] === currentSalary ? '#1b5e20' : '#2e7d32';
+      ctx.fillRect(x, baseY - takeH, barW, takeH);
+      // Social
+      ctx.fillStyle = '#1565c0';
+      ctx.fillRect(x, baseY - takeH - socialH, barW, socialH);
+      // Tax
+      ctx.fillStyle = '#ef6c00';
+      ctx.fillRect(x, baseY - takeH - socialH - taxH, barW, taxH);
+
+      // Highlight current
+      if (salaries[i] === currentSalary) {
+        ctx.strokeStyle = '#1b5e20';
+        ctx.lineWidth = 2;
+        ctx.strokeRect(x - 1, baseY - fullH - 1, barW + 2, fullH + 2);
+        ctx.lineWidth = 1;
+      }
+
+      // Label
+      ctx.fillStyle = '#555';
+      ctx.font = '11px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(salaries[i] + '万', x + barW / 2, baseY + 16);
+      ctx.fillStyle = '#2e7d32';
+      ctx.font = '10px sans-serif';
+      ctx.fillText(Math.round(r.takeHome / 10000) + '万', x + barW / 2, baseY + 30);
+    });
+
+    // Legend
+    const legends = [
+      { label: '手取り', color: '#2e7d32' },
+      { label: '社会保険料', color: '#1565c0' },
+      { label: '税金', color: '#ef6c00' },
+    ];
+    ctx.font = '11px sans-serif';
+    legends.forEach((l, i) => {
+      const lx = marginL + i * 110;
+      ctx.fillStyle = l.color;
+      ctx.fillRect(lx, 8, 12, 12);
+      ctx.fillStyle = '#333';
+      ctx.textAlign = 'left';
+      ctx.fillText(l.label, lx + 16, 18);
+    });
+  }
+
+  function buildTable(currentSalary, age40, deps, sp) {
+    const salaries = [200, 300, 400, 500, 600, 700, 800, 900, 1000, 1200, 1500, 2000, 3000];
+    const tbody = document.querySelector('#comparisonTable tbody');
+    tbody.innerHTML = salaries.map(s => {
+      const r = calcFor(s, age40, deps, sp);
+      const cls = s === currentSalary ? ' class="highlight-row"' : '';
+      return '<tr' + cls + '><td>' + s + '万円</td><td>' + fmtMan(r.takeHome) + '</td><td>' + fmtMan(r.taxTotal) + '</td><td>' + fmtMan(r.socialTotal) + '</td><td>' + (r.takeHome / r.salary * 100).toFixed(1) + '%</td></tr>';
+    }).join('');
+  }
+
+  calc();
+})();
+</script>
+</body>
+</html>

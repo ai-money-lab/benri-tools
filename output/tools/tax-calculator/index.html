@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>副業の税金計算シミュレーター【無料】</title>
+<meta name="description" content="副業の税金をかんたんシミュレーション。所得税・住民税・復興特別所得税を自動計算し、確定申告の要否も判定します。">
+<meta name="keywords" content="副業,税金,シミュレーター,計算,所得税,住民税,確定申告,青色申告,事業所得,雑所得">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="">
+<!-- OGP -->
+<meta property="og:title" content="副業の税金計算シミュレーター【無料】">
+<meta property="og:description" content="副業の税金をかんたんシミュレーション。所得税・住民税・復興特別所得税を自動計算し、確定申告の要否も判定します。">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:site_name" content="副業税金シミュレーター">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="副業の税金計算シミュレーター【無料】">
+<meta name="twitter:description" content="副業の税金をかんたんシミュレーション。所得税・住民税・復興特別所得税を自動計算。">
+<style>
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', Meiryo, sans-serif;
+  background: #ffffff;
+  color: #333;
+  line-height: 1.7;
+  min-height: 100vh;
+}
+.header {
+  background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
+  color: #fff;
+  padding: 32px 16px 28px;
+  text-align: center;
+}
+.header h1 {
+  font-size: clamp(1.3rem, 4vw, 2rem);
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  margin-bottom: 8px;
+}
+.header p {
+  font-size: clamp(0.82rem, 2.5vw, 1rem);
+  opacity: 0.88;
+}
+.container {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 20px 12px 40px;
+}
+.card {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 2px 16px rgba(26,35,126,0.10), 0 1px 4px rgba(0,0,0,0.06);
+  padding: 28px 24px;
+  margin-bottom: 22px;
+}
+.card-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #1a237e;
+  margin-bottom: 22px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #e8eaf6;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.card-title .icon {
+  font-size: 1.3rem;
+}
+
+/* Input group */
+.input-group {
+  margin-bottom: 22px;
+}
+.input-group label {
+  display: block;
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin-bottom: 8px;
+  color: #1a237e;
+}
+.slider-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.slider-row input[type="range"] {
+  flex: 1;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  border-radius: 3px;
+  background: #c5cae9;
+  outline: none;
+}
+.slider-row input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #283593;
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(26,35,126,0.35);
+  transition: transform 0.15s;
+}
+.slider-row input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+}
+.slider-row input[type="range"]::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #283593;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 1px 4px rgba(26,35,126,0.35);
+}
+.number-input {
+  width: 90px;
+  padding: 7px 10px;
+  border: 2px solid #c5cae9;
+  border-radius: 8px;
+  font-size: 1rem;
+  text-align: right;
+  font-weight: 600;
+  color: #1a237e;
+  transition: border-color 0.2s;
+}
+.number-input:focus {
+  outline: none;
+  border-color: #283593;
+}
+.unit {
+  font-size: 0.88rem;
+  color: #666;
+  white-space: nowrap;
+}
+
+/* Radio / Checkbox / Select */
+.option-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+.radio-label, .check-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 18px;
+  border: 2px solid #c5cae9;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: all 0.2s;
+  user-select: none;
+}
+.radio-label:hover, .check-label:hover {
+  border-color: #283593;
+}
+.radio-label input:checked + span,
+.check-label input:checked + span {
+  color: #1a237e;
+  font-weight: 700;
+}
+.radio-label:has(input:checked),
+.check-label:has(input:checked) {
+  background: #e8eaf6;
+  border-color: #283593;
+}
+.radio-label input, .check-label input {
+  accent-color: #283593;
+  width: 16px;
+  height: 16px;
+}
+.select-input {
+  padding: 8px 16px;
+  border: 2px solid #c5cae9;
+  border-radius: 8px;
+  font-size: 1rem;
+  color: #1a237e;
+  font-weight: 600;
+  background: #fff;
+  cursor: pointer;
+}
+.select-input:focus {
+  outline: none;
+  border-color: #283593;
+}
+
+/* Results */
+.result-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 14px;
+  margin-bottom: 20px;
+}
+.result-item {
+  background: #f5f5ff;
+  border-radius: 10px;
+  padding: 16px;
+  text-align: center;
+  border: 1px solid #e8eaf6;
+}
+.result-item .label {
+  font-size: 0.82rem;
+  color: #555;
+  margin-bottom: 4px;
+}
+.result-item .value {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #1a237e;
+}
+.result-item .value .yen {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+.result-item.highlight {
+  background: linear-gradient(135deg, #1a237e, #283593);
+  border: none;
+}
+.result-item.highlight .label {
+  color: rgba(255,255,255,0.82);
+}
+.result-item.highlight .value {
+  color: #fff;
+}
+
+/* Judgment box */
+.judgment-box {
+  border-radius: 10px;
+  padding: 18px 20px;
+  text-align: center;
+  font-weight: 700;
+  font-size: 1.05rem;
+  margin-top: 10px;
+}
+.judgment-required {
+  background: #fff3e0;
+  border: 2px solid #ff9800;
+  color: #e65100;
+}
+.judgment-not-required {
+  background: #e8f5e9;
+  border: 2px solid #4caf50;
+  color: #2e7d32;
+}
+
+/* Chart */
+.chart-wrapper {
+  display: flex;
+  justify-content: center;
+  padding: 10px 0;
+}
+canvas#pieChart {
+  max-width: 320px;
+  max-height: 320px;
+  width: 100%;
+  height: auto;
+}
+
+/* Deduction detail */
+.deduction-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  margin-top: 8px;
+}
+.deduction-table th, .deduction-table td {
+  padding: 8px 12px;
+  text-align: left;
+  border-bottom: 1px solid #e8eaf6;
+}
+.deduction-table th {
+  background: #f5f5ff;
+  color: #1a237e;
+  font-weight: 600;
+  width: 55%;
+}
+.deduction-table td {
+  text-align: right;
+  font-weight: 600;
+  color: #333;
+}
+
+/* Affiliate */
+.affiliate-section {
+  text-align: center;
+  padding: 10px 0 0;
+}
+.affiliate-section p {
+  font-size: 0.92rem;
+  color: #555;
+  margin-bottom: 16px;
+}
+.btn-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px;
+}
+.btn-affiliate {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 28px;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+.btn-primary {
+  background: linear-gradient(135deg, #1a237e, #283593);
+  color: #fff;
+  box-shadow: 0 3px 12px rgba(26,35,126,0.3);
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 20px rgba(26,35,126,0.4);
+}
+.btn-secondary {
+  background: #fff;
+  color: #1a237e;
+  border: 2px solid #283593;
+  box-shadow: 0 2px 8px rgba(26,35,126,0.12);
+}
+.btn-secondary:hover {
+  background: #e8eaf6;
+  transform: translateY(-2px);
+}
+
+/* Footer */
+.footer {
+  background: #f5f5ff;
+  border-top: 1px solid #e8eaf6;
+  padding: 24px 16px;
+  text-align: center;
+}
+.footer .disclaimer {
+  font-size: 0.82rem;
+  color: #888;
+  max-width: 700px;
+  margin: 0 auto 10px;
+  line-height: 1.8;
+}
+.footer .copy {
+  font-size: 0.78rem;
+  color: #aaa;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .card {
+    padding: 20px 16px;
+    border-radius: 10px;
+  }
+  .slider-row {
+    flex-wrap: wrap;
+  }
+  .slider-row input[type="range"] {
+    width: 100%;
+    flex: none;
+    order: 2;
+  }
+  .number-input {
+    order: 1;
+  }
+  .unit {
+    order: 1;
+  }
+  .result-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .result-item .value {
+    font-size: 1.1rem;
+  }
+  .btn-affiliate {
+    width: 100%;
+    justify-content: center;
+    padding: 14px 20px;
+  }
+  .header {
+    padding: 24px 12px 20px;
+  }
+}
+@media (max-width: 380px) {
+  .result-grid {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <h1>副業の税金シミュレーター</h1>
+  <p>副業の所得税・住民税・手取りをかんたん計算</p>
+</header>
+
+<div class="container">
+
+  <!-- Input Card -->
+  <div class="card">
+    <div class="card-title"><span class="icon">&#9998;</span> 収入・経費を入力</div>
+
+    <div class="input-group">
+      <label for="salarySlider">本業年収（万円）</label>
+      <div class="slider-row">
+        <input type="range" id="salarySlider" min="0" max="2000" value="400" step="10">
+        <input type="number" id="salaryNumber" class="number-input" min="0" max="2000" value="400">
+        <span class="unit">万円</span>
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label for="sideSlider">副業売上（万円）</label>
+      <div class="slider-row">
+        <input type="range" id="sideSlider" min="0" max="1000" value="100" step="5">
+        <input type="number" id="sideNumber" class="number-input" min="0" max="1000" value="100">
+        <span class="unit">万円</span>
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label for="expenseSlider">経費（万円）</label>
+      <div class="slider-row">
+        <input type="range" id="expenseSlider" min="0" max="500" value="20" step="5">
+        <input type="number" id="expenseNumber" class="number-input" min="0" max="500" value="20">
+        <span class="unit">万円</span>
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label>所得区分</label>
+      <div class="option-row">
+        <label class="radio-label">
+          <input type="radio" name="incomeType" value="business" checked>
+          <span>事業所得</span>
+        </label>
+        <label class="radio-label">
+          <input type="radio" name="incomeType" value="misc">
+          <span>雑所得</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label>青色申告</label>
+      <div class="option-row">
+        <label class="check-label">
+          <input type="checkbox" id="blueReturn">
+          <span>青色申告特別控除を適用する</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label for="dependents">扶養人数</label>
+      <div class="option-row">
+        <select id="dependents" class="select-input">
+          <option value="0">0人</option>
+          <option value="1">1人</option>
+          <option value="2">2人</option>
+          <option value="3">3人</option>
+          <option value="4">4人</option>
+          <option value="5">5人</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Results Card -->
+  <div class="card">
+    <div class="card-title"><span class="icon">&#128202;</span> 計算結果</div>
+
+    <div class="result-grid">
+      <div class="result-item">
+        <div class="label">所得税額</div>
+        <div class="value" id="incomeTaxDisplay">0<span class="yen"> 円</span></div>
+      </div>
+      <div class="result-item">
+        <div class="label">住民税額</div>
+        <div class="value" id="residentTaxDisplay">0<span class="yen"> 円</span></div>
+      </div>
+      <div class="result-item">
+        <div class="label">復興特別所得税額</div>
+        <div class="value" id="reconstructionTaxDisplay">0<span class="yen"> 円</span></div>
+      </div>
+      <div class="result-item">
+        <div class="label">税金合計</div>
+        <div class="value" id="totalTaxDisplay">0<span class="yen"> 円</span></div>
+      </div>
+      <div class="result-item highlight">
+        <div class="label">手取り概算</div>
+        <div class="value" id="netIncomeDisplay">0<span class="yen"> 円</span></div>
+      </div>
+      <div class="result-item">
+        <div class="label">実効税率</div>
+        <div class="value" id="effectiveRateDisplay">0<span class="yen"> %</span></div>
+      </div>
+    </div>
+
+    <div id="judgmentBox" class="judgment-box judgment-not-required">
+      確定申告：不要（副業所得が20万円以下）
+    </div>
+  </div>
+
+  <!-- Chart Card -->
+  <div class="card">
+    <div class="card-title"><span class="icon">&#128200;</span> 税金の内訳</div>
+    <div class="chart-wrapper">
+      <canvas id="pieChart" width="320" height="320"></canvas>
+    </div>
+  </div>
+
+  <!-- Deduction Detail Card -->
+  <div class="card">
+    <div class="card-title"><span class="icon">&#128221;</span> 控除・所得の内訳</div>
+    <table class="deduction-table">
+      <tr><th>給与収入</th><td id="detailSalary">0 円</td></tr>
+      <tr><th>給与所得控除</th><td id="detailSalaryDeduction">0 円</td></tr>
+      <tr><th>給与所得</th><td id="detailSalaryIncome">0 円</td></tr>
+      <tr><th>副業売上</th><td id="detailSideRevenue">0 円</td></tr>
+      <tr><th>経費</th><td id="detailExpense">0 円</td></tr>
+      <tr><th>副業所得</th><td id="detailSideIncome">0 円</td></tr>
+      <tr><th>青色申告特別控除</th><td id="detailBlueDeduction">0 円</td></tr>
+      <tr><th>基礎控除</th><td id="detailBasicDeduction">0 円</td></tr>
+      <tr><th>扶養控除</th><td id="detailDependentDeduction">0 円</td></tr>
+      <tr><th>社会保険料控除（概算）</th><td id="detailSocialInsurance">0 円</td></tr>
+      <tr><th>課税所得</th><td id="detailTaxableIncome">0 円</td></tr>
+    </table>
+  </div>
+
+  <!-- Affiliate Card -->
+  <div class="card">
+    <div class="card-title"><span class="icon">&#128161;</span> おすすめサービス</div>
+    <div class="affiliate-section">
+      <p>確定申告の準備をスムーズに進めましょう</p>
+      <div class="btn-row">
+        <a href="#" class="btn-affiliate btn-primary">確定申告をかんたんに【マネーフォワード クラウド】</a>
+        <a href="#" class="btn-affiliate btn-secondary">税理士に無料相談【税理士ドットコム】</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer class="footer">
+  <p class="disclaimer">
+    ※ この計算は概算です。正確な税額は税務署または税理士にご相談ください。<br>
+    ※ 社会保険料控除は給与収入の約15%として概算しています。<br>
+    ※ 配偶者控除・医療費控除等のその他控除は含まれていません。
+  </p>
+  <p class="copy">&copy; 2024 副業税金シミュレーター</p>
+</footer>
+
+<script>
+(function() {
+  'use strict';
+
+  // === DOM references ===
+  var salarySlider = document.getElementById('salarySlider');
+  var salaryNumber = document.getElementById('salaryNumber');
+  var sideSlider = document.getElementById('sideSlider');
+  var sideNumber = document.getElementById('sideNumber');
+  var expenseSlider = document.getElementById('expenseSlider');
+  var expenseNumber = document.getElementById('expenseNumber');
+  var blueReturn = document.getElementById('blueReturn');
+  var dependents = document.getElementById('dependents');
+  var incomeTypeRadios = document.querySelectorAll('input[name="incomeType"]');
+
+  // === Sync sliders <-> number inputs ===
+  function syncPair(slider, number) {
+    slider.addEventListener('input', function() {
+      number.value = slider.value;
+      calculate();
+    });
+    number.addEventListener('input', function() {
+      var v = parseInt(number.value) || 0;
+      var min = parseInt(slider.min);
+      var max = parseInt(slider.max);
+      if (v < min) v = min;
+      if (v > max) v = max;
+      slider.value = v;
+      calculate();
+    });
+    number.addEventListener('blur', function() {
+      var v = parseInt(number.value) || 0;
+      var min = parseInt(slider.min);
+      var max = parseInt(slider.max);
+      if (v < min) v = min;
+      if (v > max) v = max;
+      number.value = v;
+      slider.value = v;
+      calculate();
+    });
+  }
+  syncPair(salarySlider, salaryNumber);
+  syncPair(sideSlider, sideNumber);
+  syncPair(expenseSlider, expenseNumber);
+
+  blueReturn.addEventListener('change', calculate);
+  dependents.addEventListener('change', calculate);
+  incomeTypeRadios.forEach(function(r) {
+    r.addEventListener('change', function() {
+      // 雑所得の場合、青色申告は使えない
+      if (getIncomeType() === 'misc') {
+        blueReturn.checked = false;
+        blueReturn.disabled = true;
+      } else {
+        blueReturn.disabled = false;
+      }
+      calculate();
+    });
+  });
+
+  function getIncomeType() {
+    var checked = document.querySelector('input[name="incomeType"]:checked');
+    return checked ? checked.value : 'business';
+  }
+
+  // === 給与所得控除（令和2年分以降） ===
+  function calcSalaryDeduction(salaryYen) {
+    // salaryYen is in yen
+    if (salaryYen <= 550000) return salaryYen; // 全額控除（所得0）
+    if (salaryYen <= 1625000) return 550000;
+    if (salaryYen <= 1800000) return Math.floor(salaryYen * 0.4 - 100000);
+    if (salaryYen <= 3600000) return Math.floor(salaryYen * 0.3 + 80000);
+    if (salaryYen <= 6600000) return Math.floor(salaryYen * 0.2 + 440000);
+    if (salaryYen <= 8500000) return Math.floor(salaryYen * 0.1 + 1100000);
+    return 1950000; // 上限195万円
+  }
+
+  // === 基礎控除（令和2年分以降） ===
+  function calcBasicDeduction(totalIncome) {
+    if (totalIncome <= 24000000) return 480000;
+    if (totalIncome <= 24500000) return 320000;
+    if (totalIncome <= 25000000) return 160000;
+    return 0;
+  }
+
+  // === 扶養控除 ===
+  function calcDependentDeduction(numDependents) {
+    // 一般扶養親族38万円として概算
+    return numDependents * 380000;
+  }
+
+  // === 社会保険料控除（概算：給与の約15%） ===
+  function calcSocialInsurance(salaryYen) {
+    return Math.floor(salaryYen * 0.15);
+  }
+
+  // === 所得税（7段階累進） ===
+  function calcIncomeTax(taxableIncome) {
+    if (taxableIncome <= 0) return 0;
+    // 令和19年まで適用の税率表
+    var brackets = [
+      { limit: 1950000,  rate: 0.05, deduction: 0 },
+      { limit: 3300000,  rate: 0.10, deduction: 97500 },
+      { limit: 6950000,  rate: 0.20, deduction: 427500 },
+      { limit: 9000000,  rate: 0.23, deduction: 636000 },
+      { limit: 18000000, rate: 0.33, deduction: 1536000 },
+      { limit: 40000000, rate: 0.40, deduction: 2796000 },
+      { limit: Infinity,  rate: 0.45, deduction: 4796000 }
+    ];
+    for (var i = 0; i < brackets.length; i++) {
+      if (taxableIncome <= brackets[i].limit) {
+        return Math.floor(taxableIncome * brackets[i].rate - brackets[i].deduction);
+      }
+    }
+    return 0;
+  }
+
+  // === 住民税（所得割10% + 均等割5,000円） ===
+  function calcResidentTax(taxableIncomeForResident) {
+    if (taxableIncomeForResident <= 0) return 5000; // 均等割のみ（非課税判定は省略）
+    return Math.floor(taxableIncomeForResident * 0.10) + 5000;
+  }
+
+  // === 復興特別所得税（所得税額 x 2.1%） ===
+  function calcReconstructionTax(incomeTax) {
+    return Math.floor(incomeTax * 0.021);
+  }
+
+  // === Format number ===
+  function formatNum(n) {
+    return n.toLocaleString('ja-JP');
+  }
+
+  // === Main calculation ===
+  function calculate() {
+    var salaryMan = parseInt(salarySlider.value) || 0;
+    var sideMan = parseInt(sideSlider.value) || 0;
+    var expenseMan = parseInt(expenseSlider.value) || 0;
+    var isBlue = blueReturn.checked;
+    var isBusiness = getIncomeType() === 'business';
+    var numDep = parseInt(dependents.value) || 0;
+
+    // Convert to yen
+    var salaryYen = salaryMan * 10000;
+    var sideYen = sideMan * 10000;
+    var expenseYen = expenseMan * 10000;
+
+    // 給与所得
+    var salaryDeduction = calcSalaryDeduction(salaryYen);
+    var salaryIncome = Math.max(0, salaryYen - salaryDeduction);
+
+    // 副業所得
+    var sideIncome = Math.max(0, sideYen - expenseYen);
+
+    // 青色申告特別控除（事業所得のみ）
+    var blueDeduction = 0;
+    if (isBlue && isBusiness) {
+      blueDeduction = Math.min(650000, sideIncome);
+    }
+    var sideIncomeAfterBlue = Math.max(0, sideIncome - blueDeduction);
+
+    // 合計所得
+    var totalIncome = salaryIncome + sideIncomeAfterBlue;
+
+    // 各種控除
+    var basicDeduction = calcBasicDeduction(totalIncome);
+    var dependentDeduction = calcDependentDeduction(numDep);
+    var socialInsurance = calcSocialInsurance(salaryYen);
+
+    var totalDeductions = basicDeduction + dependentDeduction + socialInsurance;
+
+    // 課税所得（所得税用）- 千円未満切り捨て
+    var taxableIncome = Math.max(0, totalIncome - totalDeductions);
+    taxableIncome = Math.floor(taxableIncome / 1000) * 1000;
+
+    // 住民税の課税所得（基礎控除が43万円）
+    var basicDeductionResident = 430000;
+    if (totalIncome > 24000000) basicDeductionResident = 290000;
+    if (totalIncome > 24500000) basicDeductionResident = 150000;
+    if (totalIncome > 25000000) basicDeductionResident = 0;
+    var totalDeductionsResident = basicDeductionResident + dependentDeduction + socialInsurance;
+    var taxableIncomeResident = Math.max(0, totalIncome - totalDeductionsResident);
+
+    // 税額計算
+    var incomeTax = calcIncomeTax(taxableIncome);
+    var residentTax = calcResidentTax(taxableIncomeResident);
+    var reconstructionTax = calcReconstructionTax(incomeTax);
+
+    // 住民税が非課税になるケース（簡易判定）
+    if (totalIncome <= 450000 && numDep === 0) {
+      residentTax = 0;
+    }
+
+    var totalTax = incomeTax + residentTax + reconstructionTax;
+
+    // 手取り概算（給与 + 副業売上 - 経費 - 税金 - 社会保険料）
+    var grossIncome = salaryYen + sideYen - expenseYen;
+    var netIncome = Math.max(0, grossIncome - totalTax - socialInsurance);
+
+    // 実効税率
+    var effectiveRate = grossIncome > 0 ? (totalTax / grossIncome * 100) : 0;
+
+    // 確定申告判定（副業所得20万円超で必要）
+    var needsFiling = sideIncome > 200000;
+
+    // === Update display ===
+    document.getElementById('incomeTaxDisplay').innerHTML = formatNum(incomeTax) + '<span class="yen"> 円</span>';
+    document.getElementById('residentTaxDisplay').innerHTML = formatNum(residentTax) + '<span class="yen"> 円</span>';
+    document.getElementById('reconstructionTaxDisplay').innerHTML = formatNum(reconstructionTax) + '<span class="yen"> 円</span>';
+    document.getElementById('totalTaxDisplay').innerHTML = formatNum(totalTax) + '<span class="yen"> 円</span>';
+    document.getElementById('netIncomeDisplay').innerHTML = formatNum(netIncome) + '<span class="yen"> 円</span>';
+    document.getElementById('effectiveRateDisplay').innerHTML = effectiveRate.toFixed(1) + '<span class="yen"> %</span>';
+
+    // Judgment
+    var jBox = document.getElementById('judgmentBox');
+    if (sideYen === 0) {
+      jBox.className = 'judgment-box judgment-not-required';
+      jBox.textContent = '確定申告：副業収入がありません';
+    } else if (needsFiling) {
+      jBox.className = 'judgment-box judgment-required';
+      jBox.textContent = '確定申告：必要（副業所得が20万円を超えています）';
+    } else {
+      jBox.className = 'judgment-box judgment-not-required';
+      jBox.textContent = '確定申告：不要（副業所得が20万円以下）';
+    }
+
+    // Deduction detail table
+    document.getElementById('detailSalary').textContent = formatNum(salaryYen) + ' 円';
+    document.getElementById('detailSalaryDeduction').textContent = '-' + formatNum(salaryDeduction) + ' 円';
+    document.getElementById('detailSalaryIncome').textContent = formatNum(salaryIncome) + ' 円';
+    document.getElementById('detailSideRevenue').textContent = formatNum(sideYen) + ' 円';
+    document.getElementById('detailExpense').textContent = '-' + formatNum(expenseYen) + ' 円';
+    document.getElementById('detailSideIncome').textContent = formatNum(sideIncomeAfterBlue) + ' 円';
+    document.getElementById('detailBlueDeduction').textContent = blueDeduction > 0 ? '-' + formatNum(blueDeduction) + ' 円' : '0 円';
+    document.getElementById('detailBasicDeduction').textContent = '-' + formatNum(basicDeduction) + ' 円';
+    document.getElementById('detailDependentDeduction').textContent = numDep > 0 ? '-' + formatNum(dependentDeduction) + ' 円' : '0 円';
+    document.getElementById('detailSocialInsurance').textContent = '-' + formatNum(socialInsurance) + ' 円';
+    document.getElementById('detailTaxableIncome').textContent = formatNum(taxableIncome) + ' 円';
+
+    // Draw chart
+    drawPieChart(incomeTax, residentTax, reconstructionTax);
+  }
+
+  // === Pie Chart (Canvas) ===
+  function drawPieChart(incomeTax, residentTax, reconstructionTax) {
+    var canvas = document.getElementById('pieChart');
+    var ctx = canvas.getContext('2d');
+    var dpr = window.devicePixelRatio || 1;
+
+    // Set actual size in memory
+    canvas.width = 320 * dpr;
+    canvas.height = 320 * dpr;
+    ctx.scale(dpr, dpr);
+
+    // CSS display size
+    canvas.style.width = '320px';
+    canvas.style.height = '320px';
+
+    var cx = 160;
+    var cy = 145;
+    var radius = 110;
+
+    ctx.clearRect(0, 0, 320, 320);
+
+    var total = incomeTax + residentTax + reconstructionTax;
+
+    if (total === 0) {
+      // Empty state
+      ctx.beginPath();
+      ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+      ctx.fillStyle = '#e8eaf6';
+      ctx.fill();
+      ctx.fillStyle = '#999';
+      ctx.font = '14px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('税額がありません', cx, cy + 5);
+      return;
+    }
+
+    var data = [
+      { label: '所得税', value: incomeTax, color: '#1a237e' },
+      { label: '住民税', value: residentTax, color: '#3949ab' },
+      { label: '復興税', value: reconstructionTax, color: '#7986cb' }
+    ];
+
+    var startAngle = -Math.PI / 2;
+
+    // Draw slices
+    data.forEach(function(item) {
+      if (item.value <= 0) return;
+      var sliceAngle = (item.value / total) * Math.PI * 2;
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.arc(cx, cy, radius, startAngle, startAngle + sliceAngle);
+      ctx.closePath();
+      ctx.fillStyle = item.color;
+      ctx.fill();
+
+      // Label on slice
+      if (item.value / total > 0.05) {
+        var midAngle = startAngle + sliceAngle / 2;
+        var labelRadius = radius * 0.65;
+        var lx = cx + Math.cos(midAngle) * labelRadius;
+        var ly = cy + Math.sin(midAngle) * labelRadius;
+        ctx.fillStyle = '#fff';
+        ctx.font = 'bold 12px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        var pct = Math.round(item.value / total * 100);
+        ctx.fillText(pct + '%', lx, ly);
+      }
+
+      startAngle += sliceAngle;
+    });
+
+    // Inner circle (donut)
+    ctx.beginPath();
+    ctx.arc(cx, cy, radius * 0.5, 0, Math.PI * 2);
+    ctx.fillStyle = '#fff';
+    ctx.fill();
+
+    // Center text
+    ctx.fillStyle = '#1a237e';
+    ctx.font = 'bold 13px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('税金合計', cx, cy - 10);
+    ctx.font = 'bold 16px sans-serif';
+    ctx.fillText(formatNum(total) + '円', cx, cy + 12);
+
+    // Legend
+    var legendY = cy + radius + 25;
+    var legendStartX = cx - 130;
+    ctx.textBaseline = 'middle';
+    data.forEach(function(item, i) {
+      var lx = legendStartX + i * 95;
+      ctx.fillStyle = item.color;
+      ctx.fillRect(lx, legendY - 6, 12, 12);
+      ctx.fillStyle = '#333';
+      ctx.font = '12px sans-serif';
+      ctx.textAlign = 'left';
+      ctx.fillText(item.label, lx + 16, legendY);
+    });
+  }
+
+  // Initial calculation
+  calculate();
+})();
+</script>
+
+</body>
+</html>

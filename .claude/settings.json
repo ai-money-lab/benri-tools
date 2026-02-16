@@ -1,0 +1,33 @@
+{
+  "permissions": {
+    "allow": [
+      "Read",
+      "Edit",
+      "MultiEdit",
+      "Write",
+      "Bash(*)",
+      "Glob",
+      "Grep",
+      "WebFetch(*)",
+      "WebSearch(*)",
+      "Task(*)"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write(output/tools/**)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python -c \"import datetime,os,sys; f=open('logs/tool_generation.log','a',encoding='utf-8'); f.write(f'[{datetime.datetime.now():%Y-%m-%d %H:%M:%S}] Tool generated: {os.environ.get(\"CLAUDE_TOOL_INPUT_PATH\",\"?\")}\\n'); f.close()\"",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  },
+  "env": {
+    "PYTHONDONTWRITEBYTECODE": "1"
+  }
+}

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>格安SIM全プラン比較【自動更新】最安プランを即発見</title>
+<meta name="description" content="主要格安SIM10社の全プランを料金・データ容量・GB単価で比較。自動更新で常に最新。あなたに最適なプランが見つかります。">
+<meta property="og:title" content="格安SIM全プラン比較【自動更新】">
+<meta property="og:description" content="主要10社の格安SIMプランを一括比較。料金順・データ容量順・GB単価順で並べ替え可能。">
+<meta property="og:type" content="website">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Hiragino Sans",sans-serif;background:#f5f7fa;color:#333;line-height:1.6}
+.container{max-width:1200px;margin:0 auto;padding:16px}
+header{background:linear-gradient(135deg,#1a73e8,#0d47a1);color:#fff;padding:32px 16px;text-align:center;border-radius:0 0 16px 16px}
+header h1{font-size:clamp(1.4rem,4vw,2rem);margin-bottom:8px}
+header p{opacity:.9;font-size:.95rem}
+.update-date{font-size:.85rem;opacity:.7;margin-top:4px}
+.controls{background:#fff;border-radius:12px;padding:16px;margin:16px 0;box-shadow:0 2px 8px rgba(0,0,0,.08);display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.controls label{font-weight:600;font-size:.9rem;color:#555}
+.controls select,.controls button{padding:8px 16px;border:1px solid #ddd;border-radius:8px;font-size:.9rem;cursor:pointer;background:#fff}
+.controls button{background:#1a73e8;color:#fff;border:none;font-weight:600}
+.controls button:hover{background:#1557b0}
+.filter-chips{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.chip{padding:6px 14px;border-radius:20px;border:1px solid #ddd;background:#fff;cursor:pointer;font-size:.85rem;transition:.2s}
+.chip.active{background:#1a73e8;color:#fff;border-color:#1a73e8}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin:16px 0}
+.stat-card{background:#fff;border-radius:12px;padding:16px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.stat-card .num{font-size:1.8rem;font-weight:700;color:#1a73e8}
+.stat-card .label{font-size:.8rem;color:#888}
+table{width:100%;border-collapse:collapse;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+thead{background:#1a73e8;color:#fff}
+th{padding:12px 8px;font-size:.85rem;cursor:pointer;white-space:nowrap;user-select:none}
+th:hover{background:#1557b0}
+th .arrow{margin-left:4px;font-size:.7rem}
+td{padding:10px 8px;border-bottom:1px solid #f0f0f0;font-size:.9rem;text-align:center}
+tr:hover{background:#f8f9ff}
+.provider-name{font-weight:600;color:#333}
+.price{font-weight:700;color:#1a73e8;font-size:1.05rem}
+.badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:.75rem;font-weight:600}
+.badge-best{background:#e8f5e9;color:#2e7d32}
+.badge-good{background:#fff3e0;color:#e65100}
+.gb-price{color:#666}
+.btn-official{display:inline-block;padding:6px 12px;background:#ff6d00;color:#fff;border-radius:6px;text-decoration:none;font-size:.8rem;font-weight:600;transition:.2s}
+.btn-official:hover{background:#e65100}
+footer{text-align:center;padding:24px 16px;color:#999;font-size:.8rem;margin-top:24px}
+@media(max-width:768px){
+  .controls{flex-direction:column}
+  table{font-size:.8rem}
+  td,th{padding:8px 4px}
+  .btn-official{padding:4px 8px;font-size:.75rem}
+}
+</style>
+</head>
+<body>
+<header>
+<h1>格安SIM 全プラン比較表</h1>
+<p>主要10社の料金プランを一括比較 — あなたに最適なプランが見つかります</p>
+<div class="update-date">最終更新: 2026年02月16日 ｜ 自動更新データ</div>
+</header>
+<div class="container">
+<div class="stats" id="stats"></div>
+<div class="controls">
+<label>並び替え：</label>
+<select id="sortSelect" onchange="sortTable()">
+<option value="price">料金が安い順</option>
+<option value="data_gb">データ容量順</option>
+<option value="gb_price">GB単価が安い順</option>
+<option value="provider">会社名順</option>
+</select>
+</div>
+<div class="filter-chips" id="filterChips">
+<div class="chip active" onclick="filterData('all')">全て</div>
+<div class="chip" onclick="filterData(1)">1GB以下</div>
+<div class="chip" onclick="filterData(3)">〜3GB</div>
+<div class="chip" onclick="filterData(5)">〜5GB</div>
+<div class="chip" onclick="filterData(10)">〜10GB</div>
+<div class="chip" onclick="filterData(20)">〜20GB</div>
+<div class="chip" onclick="filterData(999)">20GB+/無制限</div>
+</div>
+<table>
+<thead>
+<tr>
+<th onclick="sortBy('provider')">会社名<span class="arrow"></span></th>
+<th onclick="sortBy('plan_name')">プラン名<span class="arrow"></span></th>
+<th onclick="sortBy('price')">月額料金<span class="arrow"></span></th>
+<th onclick="sortBy('data_gb')">データ容量<span class="arrow"></span></th>
+<th onclick="sortBy('gb_price')">GB単価<span class="arrow"></span></th>
+<th>特徴</th>
+<th>詳細</th>
+</tr>
+</thead>
+<tbody id="tableBody"></tbody>
+</table>
+<footer>
+<p>※ 表示価格は全て税込です。最新の正確な情報は各社公式サイトでご確認ください。</p>
+<p>※ キャンペーン価格・割引適用前の通常価格を掲載しています。</p>
+<p style="margin-top:8px">データ自動収集・更新 by Money Machine</p>
+</footer>
+</div>
+<script>
+const allPlans=[{"id": 81, "category": "sim", "provider": "povo", "plan_name": "povo2.0 基本料", "price": 0.0, "data_gb": 0.0, "data_json": "{\"call\": \"別途トッピング\", \"feature\": \"基本料0円、必要な時だけトッピング\"}", "source_url": "fallback_dictionary", "scraped_at": "2026-02-16 00:40:53", "is_current": 1}, {"id": 101, "category": "sim", "provider": "日本通信SIM", "plan_name": "合理的シンプル290 1GB", "price": 290.0, "data_gb": 1.0, "data_json": "{\"call\": \"11円/30秒\", \"feature\": \"業界最安級、ドコモ回線\"}", "source_url": "fallback_dictionary", "scraped_at": "2026-02-16 00:40:53", "is_current": 1}, {"id": 104, "category": "sim", "provider": "NUROモバイル", "plan_name": "VSプラン 3GB", "price": 792.0, "data_gb": 3.0, "data_json": "{\"call\": \"別途オプション\", \"feature\": \"ソニー系、バリューデータフリー\"}", "source_url": "fallback_dictionary", "scraped_at": "2026-02-16 00:40:53", "is_current": 1}, {"id": 91, "category": "sim", "provider": "IIJmio", "plan_name": "2ギガプラン", "price": 850.0, "data_gb": 2.0, "data_json": "{\"call\": \"別途オプション\", \"feature\": \"ドコモ/au回線選択可、老舗MVNO\"}", "source_url": "fallback_dictionary", "scraped_at": "2026-02-16 00:40:53", "is_current": 1}, {"id": 78, "category": "sim", "provider": "LINEMO", "plan_name": "ミニプラン 3GB", "price": 990.0, "data_gb": 3.0, "data_json": "{\"call\": \"別途オプション\", \"feature\": \"LINEギガフリー、ソフトバンク回線\"}", "source_url": "fallback_dictionary", "scraped_at": "2026-02-16 00:40:53", "is_current": 1}, {"id": 80, "category": "sim", "provider": "LINEMO", "plan_name": "ベストプラン 3GB", "price": 990.0, "data_gb": 3.0, "data_json": "{\"call\": \"別途オプション\", \"feature\": \"2024年新プラン、段階制\"}", "source_url": "fallback_dictionary", "scraped_at": "2026-02-16 00:40:53", "is_current": 1}, {"id": 82, "category": "sim", "provider": "povo", "plan_name": "povo2.0 3GB/30日", "price": 990.0, "data_gb": 3.0, "data_json": "{\"call\": \"別途トッピング\", \"feature\": \"au回線、30日有効\"}", "source_url": "fallback_dictionary", "scraped_at": "2026-02-16 00:40:53", "is_current": 1}, {"id": 92, "category": "sim", "provider": "IIJmio", "plan_name": "5ギガプラン", "price": 990.0, "data_gb": 5.0, "data_json": "{\"call\": \"別途オプション\", \"feature\": \"データ繰越可、eSIM対応\"}", "source_url": "fallback_dictionary", "scraped_at": "2026-02-16 00:40:53", "is_current": 1}, {"id": 100, "category": "sim", "provider": "mineo", "plan_name": "マイそく スタンダード", "price": 990.0, "data_gb": 999.0, "data_json": "{\"call\": \"別途オプション\", \"feature\": \"最大1.5Mbpsで使い放題\"}", "source_url": "fallback_dictionary", "scraped_at": "2026-02-16 00:40:53", "is_current": 1}, {"id": 105, "category": "sim", "provider": "NUROモバイル", "plan_name": "VMプラン 5GB", "price": 990.0, "data_gb": 5.0, "data_json": "{\"call\": \"別途オプション\", \"feature\": \"Gigaプラスで3ヶ月毎+3GB\"}", "source_url": "fallback_dictionary", "scraped_at": "2026-02-16 00:40:53", "is_current": 1}, {"id": 73, "category": "sim", "provider": "楽天モバイル", "plan_name": "Rakuten最強プラン 〜3GB", "price": 1078.0, "data_gb": 3.0, "data_json": "{\"call\": \"Rakuten Link無料\", \"feature\": \"データ無制限可能、楽天ポイント還元\"}", "source_url": "fallback_dictionary", "scraped_at": "2026-02-16 00:40:53", "is_current": 1}, {"id": 96, "category": "sim", "provider": "mineo", "plan_name": "マイピタ 1GB", "price": 1298.0, "data_gb": 1.0, "data_json": "{\"call\": \"別途オプション\", \"feature\": \"ドコモ/au/ソフトバンク回線\"}", "source_url": "fallback_dictionary", "scraped_at": "2026-02-16 00:40:53", "is_current": 1}, {"id": 102, "category": "sim", "provider": "日本通信SIM", "plan_name": "合理的みんなのプラン 10GB", "price": 1390.0, "data_gb": 10.0, "data_json": "{\"call\": \"70分無料通話込み\", \"feature\": \"通話込みでお得\"}", "source_url": "fallback_dictionary", "scraped_at": "2026-02-16 00:40:53", "is_current": 1}, {"id": 106, "category": "sim", "provider": "NUROモバイル", "plan_name": "VLプラン 10GB", "price": 1485.0, "data_gb": 10.0, "data_json": "{\"call\": \"別途オプション\", \"feature\": \"Gigaプラスで3ヶ月毎+6GB\"}", "source_url": "fallback_dictionary", "scraped_at": "2026-02-16 00:40:53", "is_current": 1}, {"id": 93, "category": "sim", "provider": "IIJmio", "plan_name": "10ギガプラン", "price": 1500.0, "data_gb": 10.0, "data_json": "{\"call\": \"別途オプション\", \"feature\": \"データシェア可能\"}", "source_url": "fallback_dictionary", "scraped_at": "2026-02-16 00:40:53", "is_current": 1}, {"id": 97, "category": "sim", "provider": "mineo", "plan_name": "マイピタ 5GB", "price": 1518.0, "data_gb": 5.0, "data_json": "{\"call\": \"別途オプション\", \"feature\": \"パケット放題Plus対応\"}", "source_url": "fallback_dictionary", "scraped_at": "2026-02-16 00:40:53", "is_current": 1}, {"id": 94, "category": "sim", "provider": "IIJmio", "plan_name": "15ギガプラン", "price": 1800.0, "data_gb": 15.0, "data_json": "{\"call\": \"別途オプション\", \"feature\": \"コスパ良好\"}", "source_url": "fallback_dictionary", "scraped_at": "2026-02-16 00:40:53", "is_current": 1}, {"id": 98, "category": "sim", "provider": "mineo", "plan_name": "マイピタ 10GB", "price": 1958.0, "data_gb": 10.0, "data_json": "{\"call\": \"別途オプション\", \"feature\": \"フリータンク利用可\"}", "source_url": "fallback_dictionary", "scraped_at": "2026-02-16 00:40:53", "is_current": 1}, {"id": 95, "category": "sim", "provider": "IIJmio", "plan_name": "20ギガプラン", "price": 2000.0, "data_gb": 20.0, "data_json": "{\"call\": \"別途オプション\", \"feature\": \"大容量でも低価格\"}", "source_url": "fallback_dictionary", "scraped_at": "2026-02-16 00:40:53", "is_current": 1}, {"id": 74, "category": "sim", "provider": "楽天モバイル", "plan_name": "Rakuten最強プラン 3〜20GB", "price": 2178.0, "data_gb": 20.0, "data_json": "{\"call\": \"Rakuten Link無料\", \"feature\": \"段階制料金、自動で最適プラン\"}", "source_url": "fallback_dictionary", "scraped_at": "2026-02-16 00:40:53", "is_current": 1}, {"id": 99, "category": "sim", "provider": "mineo", "plan_name": "マイピタ 20GB", "price": 2178.0, "data_gb": 20.0, "data_json": "{\"call\": \"別途オプション\", \"feature\": \"パケット放題Plus無料\"}", "source_url": "fallback_dictionary", "scraped_at": "2026-02-16 00:40:53", "is_current": 1}, {"id": 103, "category": "sim", "provider": "日本通信SIM", "plan_name": "合理的30GBプラン", "price": 2178.0, "data_gb": 30.0, "data_json": "{\"call\": \"70分無料通話込み\", \"feature\": \"大容量＋通話付き\"}", "source_url": "fallback_dictionary", "scraped_at": "2026-02-16 00:40:53", "is_current": 1}, {"id": 85, "category": "sim", "provider": "UQモバイル", "plan_name": "ミニミニプラン 4GB", "price": 2365.0, "data_gb": 4.0, "data_json": "{\"call\": \"別途オプション\", \"feature\": \"au回線、節約モードあり\"}", "source_url": "fallback_dictionary", "scraped_at": "2026-02-16 00:40:53", "is_current": 1}, {"id": 88, "category": "sim", "provider": "ワイモバイル", "plan_name": "シンプル2 S 4GB", "price": 2365.0, "data_gb": 4.0, "data_json": "{\"call\": \"別途オプション\", \"feature\": \"ソフトバンク回線、家族割あり\"}", "source_url": "fallback_dictionary", "scraped_at": "2026-02-16 00:40:53", "is_current": 1}, {"id": 107, "category": "sim", "provider": "NUROモバイル", "plan_name": "NEOプラン 20GB", "price": 2699.0, "data_gb": 20.0, "data_json": "{\"call\": \"別途オプション\", \"feature\": \"NEOデータフリー、あげ放題\"}", "source_url": "fallback_dictionary", "scraped_at": "2026-02-16 00:40:53", "is_current": 1}, {"id": 83, "category": "sim", "provider": "povo", "plan_name": "povo2.0 20GB/30日", "price": 2700.0, "data_gb": 20.0, "data_json": "{\"call\": \"別途トッピング\", \"feature\": \"au回線、30日有効\"}", "source_url": "fallback_dictionary", "scraped_at": "2026-02-16 00:40:53", "is_current": 1}, {"id": 79, "category": "sim", "provider": "LINEMO", "plan_name": "スマホプラン 20GB", "price": 2728.0, "data_gb": 20.0, "data_json": "{\"call\": \"別途オプション\", \"feature\": \"LINEギガフリー、ソフトバンク回線\"}", "source_url": "fallback_dictionary", "scraped_at": "2026-02-16 00:40:53", "is_current": 1}, {"id": 76, "category": "sim", "provider": "ahamo", "plan_name": "ahamo 20GB", "price": 2970.0, "data_gb": 20.0, "data_json": "{\"call\": \"5分かけ放題込み\", \"feature\": \"ドコモ回線、海外82カ国対応\"}", "source_url": "fallback_dictionary", "scraped_at": "2026-02-16 00:40:53", "is_current": 1}, {"id": 75, "category": "sim", "provider": "楽天モバイル", "plan_name": "Rakuten最強プラン 20GB〜無制限", "price": 3278.0, "data_gb": 999.0, "data_json": "{\"call\": \"Rakuten Link無料\", \"feature\": \"データ無制限、テザリング無制限\"}", "source_url": "fallback_dictionary", "scraped_at": "2026-02-16 00:40:53", "is_current": 1}, {"id": 87, "category": "sim", "provider": "UQモバイル", "plan_name": "コミコミプラン 20GB", "price": 3278.0, "data_gb": 20.0, "data_json": "{\"call\": \"10分かけ放題込み\", \"feature\": \"au回線、通話込みでお得\"}", "source_url": "fallback_dictionary", "scraped_at": "2026-02-16 00:40:53", "is_current": 1}, {"id": 86, "category": "sim", "provider": "UQモバイル", "plan_name": "トクトクプラン 15GB", "price": 3465.0, "data_gb": 15.0, "data_json": "{\"call\": \"別途オプション\", \"feature\": \"au回線、1GB以下は割引\"}", "source_url": "fallback_dictionary", "scraped_at": "2026-02-16 00:40:53", "is_current": 1}, {"id": 108, "category": "sim", "provider": "NUROモバイル", "plan_name": "NEOプランW 40GB", "price": 3980.0, "data_gb": 40.0, "data_json": "{\"call\": \"別途オプション\", \"feature\": \"大容量、NEOデータフリー\"}", "source_url": "fallback_dictionary", "scraped_at": "2026-02-16 00:40:53", "is_current": 1}, {"id": 89, "category": "sim", "provider": "ワイモバイル", "plan_name": "シンプル2 M 20GB", "price": 4015.0, "data_gb": 20.0, "data_json": "{\"call\": \"別途オプション\", \"feature\": \"ソフトバンク回線、データ繰越可\"}", "source_url": "fallback_dictionary", "scraped_at": "2026-02-16 00:40:53", "is_current": 1}, {"id": 77, "category": "sim", "provider": "ahamo", "plan_name": "ahamo大盛り 100GB", "price": 4950.0, "data_gb": 100.0, "data_json": "{\"call\": \"5分かけ放題込み\", \"feature\": \"大容量100GB、テザリング可\"}", "source_url": "fallback_dictionary", "scraped_at": "2026-02-16 00:40:53", "is_current": 1}, {"id": 90, "category": "sim", "provider": "ワイモバイル", "plan_name": "シンプル2 L 30GB", "price": 5115.0, "data_gb": 30.0, "data_json": "{\"call\": \"別途オプション\", \"feature\": \"ソフトバンク回線、大容量\"}", "source_url": "fallback_dictionary", "scraped_at": "2026-02-16 00:40:53", "is_current": 1}, {"id": 84, "category": "sim", "provider": "povo", "plan_name": "povo2.0 60GB/90日", "price": 6490.0, "data_gb": 60.0, "data_json": "{\"call\": \"別途トッピング\", \"feature\": \"au回線、90日有効、月あたり約2163円\"}", "source_url": "fallback_dictionary", "scraped_at": "2026-02-16 00:40:53", "is_current": 1}];
+let currentSort="price";
+let currentDir=1;
+let currentFilter="all";
+function init(){
+  renderStats();
+  renderTable(allPlans);
+}
+function renderStats(){
+  const el=document.getElementById("stats");
+  const providers=new Set(allPlans.map(p=>p.provider));
+  const minPrice=Math.min(...allPlans.filter(p=>p.price>0).map(p=>p.price));
+  const avgPrice=Math.round(allPlans.filter(p=>p.price>0).reduce((a,b)=>a+b.price,0)/allPlans.filter(p=>p.price>0).length);
+  el.innerHTML=`
+    <div class="stat-card"><div class="num">${providers.size}</div><div class="label">社</div></div>
+    <div class="stat-card"><div class="num">${allPlans.length}</div><div class="label">プラン</div></div>
+    <div class="stat-card"><div class="num">${minPrice.toLocaleString()}円</div><div class="label">最安</div></div>
+    <div class="stat-card"><div class="num">${avgPrice.toLocaleString()}円</div><div class="label">平均</div></div>`;
+}
+function getGbPrice(p){
+  if(p.data_gb<=0||p.price<=0)return 99999;
+  if(p.data_gb>=999)return Math.round(p.price/100);
+  return Math.round(p.price/p.data_gb);
+}
+function getFiltered(){
+  let d=[...allPlans];
+  if(currentFilter!=="all"){
+    if(currentFilter===1)d=d.filter(p=>p.data_gb<=1);
+    else if(currentFilter===999)d=d.filter(p=>p.data_gb>20);
+    else d=d.filter(p=>p.data_gb<=currentFilter&&p.data_gb>0);
+  }
+  return d;
+}
+function sortBy(key){
+  if(currentSort===key)currentDir*=-1;
+  else{currentSort=key;currentDir=1;}
+  sortTable();
+}
+function sortTable(){
+  currentSort=document.getElementById("sortSelect").value||currentSort;
+  let data=getFiltered();
+  data.sort((a,b)=>{
+    let va,vb;
+    if(currentSort==="gb_price"){va=getGbPrice(a);vb=getGbPrice(b);}
+    else if(currentSort==="price"||currentSort==="data_gb"){va=a[currentSort];vb=b[currentSort];}
+    else{va=a[currentSort]||"";vb=b[currentSort]||"";if(typeof va==="string")return va.localeCompare(vb)*currentDir;}
+    return(va-vb)*currentDir;
+  });
+  renderTable(data);
+}
+function filterData(f){
+  currentFilter=f;
+  document.querySelectorAll(".chip").forEach(c=>c.classList.remove("active"));
+  event.target.classList.add("active");
+  sortTable();
+}
+function renderTable(data){
+  const minGbPrice=Math.min(...data.filter(p=>p.price>0&&p.data_gb>0).map(p=>getGbPrice(p)));
+  const minPrice=Math.min(...data.filter(p=>p.price>0).map(p=>p.price));
+  const tbody=document.getElementById("tableBody");
+  tbody.innerHTML=data.map(p=>{
+    const gbp=getGbPrice(p);
+    const info=JSON.parse(p.data_json||"{}");
+    const dataLabel=p.data_gb>=999?"無制限":p.data_gb+"GB";
+    const gbLabel=p.data_gb>=999?"−":gbp+"円/GB";
+    let badges="";
+    if(p.price===minPrice&&p.price>0)badges+=`<span class="badge badge-best">最安</span> `;
+    if(gbp===minGbPrice&&gbp<99999)badges+=`<span class="badge badge-good">GB単価最安</span> `;
+    return`<tr>
+      <td class="provider-name">${p.provider}</td>
+      <td>${p.plan_name}</td>
+      <td class="price">${p.price.toLocaleString()}円</td>
+      <td>${dataLabel}</td>
+      <td class="gb-price">${gbLabel}</td>
+      <td style="text-align:left;font-size:.8rem">${badges}${info.feature||""}</td>
+      <td><a href="#" class="btn-official">公式サイト</a></td>
+    </tr>`;
+  }).join("");
+}
+init();
+</script>
+</body>
+</html>

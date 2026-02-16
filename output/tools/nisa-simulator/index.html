@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>積立NISAシミュレーター【無料】</title>
+<meta name="description" content="積立NISAの運用シミュレーションが無料でできるツールです。毎月の積立額・想定利回り・積立期間を入力するだけで、最終資産額・運用益・非課税メリット額をリアルタイムで計算します。">
+<meta name="keywords" content="積立NISA,シミュレーター,資産運用,投資信託,非課税,シミュレーション">
+<meta property="og:title" content="積立NISAシミュレーター【無料】">
+<meta property="og:description" content="積立NISAの運用シミュレーションが無料でできるツールです。毎月の積立額・想定利回り・積立期間を入力するだけで、最終資産額・運用益・非課税メリット額をリアルタイムで計算します。">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:site_name" content="積立NISAシミュレーター">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="積立NISAシミュレーター【無料】">
+<meta name="twitter:description" content="積立NISAの運用シミュレーションが無料でできるツールです。毎月の積立額・想定利回り・積立期間を入力するだけで、最終資産額・運用益・非課税メリット額をリアルタイムで計算します。">
+<style>
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --orange-dark: #e65100;
+  --orange-mid: #ff6d00;
+  --orange-light: #fff3e0;
+  --orange-pale: #fffaf5;
+  --gray-50: #fafafa;
+  --gray-100: #f5f5f5;
+  --gray-200: #eeeeee;
+  --gray-300: #e0e0e0;
+  --gray-600: #757575;
+  --gray-700: #616161;
+  --gray-800: #424242;
+  --gray-900: #212121;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
+  --shadow-md: 0 4px 6px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.06);
+  --shadow-lg: 0 10px 25px rgba(0,0,0,0.08), 0 6px 12px rgba(0,0,0,0.06);
+  --radius: 12px;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+  background: #ffffff;
+  color: var(--gray-900);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px 16px 40px;
+}
+
+header {
+  text-align: center;
+  padding: 32px 0 24px;
+}
+
+header h1 {
+  font-size: clamp(1.5rem, 5vw, 2rem);
+  font-weight: 800;
+  color: var(--orange-dark);
+  letter-spacing: -0.02em;
+  margin-bottom: 8px;
+}
+
+header p {
+  font-size: 0.95rem;
+  color: var(--gray-600);
+}
+
+.card {
+  background: #fff;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-md);
+  padding: 24px;
+  margin-bottom: 20px;
+  border: 1px solid var(--gray-200);
+}
+
+.card-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--gray-800);
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--orange-mid);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.card-title .icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background: var(--orange-light);
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+/* Input group */
+.input-group {
+  margin-bottom: 22px;
+}
+
+.input-group:last-child {
+  margin-bottom: 0;
+}
+
+.input-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 8px;
+}
+
+.input-label label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--gray-800);
+}
+
+.input-value-display {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--orange-dark);
+  min-width: 80px;
+  text-align: right;
+}
+
+.slider-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.slider-row input[type="range"] {
+  flex: 1;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--gray-200);
+  outline: none;
+  cursor: pointer;
+}
+
+.slider-row input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--orange-mid);
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(230,81,0,0.3);
+  transition: transform 0.15s ease;
+}
+
+.slider-row input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+}
+
+.slider-row input[type="range"]::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--orange-mid);
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 2px 6px rgba(230,81,0,0.3);
+}
+
+.slider-row input[type="number"] {
+  width: 80px;
+  padding: 6px 8px;
+  border: 1.5px solid var(--gray-300);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  text-align: center;
+  font-weight: 600;
+  color: var(--gray-800);
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.slider-row input[type="number"]:focus {
+  border-color: var(--orange-mid);
+  box-shadow: 0 0 0 3px rgba(255,109,0,0.12);
+}
+
+.slider-row input[type="number"]::-webkit-inner-spin-button,
+.slider-row input[type="number"]::-webkit-outer-spin-button {
+  opacity: 1;
+}
+
+.input-range-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 4px;
+  font-size: 0.75rem;
+  color: var(--gray-600);
+}
+
+/* Result cards */
+.results-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.result-item {
+  background: var(--gray-50);
+  border-radius: 10px;
+  padding: 16px;
+  text-align: center;
+  border: 1px solid var(--gray-200);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.result-item:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.result-item.highlight {
+  background: linear-gradient(135deg, var(--orange-light), #fff8f0);
+  border-color: #ffcc80;
+}
+
+.result-item.highlight-strong {
+  background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+  border-color: #ffb74d;
+}
+
+.result-item .result-label {
+  font-size: 0.8rem;
+  color: var(--gray-600);
+  margin-bottom: 4px;
+  font-weight: 500;
+}
+
+.result-item .result-value {
+  font-size: clamp(1.1rem, 4vw, 1.4rem);
+  font-weight: 800;
+  color: var(--gray-900);
+}
+
+.result-item.highlight-strong .result-value {
+  color: var(--orange-dark);
+}
+
+.result-item .result-unit {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--gray-600);
+}
+
+.result-full {
+  grid-column: 1 / -1;
+}
+
+/* Chart */
+.chart-wrapper {
+  position: relative;
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.chart-wrapper canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.chart-legend {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+.chart-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--gray-700);
+}
+
+.chart-legend-color {
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+}
+
+/* Affiliate */
+.affiliate-section {
+  text-align: center;
+  padding: 28px 20px;
+}
+
+.affiliate-section p {
+  font-size: 0.95rem;
+  color: var(--gray-700);
+  margin-bottom: 16px;
+  font-weight: 500;
+}
+
+.affiliate-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn-affiliate {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 28px;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  border: none;
+  min-width: 200px;
+}
+
+.btn-affiliate-primary {
+  background: linear-gradient(135deg, var(--orange-dark), var(--orange-mid));
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(230,81,0,0.3);
+}
+
+.btn-affiliate-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(230,81,0,0.4);
+}
+
+.btn-affiliate-secondary {
+  background: #fff;
+  color: var(--orange-dark);
+  border: 2px solid var(--orange-dark);
+}
+
+.btn-affiliate-secondary:hover {
+  background: var(--orange-light);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 32px 16px 24px;
+  border-top: 1px solid var(--gray-200);
+  margin-top: 12px;
+}
+
+footer .disclaimer {
+  font-size: 0.8rem;
+  color: var(--gray-600);
+  line-height: 1.8;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .container {
+    padding: 12px 12px 32px;
+  }
+
+  .card {
+    padding: 18px 16px;
+    border-radius: 10px;
+  }
+
+  .results-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .result-full {
+    grid-column: 1;
+  }
+
+  .slider-row input[type="number"] {
+    width: 68px;
+    padding: 5px 4px;
+    font-size: 0.9rem;
+  }
+
+  .affiliate-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .btn-affiliate {
+    width: 100%;
+    max-width: 300px;
+  }
+}
+
+@media (min-width: 768px) {
+  .container {
+    padding: 24px 32px 48px;
+  }
+
+  header {
+    padding: 40px 0 32px;
+  }
+
+  .card {
+    padding: 28px 32px;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <h1>積立NISAシミュレーター</h1>
+    <p>毎月の積立額と利回りから、将来の資産額を無料でシミュレーション</p>
+  </header>
+
+  <!-- Input Card -->
+  <div class="card">
+    <div class="card-title"><span class="icon">&#9881;</span> シミュレーション条件</div>
+
+    <!-- 毎月積立額 -->
+    <div class="input-group">
+      <div class="input-label">
+        <label for="monthly">毎月積立額</label>
+        <span class="input-value-display" id="monthly-display">3.0万円</span>
+      </div>
+      <div class="slider-row">
+        <input type="range" id="monthly-slider" min="0.1" max="30" step="0.1" value="3">
+        <input type="number" id="monthly-num" min="0.1" max="30" step="0.1" value="3">
+      </div>
+      <div class="input-range-labels"><span>0.1万円</span><span>30万円</span></div>
+    </div>
+
+    <!-- 想定年利回り -->
+    <div class="input-group">
+      <div class="input-label">
+        <label for="rate">想定年利回り</label>
+        <span class="input-value-display" id="rate-display">5.0%</span>
+      </div>
+      <div class="slider-row">
+        <input type="range" id="rate-slider" min="1" max="10" step="0.1" value="5">
+        <input type="number" id="rate-num" min="1" max="10" step="0.1" value="5">
+      </div>
+      <div class="input-range-labels"><span>1%</span><span>10%</span></div>
+    </div>
+
+    <!-- 積立期間 -->
+    <div class="input-group">
+      <div class="input-label">
+        <label for="years">積立期間</label>
+        <span class="input-value-display" id="years-display">20年</span>
+      </div>
+      <div class="slider-row">
+        <input type="range" id="years-slider" min="1" max="30" step="1" value="20">
+        <input type="number" id="years-num" min="1" max="30" step="1" value="20">
+      </div>
+      <div class="input-range-labels"><span>1年</span><span>30年</span></div>
+    </div>
+
+    <!-- 初期投資額 -->
+    <div class="input-group">
+      <div class="input-label">
+        <label for="initial">初期投資額</label>
+        <span class="input-value-display" id="initial-display">0万円</span>
+      </div>
+      <div class="slider-row">
+        <input type="range" id="initial-slider" min="0" max="500" step="1" value="0">
+        <input type="number" id="initial-num" min="0" max="500" step="1" value="0">
+      </div>
+      <div class="input-range-labels"><span>0万円</span><span>500万円</span></div>
+    </div>
+  </div>
+
+  <!-- Results Card -->
+  <div class="card">
+    <div class="card-title"><span class="icon">&#128200;</span> シミュレーション結果</div>
+    <div class="results-grid">
+      <div class="result-item highlight-strong result-full">
+        <div class="result-label">最終資産額</div>
+        <div class="result-value" id="result-total">0 <span class="result-unit">万円</span></div>
+      </div>
+      <div class="result-item">
+        <div class="result-label">元本合計</div>
+        <div class="result-value" id="result-principal">0 <span class="result-unit">万円</span></div>
+      </div>
+      <div class="result-item highlight">
+        <div class="result-label">運用益</div>
+        <div class="result-value" id="result-gain">0 <span class="result-unit">万円</span></div>
+      </div>
+      <div class="result-item highlight-strong result-full">
+        <div class="result-label">非課税メリット額（通常口座との差額）</div>
+        <div class="result-value" id="result-tax-benefit">0 <span class="result-unit">万円</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chart Card -->
+  <div class="card">
+    <div class="card-title"><span class="icon">&#128202;</span> 資産推移グラフ</div>
+    <div class="chart-wrapper">
+      <canvas id="chart"></canvas>
+    </div>
+    <div class="chart-legend">
+      <div class="chart-legend-item">
+        <div class="chart-legend-color" style="background:#ff8f00;"></div>
+        <span>元本</span>
+      </div>
+      <div class="chart-legend-item">
+        <div class="chart-legend-color" style="background:#e65100;"></div>
+        <span>運用益</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Affiliate Card -->
+  <div class="card affiliate-section">
+    <p>NISAを始めてみませんか？</p>
+    <div class="affiliate-buttons">
+      <a href="#" class="btn-affiliate btn-affiliate-primary">新NISAで積立を始める【SBI証券】</a>
+      <a href="#" class="btn-affiliate btn-affiliate-secondary">おまかせ資産運用【WealthNavi】</a>
+    </div>
+  </div>
+
+  <footer>
+    <p class="disclaimer">この計算は概算です。実際の運用成果は市場環境により変動します。投資にはリスクが伴います。</p>
+  </footer>
+</div>
+
+<script>
+(function() {
+  'use strict';
+
+  // Element references
+  var els = {
+    monthlySlider: document.getElementById('monthly-slider'),
+    monthlyNum: document.getElementById('monthly-num'),
+    monthlyDisplay: document.getElementById('monthly-display'),
+    rateSlider: document.getElementById('rate-slider'),
+    rateNum: document.getElementById('rate-num'),
+    rateDisplay: document.getElementById('rate-display'),
+    yearsSlider: document.getElementById('years-slider'),
+    yearsNum: document.getElementById('years-num'),
+    yearsDisplay: document.getElementById('years-display'),
+    initialSlider: document.getElementById('initial-slider'),
+    initialNum: document.getElementById('initial-num'),
+    initialDisplay: document.getElementById('initial-display'),
+    resultTotal: document.getElementById('result-total'),
+    resultPrincipal: document.getElementById('result-principal'),
+    resultGain: document.getElementById('result-gain'),
+    resultTaxBenefit: document.getElementById('result-tax-benefit'),
+    canvas: document.getElementById('chart')
+  };
+
+  var TAX_RATE = 0.20315;
+
+  // Sync slider and number input
+  function syncInputs(slider, numInput, displayEl, suffix, decimals) {
+    function update(value) {
+      var v = parseFloat(value);
+      var min = parseFloat(slider.min);
+      var max = parseFloat(slider.max);
+      if (isNaN(v)) return;
+      v = Math.max(min, Math.min(max, v));
+      slider.value = v;
+      numInput.value = v;
+      displayEl.textContent = v.toFixed(decimals) + suffix;
+      calculate();
+    }
+    slider.addEventListener('input', function() { update(this.value); });
+    numInput.addEventListener('input', function() { update(this.value); });
+    numInput.addEventListener('change', function() { update(this.value); });
+  }
+
+  syncInputs(els.monthlySlider, els.monthlyNum, els.monthlyDisplay, '万円', 1);
+  syncInputs(els.rateSlider, els.rateNum, els.rateDisplay, '%', 1);
+  syncInputs(els.yearsSlider, els.yearsNum, els.yearsDisplay, '年', 0);
+  syncInputs(els.initialSlider, els.initialNum, els.initialDisplay, '万円', 0);
+
+  function formatNumber(n) {
+    return Math.round(n).toLocaleString('ja-JP');
+  }
+
+  function formatDecimal(n, d) {
+    if (n >= 10000) {
+      return Math.round(n).toLocaleString('ja-JP');
+    }
+    return n.toFixed(d).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  }
+
+  // Compute yearly data
+  function computeYearlyData(monthlyMan, ratePercent, years, initialMan) {
+    var monthlyYen = monthlyMan; // keep in 万円 units
+    var rate = ratePercent / 100;
+    var monthlyRate = rate / 12;
+    var data = [];
+
+    for (var y = 1; y <= years; y++) {
+      // Total value at end of year y:
+      // Initial investment compounded: initial * (1 + r)^y
+      // Monthly contributions compounded (annuity formula):
+      // M * [ ((1 + rm)^(12*y) - 1) / rm ]
+      var months = 12 * y;
+      var totalValue;
+      var initialCompounded = initialMan * Math.pow(1 + rate, y);
+
+      if (monthlyRate === 0) {
+        totalValue = initialCompounded + monthlyYen * months;
+      } else {
+        var annuityFactor = (Math.pow(1 + monthlyRate, months) - 1) / monthlyRate;
+        totalValue = initialCompounded + monthlyYen * annuityFactor;
+      }
+
+      var principal = initialMan + monthlyYen * months;
+      var gain = totalValue - principal;
+      if (gain < 0) gain = 0;
+
+      data.push({
+        year: y,
+        total: totalValue,
+        principal: principal,
+        gain: gain
+      });
+    }
+
+    return data;
+  }
+
+  function calculate() {
+    var monthly = parseFloat(els.monthlySlider.value);
+    var rate = parseFloat(els.rateSlider.value);
+    var years = parseInt(els.yearsSlider.value);
+    var initial = parseFloat(els.initialSlider.value);
+
+    var data = computeYearlyData(monthly, rate, years, initial);
+    var last = data[data.length - 1];
+
+    var total = last.total;
+    var principal = last.principal;
+    var gain = last.gain;
+    var taxBenefit = gain * TAX_RATE;
+
+    els.resultTotal.innerHTML = formatDecimal(total, 1) + ' <span class="result-unit">万円</span>';
+    els.resultPrincipal.innerHTML = formatDecimal(principal, 1) + ' <span class="result-unit">万円</span>';
+    els.resultGain.innerHTML = formatDecimal(gain, 1) + ' <span class="result-unit">万円</span>';
+    els.resultTaxBenefit.innerHTML = formatDecimal(taxBenefit, 1) + ' <span class="result-unit">万円</span>';
+
+    drawChart(data);
+  }
+
+  function drawChart(data) {
+    var canvas = els.canvas;
+    var dpr = window.devicePixelRatio || 1;
+    var containerWidth = canvas.parentElement.clientWidth;
+
+    // Chart dimensions
+    var chartWidth = Math.max(containerWidth, 300);
+    var chartHeight = Math.round(chartWidth * 0.55);
+    if (chartHeight < 250) chartHeight = 250;
+    if (chartHeight > 450) chartHeight = 450;
+
+    canvas.style.width = chartWidth + 'px';
+    canvas.style.height = chartHeight + 'px';
+    canvas.width = chartWidth * dpr;
+    canvas.height = chartHeight * dpr;
+
+    var ctx = canvas.getContext('2d');
+    ctx.scale(dpr, dpr);
+    ctx.clearRect(0, 0, chartWidth, chartHeight);
+
+    // Padding
+    var padLeft = 64;
+    var padRight = 20;
+    var padTop = 20;
+    var padBottom = 48;
+
+    var plotW = chartWidth - padLeft - padRight;
+    var plotH = chartHeight - padTop - padBottom;
+
+    var n = data.length;
+    if (n === 0) return;
+
+    // Find max value for y-axis
+    var maxVal = 0;
+    for (var i = 0; i < n; i++) {
+      if (data[i].total > maxVal) maxVal = data[i].total;
+    }
+    if (maxVal === 0) maxVal = 1;
+
+    // Nice y-axis ticks
+    var rawStep = maxVal / 5;
+    var magnitude = Math.pow(10, Math.floor(Math.log10(rawStep)));
+    var niceSteps = [1, 2, 2.5, 5, 10];
+    var yStep = niceSteps[niceSteps.length - 1] * magnitude;
+    for (var s = 0; s < niceSteps.length; s++) {
+      if (niceSteps[s] * magnitude >= rawStep) {
+        yStep = niceSteps[s] * magnitude;
+        break;
+      }
+    }
+    var yMax = Math.ceil(maxVal / yStep) * yStep;
+    if (yMax === 0) yMax = yStep;
+
+    // Colors
+    var colorPrincipal = '#ff8f00';
+    var colorGain = '#e65100';
+
+    // Draw grid lines and y-axis labels
+    ctx.strokeStyle = '#e8e8e8';
+    ctx.lineWidth = 1;
+    ctx.fillStyle = '#757575';
+    ctx.font = '11px -apple-system, BlinkMacSystemFont, sans-serif';
+    ctx.textAlign = 'right';
+    ctx.textBaseline = 'middle';
+
+    var tickCount = Math.round(yMax / yStep);
+    for (var t = 0; t <= tickCount; t++) {
+      var yVal = t * yStep;
+      var yPos = padTop + plotH - (yVal / yMax) * plotH;
+
+      ctx.beginPath();
+      ctx.moveTo(padLeft, yPos);
+      ctx.lineTo(padLeft + plotW, yPos);
+      ctx.stroke();
+
+      var labelText;
+      if (yVal >= 10000) {
+        labelText = (yVal / 10000).toFixed(yVal % 10000 === 0 ? 0 : 1) + '億';
+      } else {
+        labelText = Math.round(yVal) + '万';
+      }
+      ctx.fillText(labelText, padLeft - 8, yPos);
+    }
+
+    // Bar dimensions
+    var barAreaWidth = plotW / n;
+    var barWidth = Math.max(4, Math.min(barAreaWidth * 0.65, 40));
+
+    // Draw bars
+    for (var i = 0; i < n; i++) {
+      var d = data[i];
+      var cx = padLeft + barAreaWidth * i + barAreaWidth / 2;
+      var bx = cx - barWidth / 2;
+
+      var principalH = (d.principal / yMax) * plotH;
+      var gainH = (d.gain / yMax) * plotH;
+
+      // Principal bar (bottom)
+      var principalY = padTop + plotH - principalH;
+      ctx.fillStyle = colorPrincipal;
+      roundedRectTop(ctx, bx, principalY, barWidth, principalH, 0);
+
+      // Gain bar (top, stacked)
+      if (gainH > 0.5) {
+        var gainY = principalY - gainH;
+        ctx.fillStyle = colorGain;
+        roundedRectTop(ctx, bx, gainY, barWidth, gainH, Math.min(3, barWidth / 4));
+      }
+
+      // X-axis label (show selectively for readability)
+      if (shouldShowLabel(i, n)) {
+        ctx.fillStyle = '#757575';
+        ctx.font = '11px -apple-system, BlinkMacSystemFont, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'top';
+        ctx.fillText(d.year + '年', cx, padTop + plotH + 8);
+      }
+    }
+
+    // Draw axes
+    ctx.strokeStyle = '#bdbdbd';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(padLeft, padTop);
+    ctx.lineTo(padLeft, padTop + plotH);
+    ctx.lineTo(padLeft + plotW, padTop + plotH);
+    ctx.stroke();
+  }
+
+  function shouldShowLabel(index, total) {
+    if (total <= 10) return true;
+    if (total <= 20) return (index + 1) % 2 === 0 || index === 0;
+    return (index + 1) % 5 === 0 || index === 0;
+  }
+
+  function roundedRectTop(ctx, x, y, w, h, r) {
+    if (h <= 0) return;
+    if (r > h) r = h;
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.lineTo(x + w - r, y);
+    ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+    ctx.lineTo(x + w, y + h);
+    ctx.lineTo(x, y + h);
+    ctx.lineTo(x, y + r);
+    ctx.quadraticCurveTo(x, y, x + r, y);
+    ctx.closePath();
+    ctx.fill();
+  }
+
+  // Handle resize
+  var resizeTimer;
+  window.addEventListener('resize', function() {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(calculate, 100);
+  });
+
+  // Initial calculation
+  calculate();
+})();
+</script>
+</body>
+</html>
