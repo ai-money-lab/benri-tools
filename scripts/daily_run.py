@@ -14,6 +14,7 @@
 import subprocess
 import sys
 import os
+import json
 from datetime import datetime
 
 sys.stdout.reconfigure(encoding='utf-8')
@@ -148,6 +149,60 @@ def git_auto_deploy(fh):
         return False
 
 
+def check_x_queue(fh):
+    """X投稿キューの残数をチェックし、少なければアラートを出す"""
+    queue_path = os.path.join(BASE_DIR, 'data', 'x_post_queue.json')
+    alerts_path = os.path.join(BASE_DIR, 'data', 'alerts.json')
+
+    try:
+        with open(queue_path, 'r', encoding='utf-8') as f:
+            queue = json.load(f)
+        remaining = sum(1 for p in queue if not p.get('posted', False))
+        total = len(queue)
+        posted = total - remaining
+
+        log(f"X queue check: {remaining} remaining / {total} total", fh)
+
+        # アラート管理
+        alerts = []
+        if os.path.exists(alerts_path):
+            try:
+                with open(alerts_path, 'r', encoding='utf-8') as f:
+                    alerts = json.load(f)
+            except Exception:
+                alerts = []
+
+        # 古いqueue_lowアラートを除去
+        alerts = [a for a in alerts if a.get('type') != 'queue_low']
+
+        if remaining <= 5:
+            alert = {
+                'type': 'queue_low',
+                'level': 'critical' if remaining <= 2 else 'warning',
+                'message': f'X投稿キュー残り{remaining}件！補充が必要です。',
+                'remaining': remaining,
+                'created_at': datetime.now().isoformat(),
+            }
+            alerts.append(alert)
+            log(f"ALERT: X queue low! Only {remaining} posts remaining!", fh)
+        elif remaining <= 10:
+            alert = {
+                'type': 'queue_low',
+                'level': 'info',
+                'message': f'X投稿キュー残り{remaining}件。そろそろ補充を検討。',
+                'remaining': remaining,
+                'created_at': datetime.now().isoformat(),
+            }
+            alerts.append(alert)
+            log(f"INFO: X queue getting low ({remaining} remaining)", fh)
+
+        with open(alerts_path, 'w', encoding='utf-8') as f:
+            json.dump(alerts, f, ensure_ascii=False, indent=2)
+
+    except Exception as e:
+        log(f"X queue check ... ERROR: {e}", fh)
+
+
 def main():
     os.makedirs(LOG_DIR, exist_ok=True)
     ok_count = 0
@@ -159,6 +214,9 @@ def main():
         for name, cmd in STEPS:
             if run_step(name, cmd, fh):
                 ok_count += 1
+
+        # X投稿キュー残数チェック
+        check_x_queue(fh)
 
         # Git deploy (after all generation steps)
         if git_auto_deploy(fh):
