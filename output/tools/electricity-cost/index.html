@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>電気代シミュレーター - 電力会社乗り換えで年間いくら節約？</title>
+<meta name="description" content="現在の電気代を入力するだけで、新電力への切り替えによる節約額を自動計算。世帯人数別の平均電気代との比較や、年間・10年間の節約額をグラフで可視化。無料の電気代シミュレーターです。">
+<meta name="keywords" content="電気代,シミュレーター,新電力,電力会社,乗り換え,節約,光熱費,電気料金比較">
+<meta property="og:title" content="電気代シミュレーター - 電力会社乗り換えで年間いくら節約？">
+<meta property="og:description" content="現在の電気代を入力するだけで新電力への切り替えによる節約額を自動計算。世帯人数別の平均電気代との比較や年間・10年間の節約額をグラフで可視化できる無料ツール。">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:site_name" content="電気代シミュレーター">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="電気代シミュレーター - 電力会社乗り換えで年間いくら節約？">
+<meta name="twitter:description" content="現在の電気代を入力するだけで新電力への切り替えによる節約額を自動計算。無料の電気代シミュレーター。">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --primary:#f59e0b;--accent:#d97706;--primary-dark:#b45309;--primary-pale:#fef3c7;
+  --warm-bg:#fffbeb;--warm-light:#fef9ee;
+  --shadow:0 2px 12px rgba(0,0,0,.08);--shadow-lg:0 4px 24px rgba(0,0,0,.12);
+  --radius:12px;--gray:#f7f8fa;--text:#333;--text-light:#666;--border:#e5e7eb
+}
+html{font-size:16px;scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;background:var(--warm-bg);color:var(--text);line-height:1.7;min-height:100vh}
+a{color:var(--accent);text-decoration:none}
+
+/* Header */
+.header{background:linear-gradient(135deg,#92400e,var(--accent),var(--primary));color:#fff;text-align:center;padding:2.2rem 1rem 2rem;position:relative;overflow:hidden}
+.header::before{content:"";position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle at 30% 70%,rgba(255,255,255,.1),transparent 50%);pointer-events:none}
+.header h1{font-size:clamp(1.3rem,4vw,1.7rem);font-weight:700;margin-bottom:.4rem;position:relative}
+.header p{font-size:.9rem;opacity:.92;position:relative}
+
+/* Container */
+.container{max-width:960px;margin:0 auto;padding:0 1rem 2.5rem}
+
+/* Card */
+.card{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);padding:1.5rem;margin-top:1.5rem}
+.card-title{font-size:1.1rem;font-weight:700;color:#92400e;margin-bottom:1.2rem;padding-bottom:.6rem;border-bottom:2px solid var(--primary-pale);display:flex;align-items:center;gap:.5rem}
+.card-title::before{content:"";display:inline-block;width:4px;height:1.1rem;background:var(--primary);border-radius:2px}
+
+/* Input Group */
+.input-group{margin-bottom:1.3rem}
+.input-group:last-child{margin-bottom:0}
+.input-label{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.5rem;font-weight:600;font-size:.93rem}
+.input-label .unit{font-weight:400;color:var(--text-light);font-size:.83rem}
+.slider-row{display:flex;align-items:center;gap:.75rem}
+.slider-row input[type=range]{flex:1;-webkit-appearance:none;appearance:none;height:6px;border-radius:3px;background:var(--border);outline:none;cursor:pointer}
+.slider-row input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:22px;height:22px;border-radius:50%;background:var(--primary);cursor:pointer;border:3px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.2)}
+.slider-row input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:var(--primary);cursor:pointer;border:3px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.2)}
+.slider-row .num-input{width:110px;padding:.45rem .5rem;border:1.5px solid var(--border);border-radius:8px;font-size:1rem;text-align:right;font-family:inherit;transition:border-color .2s}
+.slider-row .num-input:focus{outline:none;border-color:var(--primary)}
+
+/* Select */
+select.form-select{width:100%;padding:.55rem .7rem;border:1.5px solid var(--border);border-radius:8px;font-size:.95rem;font-family:inherit;background:#fff;cursor:pointer;transition:border-color .2s}
+select.form-select:focus{outline:none;border-color:var(--primary)}
+
+/* Two column */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+@media(max-width:640px){.two-col{grid-template-columns:1fr}}
+
+/* Result boxes */
+.results-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.75rem}
+@media(max-width:500px){.results-grid{grid-template-columns:1fr}}
+.result-box{background:var(--primary-pale);border-radius:10px;padding:1rem;text-align:center}
+.result-box.primary{background:linear-gradient(135deg,#92400e,var(--accent));color:#fff;grid-column:1/-1}
+.result-box.highlight{background:linear-gradient(135deg,var(--primary),#fbbf24);color:#fff}
+.result-box .label{font-size:.78rem;font-weight:600;margin-bottom:.25rem}
+.result-box.primary .label{opacity:.9;font-size:.85rem}
+.result-box .value{font-size:1.5rem;font-weight:800;letter-spacing:.02em}
+.result-box.primary .value{font-size:2rem}
+.result-box .sub{font-size:.75rem;opacity:.7;margin-top:.15rem}
+
+/* Comparison table */
+.compare-table{width:100%;border-collapse:collapse;margin-top:1rem;font-size:.9rem}
+.compare-table th,.compare-table td{padding:.65rem .8rem;text-align:left;border-bottom:1px solid var(--border)}
+.compare-table th{background:var(--gray);font-weight:600;color:#92400e;font-size:.83rem}
+.compare-table td:last-child{text-align:right;font-weight:600;white-space:nowrap}
+.compare-table tr.your-row{background:var(--primary-pale);font-weight:700}
+.compare-table tr.your-row td{border-bottom:2px solid var(--primary)}
+
+/* Canvas chart */
+.chart-container{margin-top:1rem;display:flex;gap:1rem;flex-wrap:wrap;justify-content:center}
+.chart-wrap{flex:1;min-width:280px;max-width:500px;text-align:center}
+.chart-wrap h3{font-size:.92rem;font-weight:700;color:#92400e;margin-bottom:.5rem}
+.chart-wrap canvas{width:100%;max-width:480px}
+
+/* CTA */
+.cta-section{margin-top:1.5rem}
+.cta-box{display:block;background:linear-gradient(135deg,var(--accent),var(--primary));color:#fff;text-align:center;padding:1.1rem 1.5rem;border-radius:var(--radius);font-weight:700;font-size:1.05rem;text-decoration:none;transition:transform .15s,box-shadow .15s;box-shadow:var(--shadow);margin-bottom:.75rem}
+.cta-box:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg)}
+.cta-box.secondary{background:linear-gradient(135deg,#92400e,#78350f)}
+.cta-box small{display:block;font-weight:400;font-size:.78rem;opacity:.9;margin-top:.2rem}
+
+/* Tip */
+.tip{display:inline-block;width:16px;height:16px;background:var(--primary-pale);color:#92400e;border-radius:50%;font-size:.7rem;line-height:16px;text-align:center;cursor:help;font-weight:700;margin-left:.3rem;position:relative}
+.tip:hover::after{content:attr(data-tip);position:absolute;left:50%;bottom:calc(100% + 6px);transform:translateX(-50%);background:#333;color:#fff;font-size:.75rem;font-weight:400;padding:.35rem .6rem;border-radius:6px;z-index:10;max-width:260px;white-space:normal;line-height:1.4}
+@media(max-width:500px){.tip:hover::after{left:0;transform:none;max-width:200px}}
+
+/* Note */
+.note{background:#fff8e1;border:1px solid #ffe082;border-radius:8px;padding:.8rem 1rem;font-size:.82rem;color:#795548;margin-top:1.5rem;line-height:1.6}
+.note strong{color:#e65100}
+
+/* Footer */
+.footer{text-align:center;padding:1.5rem 1rem;font-size:.78rem;color:var(--text-light);border-top:1px solid var(--border);margin-top:2rem}
+
+/* Savings badge */
+.savings-badge{display:inline-block;background:#dc2626;color:#fff;padding:2px 10px;border-radius:12px;font-size:.8rem;font-weight:700;margin-left:.5rem;animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+
+/* Info box */
+.info-box{background:var(--warm-light);border-left:4px solid var(--primary);border-radius:0 8px 8px 0;padding:.8rem 1rem;margin-top:1rem;font-size:.85rem;color:#78350f;line-height:1.6}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>電気代シミュレーター</h1>
+  <p>電力会社の乗り換えで年間いくら節約できる？今すぐチェック</p>
+</div>
+
+<div class="container">
+
+  <!-- Input Section -->
+  <div class="card">
+    <div class="card-title">現在の電気料金情報</div>
+    <div class="input-group">
+      <div class="input-label">現在の月額電気代<span class="unit">円</span></div>
+      <div class="slider-row">
+        <input type="range" id="billSlider" min="1000" max="40000" step="100" value="10000">
+        <input type="number" class="num-input" id="billNum" min="1000" max="100000" step="100" value="10000">
+      </div>
+    </div>
+    <div class="two-col">
+      <div class="input-group">
+        <div class="input-label">世帯人数</div>
+        <select class="form-select" id="householdSelect">
+          <option value="1">1人暮らし</option>
+          <option value="2" selected>2人世帯</option>
+          <option value="3">3人世帯</option>
+          <option value="4">4人以上世帯</option>
+        </select>
+      </div>
+      <div class="input-group">
+        <div class="input-label">契約アンペア<span class="tip" data-tip="電気の契約容量です。分電盤のブレーカーに記載があります。一般家庭は30A〜40Aが多いです。">?</span></div>
+        <select class="form-select" id="ampSelect">
+          <option value="20">20A</option>
+          <option value="30" selected>30A</option>
+          <option value="40">40A</option>
+          <option value="50">50A</option>
+          <option value="60">60A</option>
+        </select>
+      </div>
+    </div>
+    <div class="input-group">
+      <div class="input-label">お住まいの地域</div>
+      <select class="form-select" id="regionSelect">
+        <option value="tokyo" selected>東京電力エリア</option>
+        <option value="kansai">関西電力エリア</option>
+        <option value="chubu">中部電力エリア</option>
+        <option value="tohoku">東北電力エリア</option>
+        <option value="kyushu">九州電力エリア</option>
+        <option value="hokkaido">北海道電力エリア</option>
+        <option value="chugoku">中国電力エリア</option>
+        <option value="shikoku">四国電力エリア</option>
+        <option value="hokuriku">北陸電力エリア</option>
+        <option value="okinawa">沖縄電力エリア</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Results -->
+  <div class="card" id="resultsCard">
+    <div class="card-title">シミュレーション結果</div>
+    <div class="results-grid">
+      <div class="result-box primary">
+        <div class="label">年間節約額（見込み）</div>
+        <div class="value" id="resultYearlySaving">--</div>
+        <div class="sub">新電力への切り替えで節約できる目安</div>
+      </div>
+      <div class="result-box">
+        <div class="label">現在の年間電気代</div>
+        <div class="value" id="resultYearlyCurrent">--</div>
+      </div>
+      <div class="result-box highlight">
+        <div class="label">新電力の想定月額</div>
+        <div class="value" id="resultNewMonthly">--</div>
+      </div>
+      <div class="result-box">
+        <div class="label">新電力の年間電気代</div>
+        <div class="value" id="resultYearlyNew">--</div>
+      </div>
+      <div class="result-box" style="background:#fef2f2">
+        <div class="label">10年間の節約額</div>
+        <div class="value" id="result10Year">--</div>
+      </div>
+    </div>
+
+    <div class="info-box" id="infoBox"></div>
+  </div>
+
+  <!-- Chart -->
+  <div class="card">
+    <div class="card-title">電気代比較グラフ</div>
+    <div class="chart-container">
+      <div class="chart-wrap">
+        <h3>月額比較：現在 vs 新電力</h3>
+        <canvas id="barChart" width="480" height="320"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Household Average Comparison -->
+  <div class="card">
+    <div class="card-title">世帯人数別の平均電気代との比較</div>
+    <table class="compare-table">
+      <thead>
+        <tr><th>世帯人数</th><th>全国平均（月額）</th><th>あなたとの差額</th></tr>
+      </thead>
+      <tbody id="compareBody"></tbody>
+    </table>
+    <div class="info-box" id="compareInfo" style="margin-top:.8rem"></div>
+  </div>
+
+  <!-- CTA Section -->
+  <div class="cta-section">
+    <a href="https://px.a8.net/svt/ejp?a8mat=45E59Y+3FU9OY+5MNK+5YJRM" class="cta-box" target="_blank" rel="nofollow noopener">
+      電気代を見直す【エネチェンジ】
+      <small>電力会社の料金プランを無料で比較 / 切り替え手続きもカンタン</small>
+    </a>
+    <a href="https://px.a8.net/svt/ejp?a8mat=45E59Y+3BO8GI+9MO+3N0FO1" class="cta-box secondary" target="_blank" rel="nofollow noopener">
+      リフォームで省エネ対策
+      <small>断熱・窓リフォームで光熱費を大幅カット / 補助金制度の活用も</small>
+    </a>
+  </div>
+
+  <!-- Note -->
+  <div class="note">
+    <strong>ご注意：</strong>このシミュレーション結果は概算です。実際の節約額は、使用電力量・契約プラン・時間帯別使用量・燃料費調整額等により異なります。正確な料金比較は、各電力会社の公式サイトまたはエネチェンジ等の比較サービスでご確認ください。削減率は一般的な新電力への切り替え実績をもとにした目安（約5〜15%）です。
+  </div>
+
+  <div class="footer">&copy; 2026 AI Money Lab</div>
+</div>
+
+<script>
+(function(){
+'use strict';
+
+/* ===== Data: regional discount rates & household averages ===== */
+var regionData = {
+  tokyo:    { name:'東京電力', discountMin:0.06, discountMax:0.13 },
+  kansai:   { name:'関西電力', discountMin:0.05, discountMax:0.12 },
+  chubu:    { name:'中部電力', discountMin:0.06, discountMax:0.13 },
+  tohoku:   { name:'東北電力', discountMin:0.05, discountMax:0.11 },
+  kyushu:   { name:'九州電力', discountMin:0.06, discountMax:0.14 },
+  hokkaido: { name:'北海道電力', discountMin:0.07, discountMax:0.15 },
+  chugoku:  { name:'中国電力', discountMin:0.05, discountMax:0.12 },
+  shikoku:  { name:'四国電力', discountMin:0.05, discountMax:0.11 },
+  hokuriku: { name:'北陸電力', discountMin:0.05, discountMax:0.10 },
+  okinawa:  { name:'沖縄電力', discountMin:0.05, discountMax:0.10 }
+};
+
+// Household average monthly electricity cost (total Japan average, in yen)
+// Source: statistics bureau, approximate 2024-2025 data
+var householdAverage = {
+  1: 6570,
+  2: 11307,
+  3: 13157,
+  4: 13948
+};
+
+/* ===== Amp-based discount adjustment ===== */
+// Higher amp = more usage = potentially higher absolute saving but similar % range
+// We give a small bonus to higher amp users
+function getAmpFactor(amp) {
+  if (amp <= 20) return 0.92;
+  if (amp <= 30) return 1.0;
+  if (amp <= 40) return 1.04;
+  if (amp <= 50) return 1.07;
+  return 1.10; // 60A
+}
+
+/* ===== Slider <-> Number sync ===== */
+function syncPair(sliderId, numId) {
+  var s = document.getElementById(sliderId);
+  var n = document.getElementById(numId);
+  s.addEventListener('input', function(){ n.value = s.value; calc(); });
+  n.addEventListener('input', function(){
+    var v = parseInt(n.value);
+    if (isNaN(v)) return;
+    v = Math.max(parseInt(s.min), Math.min(parseInt(s.max), v));
+    s.value = v; n.value = v; calc();
+  });
+}
+syncPair('billSlider', 'billNum');
+
+/* ===== Select listeners ===== */
+document.getElementById('householdSelect').addEventListener('change', calc);
+document.getElementById('ampSelect').addEventListener('change', calc);
+document.getElementById('regionSelect').addEventListener('change', calc);
+
+/* ===== Comma formatting ===== */
+function comma(n) {
+  return Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}
+
+/* ===== Main Calculation ===== */
+var lastResult = {};
+
+function calc() {
+  var bill = parseInt(document.getElementById('billNum').value) || 10000;
+  var household = parseInt(document.getElementById('householdSelect').value) || 2;
+  var amp = parseInt(document.getElementById('ampSelect').value) || 30;
+  var region = document.getElementById('regionSelect').value || 'tokyo';
+
+  var rd = regionData[region];
+  var ampFactor = getAmpFactor(amp);
+
+  // Calculate discount range adjusted by amp factor
+  var discountMin = rd.discountMin * ampFactor;
+  var discountMax = rd.discountMax * ampFactor;
+  // Clamp to reasonable range
+  discountMin = Math.max(0.03, Math.min(0.15, discountMin));
+  discountMax = Math.max(discountMin + 0.02, Math.min(0.18, discountMax));
+
+  // Use midpoint as the "expected" discount rate
+  var discountRate = (discountMin + discountMax) / 2;
+
+  var yearlyCurrent = bill * 12;
+  var monthlySaving = Math.round(bill * discountRate);
+  var newMonthly = bill - monthlySaving;
+  var yearlyNew = newMonthly * 12;
+  var yearlySaving = yearlyCurrent - yearlyNew;
+  var saving10Year = yearlySaving * 10;
+
+  lastResult = {
+    bill: bill,
+    household: household,
+    amp: amp,
+    region: region,
+    regionName: rd.name,
+    discountRate: discountRate,
+    discountMin: discountMin,
+    discountMax: discountMax,
+    yearlyCurrent: yearlyCurrent,
+    newMonthly: newMonthly,
+    monthlySaving: monthlySaving,
+    yearlyNew: yearlyNew,
+    yearlySaving: yearlySaving,
+    saving10Year: saving10Year
+  };
+
+  // Update result boxes
+  document.getElementById('resultYearlySaving').textContent = comma(yearlySaving) + '円';
+  document.getElementById('resultYearlyCurrent').textContent = comma(yearlyCurrent) + '円';
+  document.getElementById('resultNewMonthly').textContent = comma(newMonthly) + '円';
+  document.getElementById('resultYearlyNew').textContent = comma(yearlyNew) + '円';
+  document.getElementById('result10Year').textContent = comma(saving10Year) + '円';
+
+  // Info box
+  var pctMin = Math.round(discountMin * 100);
+  var pctMax = Math.round(discountMax * 100);
+  document.getElementById('infoBox').innerHTML =
+    rd.name + 'エリアでは、新電力への切り替えで <strong>約' + pctMin + '〜' + pctMax + '%</strong> の電気代削減が見込まれます。' +
+    '契約アンペア' + amp + 'Aの場合、月々 <strong>' + comma(monthlySaving) + '円</strong> の節約で、' +
+    '10年間で <strong>' + comma(saving10Year) + '円</strong> もお得になる計算です。';
+
+  // Comparison table
+  renderCompareTable(bill, household);
+
+  // Chart
+  drawBarChart();
+}
+
+/* ===== Household Comparison Table ===== */
+function renderCompareTable(bill, currentHousehold) {
+  var tbody = document.getElementById('compareBody');
+  var html = '';
+  var keys = [1, 2, 3, 4];
+  var labels = { 1: '1人暮らし', 2: '2人世帯', 3: '3人世帯', 4: '4人以上' };
+
+  keys.forEach(function(k) {
+    var avg = householdAverage[k];
+    var diff = bill - avg;
+    var diffText = diff > 0
+      ? '+' + comma(diff) + '円（平均より高い）'
+      : diff < 0
+      ? comma(diff) + '円（平均より安い）'
+      : '平均と同じ';
+    var diffColor = diff > 0 ? 'color:#dc2626' : diff < 0 ? 'color:#16a34a' : '';
+    var isYou = (k === currentHousehold);
+    html += '<tr class="' + (isYou ? 'your-row' : '') + '">';
+    html += '<td>' + labels[k] + (isYou ? ' (あなた)' : '') + '</td>';
+    html += '<td>' + comma(avg) + '円</td>';
+    html += '<td style="' + diffColor + '">' + diffText + '</td>';
+    html += '</tr>';
+  });
+
+  tbody.innerHTML = html;
+
+  // Compare info
+  var avg = householdAverage[currentHousehold];
+  var diff = bill - avg;
+  var info = document.getElementById('compareInfo');
+  if (diff > 1000) {
+    info.innerHTML = 'あなたの電気代は' + labels[currentHousehold] + 'の全国平均より <strong>' + comma(diff) + '円高い</strong> です。電力会社の見直しで大きく節約できる可能性があります。';
+  } else if (diff < -1000) {
+    info.innerHTML = 'あなたの電気代は' + labels[currentHousehold] + 'の全国平均より <strong>' + comma(Math.abs(diff)) + '円安い</strong> です。すでに節約できていますが、さらにお得になる場合もあります。';
+  } else {
+    info.innerHTML = 'あなたの電気代は' + labels[currentHousehold] + 'の全国平均とほぼ同水準です。新電力への切り替えで更なる節約が期待できます。';
+  }
+}
+
+/* ===== Bar Chart (Canvas): Current vs New ===== */
+function drawBarChart() {
+  var canvas = document.getElementById('barChart');
+  var ctx = canvas.getContext('2d');
+  var dpr = window.devicePixelRatio || 1;
+  var w = canvas.clientWidth;
+  var h = canvas.clientHeight || 320;
+  canvas.width = w * dpr;
+  canvas.height = h * dpr;
+  ctx.scale(dpr, dpr);
+  ctx.clearRect(0, 0, w, h);
+
+  var bill = lastResult.bill || 10000;
+  var newMonthly = lastResult.newMonthly || 9000;
+  var monthlySaving = lastResult.monthlySaving || 1000;
+  var avg = householdAverage[lastResult.household || 2] || 11307;
+
+  var data = [
+    { label: '現在の電気代', value: bill, color: '#ef4444' },
+    { label: '新電力(見込み)', value: newMonthly, color: '#f59e0b' },
+    { label: '全国平均', value: avg, color: '#94a3b8' }
+  ];
+
+  var maxVal = 0;
+  data.forEach(function(d) { if (d.value > maxVal) maxVal = d.value; });
+  maxVal = Math.ceil(maxVal / 1000) * 1000;
+  if (maxVal === 0) maxVal = 10000;
+
+  var padding = { top: 30, right: 30, bottom: 65, left: 70 };
+  var chartW = w - padding.left - padding.right;
+  var chartH = h - padding.top - padding.bottom;
+  var barW = Math.min(80, chartW / data.length * 0.55);
+  var gap = (chartW - barW * data.length) / (data.length + 1);
+
+  // Y axis grid
+  ctx.strokeStyle = '#e5e7eb';
+  ctx.fillStyle = '#999';
+  ctx.font = '11px sans-serif';
+  ctx.textAlign = 'right';
+  var steps = 5;
+  for (var i = 0; i <= steps; i++) {
+    var yVal = Math.round(maxVal / steps * i);
+    var yPos = padding.top + chartH - (chartH * yVal / maxVal);
+    ctx.beginPath();
+    ctx.moveTo(padding.left, yPos);
+    ctx.lineTo(w - padding.right, yPos);
+    ctx.stroke();
+    ctx.fillText(comma(yVal) + '円', padding.left - 5, yPos + 4);
+  }
+
+  // X axis line
+  ctx.strokeStyle = '#ccc';
+  ctx.beginPath();
+  ctx.moveTo(padding.left, padding.top + chartH);
+  ctx.lineTo(w - padding.right, padding.top + chartH);
+  ctx.stroke();
+
+  // Bars
+  data.forEach(function(d, idx) {
+    var x = padding.left + gap + idx * (barW + gap);
+    var barH = maxVal > 0 ? (d.value / maxVal) * chartH : 0;
+    var y = padding.top + chartH - barH;
+
+    // Bar with rounded top
+    ctx.fillStyle = d.color;
+    ctx.beginPath();
+    var r = Math.min(6, barW / 2);
+    ctx.moveTo(x, padding.top + chartH);
+    ctx.lineTo(x, y + r);
+    ctx.quadraticCurveTo(x, y, x + r, y);
+    ctx.lineTo(x + barW - r, y);
+    ctx.quadraticCurveTo(x + barW, y, x + barW, y + r);
+    ctx.lineTo(x + barW, padding.top + chartH);
+    ctx.closePath();
+    ctx.fill();
+
+    // Value label above bar
+    ctx.fillStyle = '#333';
+    ctx.font = 'bold 12px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(comma(d.value) + '円', x + barW / 2, y - 8);
+
+    // Category label below bar
+    ctx.fillStyle = '#555';
+    ctx.font = '12px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(d.label, x + barW / 2, padding.top + chartH + 20);
+  });
+
+  // Saving annotation arrow between first two bars
+  if (monthlySaving > 0) {
+    var x1 = padding.left + gap + 0 * (barW + gap) + barW / 2;
+    var x2 = padding.left + gap + 1 * (barW + gap) + barW / 2;
+    var barH1 = (bill / maxVal) * chartH;
+    var barH2 = (newMonthly / maxVal) * chartH;
+    var y1 = padding.top + chartH - barH1;
+    var y2 = padding.top + chartH - barH2;
+    var midX = (x1 + x2) / 2;
+    var midY = Math.min(y1, y2) - 2;
+
+    // Draw bracket
+    ctx.strokeStyle = '#dc2626';
+    ctx.lineWidth = 1.5;
+    ctx.setLineDash([4, 3]);
+    ctx.beginPath();
+    ctx.moveTo(x1 + barW * 0.3, y1);
+    ctx.lineTo(midX, y1);
+    ctx.lineTo(midX, y2);
+    ctx.lineTo(x2 - barW * 0.3, y2);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.lineWidth = 1;
+
+    // Saving text
+    ctx.fillStyle = '#dc2626';
+    ctx.font = 'bold 13px sans-serif';
+    ctx.textAlign = 'center';
+    var savingY = (y1 + y2) / 2;
+    ctx.fillText('-' + comma(monthlySaving) + '円/月', midX + barW * 0.8, savingY);
+  }
+}
+
+/* ===== Init ===== */
+calc();
+
+/* Resize handler for chart */
+var resizeTimer;
+window.addEventListener('resize', function() {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(function() { drawBarChart(); }, 150);
+});
+
+})();
+</script>
+</body>
+</html>
