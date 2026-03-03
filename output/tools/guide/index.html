@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>海外のClaude使いが実際に稼いでいる方法 | Claude AI 副業ラボ</title>
+  <meta name="description" content="AI自身が検証・ランク付けした7つの手法。X・Medium・Indie Hackersの海外事例をAIが徹底検証。">
+  <style>
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+    }
+
+    body {
+      font-family: system-ui, "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif;
+      background-color: #0a0a0f;
+      color: #e8e8e8;
+      line-height: 1.8;
+      overflow-x: hidden;
+    }
+
+    /* ===== Utility ===== */
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .section {
+      padding: 80px 0;
+    }
+
+    @media (max-width: 600px) {
+      .section {
+        padding: 56px 0;
+      }
+    }
+
+    .section-label {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #e94560;
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-size: clamp(1.5rem, 4vw, 2rem);
+      font-weight: 800;
+      line-height: 1.4;
+      margin-bottom: 24px;
+      color: #ffffff;
+    }
+
+    .section-lead {
+      font-size: 1.05rem;
+      color: #a0a0b0;
+      margin-bottom: 40px;
+      line-height: 1.9;
+    }
+
+    /* ===== CTA Button ===== */
+    .cta-button {
+      display: inline-block;
+      background: linear-gradient(135deg, #e94560 0%, #c73050 100%);
+      color: #ffffff;
+      font-size: 1.1rem;
+      font-weight: 700;
+      text-decoration: none;
+      padding: 18px 48px;
+      border-radius: 60px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: 0 4px 24px rgba(233, 69, 96, 0.35);
+      letter-spacing: 0.02em;
+    }
+
+    .cta-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(233, 69, 96, 0.5);
+    }
+
+    .cta-button:active {
+      transform: translateY(0);
+    }
+
+    @media (max-width: 600px) {
+      .cta-button {
+        display: block;
+        text-align: center;
+        padding: 16px 32px;
+        font-size: 1rem;
+      }
+    }
+
+    /* ===== Hero ===== */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 80px 20px;
+      position: relative;
+      background: radial-gradient(ellipse at 50% 0%, rgba(15, 52, 96, 0.4) 0%, transparent 60%),
+                  radial-gradient(ellipse at 80% 80%, rgba(233, 69, 96, 0.08) 0%, transparent 50%);
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(255, 255, 255, 0.01) 2px,
+        rgba(255, 255, 255, 0.01) 4px
+      );
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+      max-width: 720px;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: rgba(233, 69, 96, 0.12);
+      border: 1px solid rgba(233, 69, 96, 0.3);
+      color: #e94560;
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 6px 16px;
+      border-radius: 20px;
+      margin-bottom: 28px;
+      letter-spacing: 0.05em;
+    }
+
+    .hero-title {
+      font-size: clamp(1.8rem, 6vw, 3.2rem);
+      font-weight: 900;
+      line-height: 1.3;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, #ffffff 30%, #a0c4ff 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-subtitle {
+      font-size: clamp(1rem, 3vw, 1.3rem);
+      font-weight: 500;
+      color: #b0b0c0;
+      margin-bottom: 20px;
+    }
+
+    .hero-description {
+      font-size: 0.95rem;
+      color: #808098;
+      margin-bottom: 40px;
+      line-height: 1.8;
+    }
+
+    .hero-price {
+      font-size: 0.9rem;
+      color: #a0a0b0;
+      margin-top: 16px;
+    }
+
+    .hero-price strong {
+      color: #ffffff;
+      font-size: 1.1rem;
+    }
+
+    /* ===== Problem Section ===== */
+    .problem {
+      background: linear-gradient(180deg, #0a0a0f 0%, #0d0d18 100%);
+    }
+
+    .problem-quote {
+      font-size: clamp(1.3rem, 4vw, 1.8rem);
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 8px;
+      line-height: 1.4;
+    }
+
+    .problem-question {
+      font-size: 1.1rem;
+      color: #e94560;
+      font-weight: 600;
+      margin-bottom: 32px;
+    }
+
+    .problem-text {
+      font-size: 1rem;
+      color: #a0a0b0;
+      margin-bottom: 20px;
+      line-height: 2;
+    }
+
+    .problem-highlight {
+      background: rgba(15, 52, 96, 0.3);
+      border-left: 3px solid #0f3460;
+      padding: 20px 24px;
+      border-radius: 0 8px 8px 0;
+      margin-top: 32px;
+      font-size: 1.05rem;
+      color: #c0c0d0;
+      line-height: 1.9;
+    }
+
+    .problem-highlight strong {
+      color: #ffffff;
+    }
+
+    /* ===== Features Section ===== */
+    .features {
+      background: linear-gradient(180deg, #0d0d18 0%, #0a0a0f 100%);
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 600px) {
+      .feature-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .feature-card {
+      background: rgba(15, 52, 96, 0.15);
+      border: 1px solid rgba(15, 52, 96, 0.3);
+      border-radius: 12px;
+      padding: 28px 24px;
+      transition: border-color 0.2s ease;
+    }
+
+    .feature-card:hover {
+      border-color: rgba(15, 52, 96, 0.6);
+    }
+
+    .feature-icon {
+      font-size: 1.6rem;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .feature-card h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 8px;
+    }
+
+    .feature-card p {
+      font-size: 0.9rem;
+      color: #8888a0;
+      line-height: 1.7;
+    }
+
+    /* ===== Methods Preview ===== */
+    .methods {
+      background: #0d0d18;
+    }
+
+    .method-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .method-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 12px;
+      padding: 20px 24px;
+      transition: background 0.2s ease, border-color 0.2s ease;
+    }
+
+    .method-item:hover {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .method-rank {
+      flex-shrink: 0;
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+    }
+
+    .rank-s {
+      background: linear-gradient(135deg, #e94560 0%, #c73050 100%);
+      color: #ffffff;
+      box-shadow: 0 2px 12px rgba(233, 69, 96, 0.3);
+    }
+
+    .rank-a {
+      background: linear-gradient(135deg, #f5a623 0%, #d4911e 100%);
+      color: #ffffff;
+      box-shadow: 0 2px 12px rgba(245, 166, 35, 0.25);
+    }
+
+    .rank-b {
+      background: linear-gradient(135deg, #0f3460 0%, #0a2848 100%);
+      color: #a0c4ff;
+      box-shadow: 0 2px 12px rgba(15, 52, 96, 0.3);
+    }
+
+    .method-content {
+      flex: 1;
+    }
+
+    .method-name {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 4px;
+    }
+
+    .method-revenue {
+      font-size: 0.85rem;
+      color: #e94560;
+      font-weight: 600;
+    }
+
+    .method-bonus {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(233, 69, 96, 0.06);
+      border: 1px dashed rgba(233, 69, 96, 0.25);
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin-top: 8px;
+    }
+
+    .method-bonus-icon {
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+
+    .method-bonus-text {
+      font-size: 0.9rem;
+      color: #c0a0a8;
+      font-weight: 500;
+    }
+
+    /* ===== Target Audience ===== */
+    .audience {
+      background: linear-gradient(180deg, #0d0d18 0%, #0a0a0f 100%);
+    }
+
+    .audience-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .audience-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      font-size: 1rem;
+      color: #c0c0d0;
+      line-height: 1.7;
+    }
+
+    .audience-check {
+      flex-shrink: 0;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: rgba(233, 69, 96, 0.12);
+      border: 1px solid rgba(233, 69, 96, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 2px;
+    }
+
+    .audience-check::after {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #e94560;
+    }
+
+    /* ===== Pricing ===== */
+    .pricing {
+      background: radial-gradient(ellipse at 50% 50%, rgba(15, 52, 96, 0.25) 0%, transparent 60%);
+      text-align: center;
+    }
+
+    .pricing-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 20px;
+      padding: 48px 40px;
+      max-width: 520px;
+      margin: 0 auto 40px;
+    }
+
+    @media (max-width: 600px) {
+      .pricing-card {
+        padding: 36px 24px;
+      }
+    }
+
+    .pricing-amount {
+      font-size: clamp(2.5rem, 8vw, 3.5rem);
+      font-weight: 900;
+      color: #ffffff;
+      margin-bottom: 8px;
+    }
+
+    .pricing-amount span {
+      font-size: 0.4em;
+      font-weight: 500;
+      color: #a0a0b0;
+      vertical-align: middle;
+    }
+
+    .pricing-note {
+      font-size: 0.95rem;
+      color: #808098;
+      margin-bottom: 32px;
+    }
+
+    .pricing-description {
+      font-size: 1rem;
+      color: #a0a0b0;
+      margin-bottom: 36px;
+      line-height: 1.9;
+    }
+
+    /* ===== FAQ ===== */
+    .faq {
+      background: #0a0a0f;
+    }
+
+    .faq-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .faq-item {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 12px;
+      padding: 24px 28px;
+    }
+
+    .faq-question {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .faq-q-mark {
+      flex-shrink: 0;
+      color: #e94560;
+      font-weight: 800;
+    }
+
+    .faq-answer {
+      font-size: 0.95rem;
+      color: #a0a0b0;
+      line-height: 1.8;
+      padding-left: 26px;
+    }
+
+    /* ===== Footer ===== */
+    .footer {
+      padding: 40px 20px;
+      text-align: center;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .footer-brand {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #808098;
+      margin-bottom: 8px;
+    }
+
+    .footer-social a {
+      color: #606078;
+      font-size: 0.85rem;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .footer-social a:hover {
+      color: #e94560;
+    }
+
+    .footer-copy {
+      font-size: 0.8rem;
+      color: #404058;
+      margin-top: 12px;
+    }
+
+    /* ===== Divider ===== */
+    .divider {
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(90deg, #e94560, #0f3460);
+      border-radius: 2px;
+      margin: 0 auto 40px;
+    }
+
+    .divider-left {
+      margin: 0 0 40px 0;
+    }
+
+    /* ===== Animations ===== */
+    @media (prefers-reduced-motion: no-preference) {
+      .fade-in {
+        opacity: 0;
+        transform: translateY(24px);
+        transition: opacity 0.6s ease, transform 0.6s ease;
+      }
+
+      .fade-in.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero">
+    <div class="hero-inner">
+      <span class="hero-badge">Claude AI 副業ラボ</span>
+      <h1 class="hero-title">海外のClaude使いが<br>実際に稼いでいる方法</h1>
+      <p class="hero-subtitle">AI自身が検証・ランク付けした7つの手法</p>
+      <p class="hero-description">
+        X・Medium・Indie Hackersの海外事例をAIが徹底検証。<br>
+        本当に収益が出ている手法だけを厳選し、日本市場での再現手順とともにお届けします。
+      </p>
+      <a href="https://payhip.com/b/uPjxK" class="cta-button">&yen;1,480で今すぐ手に入れる &rarr;</a>
+      <p class="hero-price">買い切り <strong>&yen;1,480</strong>（税込）</p>
+    </div>
+  </section>
+
+  <!-- ===== PROBLEM ===== -->
+  <section class="section problem">
+    <div class="container fade-in">
+      <span class="section-label">Problem</span>
+      <p class="problem-quote">「Claudeで月30万稼げます！」</p>
+      <p class="problem-question">&larr; 本当？</p>
+
+      <p class="problem-text">
+        ネット上にはAI副業の情報が溢れています。<br>
+        しかし、その大半は「その記事自体のアフィリエイト」で稼いでいるだけ。<br>
+        記事の内容で稼いでいるのではなく、記事を書くこと自体が収益源という構造です。
+      </p>
+
+      <p class="problem-text">
+        では、本当にAIを使って稼いでいる人はどこにいるのか？
+      </p>
+
+      <div class="problem-highlight">
+        <strong>答えは海外です。</strong><br>
+        英語圏のX、Medium、Indie Hackersには、Claude Codeを使って実際にプロダクトを作り、月数十万〜数百万円の収益を上げている人たちがいます。しかも、その情報はほとんどが英語のまま埋もれています。
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FEATURES ===== -->
+  <section class="section features">
+    <div class="container fade-in">
+      <span class="section-label">Features</span>
+      <h2 class="section-title">このガイドの特徴</h2>
+      <div class="divider divider-left"></div>
+
+      <div class="feature-grid">
+        <div class="feature-card">
+          <span class="feature-icon" role="img" aria-label="調査">&#x1F50D;</span>
+          <h3>AIが海外ソースを直接調査</h3>
+          <p>Claude AI自身がX・Medium・Indie Hackersの英語情報を網羅的にリサーチ。人間のバイアスを排除した客観的な調査です。</p>
+        </div>
+        <div class="feature-card">
+          <span class="feature-icon" role="img" aria-label="厳選">&#x2705;</span>
+          <h3>実際に収益が出ている手法のみ</h3>
+          <p>「やってみた」ではなく「実際に稼いでいる」事例をもとに、再現性のある手法だけを厳選しています。</p>
+        </div>
+        <div class="feature-card">
+          <span class="feature-icon" role="img" aria-label="ランク">&#x1F3AF;</span>
+          <h3>S〜D級の明確なランク付け</h3>
+          <p>各手法を難易度・収益性・再現性で総合評価。あなたのスキルに合った手法がすぐに見つかります。</p>
+        </div>
+        <div class="feature-card">
+          <span class="feature-icon" role="img" aria-label="日本向け">&#x1F5FE;</span>
+          <h3>日本市場での再現手順付き</h3>
+          <p>海外の手法をそのまま紹介するのではなく、日本で実践するための具体的なステップを収録しています。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== METHODS PREVIEW ===== -->
+  <section class="section methods">
+    <div class="container fade-in">
+      <span class="section-label">Contents</span>
+      <h2 class="section-title">収録内容プレビュー</h2>
+      <p class="section-lead">ガイドに収録されている7つの手法をチラ見せ。各手法には詳細な解説・収益モデル・日本市場での実践ステップが含まれています。</p>
+
+      <div class="method-list">
+        <div class="method-item">
+          <div class="method-rank rank-s">S級</div>
+          <div class="method-content">
+            <div class="method-name">Vibe Codingマイクロアプリ量産</div>
+            <div class="method-revenue">月5〜80万円</div>
+          </div>
+        </div>
+
+        <div class="method-item">
+          <div class="method-rank rank-s">S級</div>
+          <div class="method-content">
+            <div class="method-name">デジタルプロダクト小出し販売</div>
+            <div class="method-revenue">月10〜140万円</div>
+          </div>
+        </div>
+
+        <div class="method-item">
+          <div class="method-rank rank-s">S級</div>
+          <div class="method-content">
+            <div class="method-name">LP+集客セット販売</div>
+            <div class="method-revenue">月10〜30万円</div>
+          </div>
+        </div>
+
+        <div class="method-item">
+          <div class="method-rank rank-a">A級</div>
+          <div class="method-content">
+            <div class="method-name">AI出版</div>
+            <div class="method-revenue">月5〜60万円</div>
+          </div>
+        </div>
+
+        <div class="method-item">
+          <div class="method-rank rank-a">A級</div>
+          <div class="method-content">
+            <div class="method-name">SNS特化ツール販売</div>
+            <div class="method-revenue">青天井</div>
+          </div>
+        </div>
+
+        <div class="method-item">
+          <div class="method-rank rank-b">B級</div>
+          <div class="method-content">
+            <div class="method-name">比較検証コンテンツ</div>
+            <div class="method-revenue">月3〜10万円</div>
+          </div>
+        </div>
+
+        <div class="method-item">
+          <div class="method-rank rank-b">B級</div>
+          <div class="method-content">
+            <div class="method-name">AI導入コンサル</div>
+            <div class="method-revenue">月20〜75万円</div>
+          </div>
+        </div>
+
+        <div class="method-bonus">
+          <span class="method-bonus-icon" role="img" aria-label="注意">&#x26A0;&#xFE0F;</span>
+          <span class="method-bonus-text">＋「稼げそうで稼げない手法」の注意喚起も収録</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== TARGET AUDIENCE ===== -->
+  <section class="section audience">
+    <div class="container fade-in">
+      <span class="section-label">Who is this for</span>
+      <h2 class="section-title">こんな人におすすめ</h2>
+      <div class="divider divider-left"></div>
+
+      <ul class="audience-list">
+        <li>
+          <span class="audience-check"></span>
+          AIで副業したいが、何から始めていいかわからない
+        </li>
+        <li>
+          <span class="audience-check"></span>
+          ChatGPTやClaudeは使っているが、マネタイズできていない
+        </li>
+        <li>
+          <span class="audience-check"></span>
+          海外の最新AI副業トレンドを日本語で知りたい
+        </li>
+        <li>
+          <span class="audience-check"></span>
+          情報商材に騙されたくない
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ===== PRICING ===== -->
+  <section class="section pricing">
+    <div class="container fade-in">
+      <span class="section-label">Pricing</span>
+      <h2 class="section-title">シンプルな買い切り価格</h2>
+      <div class="divider"></div>
+
+      <div class="pricing-card">
+        <div class="pricing-amount">&yen;1,480<span>（税込）</span></div>
+        <p class="pricing-note">ランチ1回分の投資で</p>
+        <p class="pricing-description">
+          この価格で、海外のClaude勢が実際に稼いでいる手法の全体像がわかります。<br>
+          どの手法が自分に合っているのか、何から始めるべきなのか。<br>
+          迷う時間をこの1冊で短縮できます。
+        </p>
+        <a href="https://payhip.com/b/uPjxK" class="cta-button">&yen;1,480で今すぐ手に入れる &rarr;</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FAQ ===== -->
+  <section class="section faq">
+    <div class="container fade-in">
+      <span class="section-label">FAQ</span>
+      <h2 class="section-title">よくある質問</h2>
+      <div class="divider divider-left"></div>
+
+      <div class="faq-list">
+        <div class="faq-item">
+          <div class="faq-question">
+            <span class="faq-q-mark">Q.</span>
+            プログラミングスキルは必要ですか？
+          </div>
+          <p class="faq-answer">不要な手法も含まれています。各手法に必要なスキルレベルを明記しているので、ご自身に合ったものを選べます。</p>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question">
+            <span class="faq-q-mark">Q.</span>
+            ChatGPTでも使えますか？
+          </div>
+          <p class="faq-answer">基本的な考え方は共通ですが、Claude Code特有の手法が中心です。Claudeを使っている方、これから使い始める方に最適な内容になっています。</p>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question">
+            <span class="faq-q-mark">Q.</span>
+            返金はできますか？
+          </div>
+          <p class="faq-answer">デジタル商品のため、購入後の返金には対応しておりません。ご了承ください。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <p class="footer-brand">Claude AI 副業ラボ</p>
+    <p class="footer-social">
+      <a href="https://x.com/ClaudeAI_fukugyou_lab" target="_blank" rel="noopener noreferrer">X: @ClaudeAI_fukugyou_lab</a>
+    </p>
+    <p class="footer-copy">&copy; 2026 Claude AI 副業ラボ</p>
+  </footer>
+
+  <!-- ===== Scroll Animation ===== -->
+  <script>
+    (function () {
+      var targets = document.querySelectorAll('.fade-in');
+      if (!targets.length) return;
+
+      if (!('IntersectionObserver' in window)) {
+        targets.forEach(function (t) { t.classList.add('visible'); });
+        return;
+      }
+
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.15 });
+
+      targets.forEach(function (t) { observer.observe(t); });
+    })();
+  </script>
+
+</body>
+</html>
