@@ -1,373 +1,234 @@
 [
   {
-    "id": "post_02_kakutei",
-    "body": "確定申告、ちゃんと準備できてる人どれくらいいる？\n\n「副業の税金っていくら？」\n「手取りって結局いくら？」\n\nこの2つに即答できない人、割と多い。\n\n年収を入れるだけで所得税・住民税・社会保険料を全部自動計算するツールをClaude AIで作った。\n\n使ってみた人いたら感想教えて。",
-    "reply": "ツールはこちらです（無料）\nhttps://ai-money-lab.github.io/benri-tools/tax-calculator/",
+    "id": "v3_01_tedori",
+    "body": "年収500万の手取り、知ってる？\n\n答え：約390万。\n\n110万円は税金と社会保険で消える。\n\n年収別の手取り率：\n300万 → 82%（246万）\n500万 → 78%（390万）\n700万 → 75%（525万）\n1000万 → 72%（720万）\n\n年収上がるほど税率も上がる残酷な現実。\n\nあなたの年収の手取り率、何%だった？\nリプで教えて",
+    "reply": "自分の年収で正確に計算できます\nhttps://ai-money-lab.github.io/benri-tools/salary-calculator/",
     "posted": true,
-    "posted_at": "2026-02-16T19:00:30.543495"
+    "posted_at": "2026-02-23T18:19:56.290295"
   },
   {
-    "id": "post_01_buzz",
-    "body": "Claude AIに「お金の計算ツール16個作って」と頼んだら\n\n本当に全部作ってくれた。\n\n・税金計算\n・年収手取り\n・住宅ローン\n・格安SIM比較\n・新NISA\n・ふるさと納税\n・年金受給額\n・配当金シミュレーション\n他8個\n\n自分はコード1行も書いてない。\n\nこれ見てまだ「AIは使えない」って言える？",
-    "reply": "全ツール無料で公開してます。\nhttps://ai-money-lab.github.io/benri-tools/",
+    "id": "v3_02_fukugyo_tax",
+    "body": "副業で年20万超えたら確定申告が必要。\n\n年収400万+副業100万の場合：\n追加の税金 → 約15万円\n\n知らずに無申告→\n延滞税+無申告加算税で最大20%上乗せ。\n\n副業してる人、\n税金ちゃんと計算した？\n\n副業の種類と金額、リプで教えてくれたら\nだいたいの税額お伝えします",
+    "reply": "年収と副業収入を入れるだけで自動計算\nhttps://ai-money-lab.github.io/benri-tools/tax-calculator/",
+    "posted": true,
+    "posted_at": "2026-02-24T12:16:07.940836"
+  },
+  {
+    "id": "v3_03_koujo_save",
+    "body": "会社員が使える控除、全部使ってる？\n\n✓ ふるさと納税（実質2000円で返礼品）\n✓ 医療費控除（年10万超で適用）\n✓ iDeCo（全額所得控除）\n✓ 生命保険料控除（最大12万）\n✓ 住宅ローン控除（最大35万/年）\n✓ セルフメディケーション税制\n✓ 扶養控除\n\n1つでも使ってないなら\n税金を多く払いすぎてる。\n\n保存して年末に見返して",
+    "reply": "ふるさと納税の控除上限額を計算\nhttps://ai-money-lab.github.io/benri-tools/furusato-tax/",
+    "posted": true,
+    "posted_at": "2026-02-24T20:01:07.546596"
+  },
+  {
+    "id": "v3_04_sim_debate",
+    "body": "まだ大手キャリアに\n月7000円払ってる人いる？\n\n格安SIMの月額：\npovo → 0円（基本料）\n日本通信 → 290円\nIIJmio → 850円（2GB）\nLINEMO → 990円（3GB）\n\n年間6〜8万円の差。\n10年で60〜80万円。\n\n「回線品質が…」→ドコモ/au/SB回線そのまま。\n\nそれでも変えない理由ある？\n大手キャリア派の意見も聞きたい",
+    "reply": "13社の料金を一覧で比較\nhttps://ai-money-lab.github.io/benri-tools/sim-comparison/",
+    "posted": true,
+    "posted_at": "2026-02-25T07:31:00.320962"
+  },
+  {
+    "id": "v3_05_sim_family",
+    "body": "親のスマホ代を格安SIMに変えた結果：\n\nBefore → 月7,238円（大手キャリア）\nAfter → 月990円（IIJmio 5GB）\n\n年間75,000円の節約。\n手続き30分。\n\n「よくわからないから」で\n毎月6,000円を捨ててた計算。\n\n自分のスマホ代は変えたけど、\n家族のまだの人、多いんじゃない？\n\n家族のスマホ代、月いくら？",
+    "reply": "最安プランが見つかる比較表\nhttps://ai-money-lab.github.io/benri-tools/sim-comparison/",
+    "posted": true,
+    "posted_at": "2026-02-25T12:16:00.791459"
+  },
+  {
+    "id": "v3_06_nisa_quiz",
+    "body": "クイズ：\n\n新NISAで月3万円を20年積み立て。\n年利5%だと、最終的にいくら？\n\nA. 720万円\nB. 985万円\nC. 1,233万円\nD. 1,500万円\n\n元本は720万円。\n差額は全部「複利」の力。\n\nしかもNISAなら運用益に税金ゼロ。\n通常口座だと利益に20%課税。\n\n答えは引用RTで",
+    "reply": "答え→C. 1,233万円\n自分の金額で計算\nhttps://ai-money-lab.github.io/benri-tools/nisa-simulator/",
+    "posted": true,
+    "posted_at": "2026-02-25T20:01:00.831521"
+  },
+  {
+    "id": "v3_07_fukuri",
+    "body": "複利が「後半に爆発する」のを\n数字で見てみよう。\n\n月3万円・年利5%の場合：\n\n10年目 → 466万（+106万）\n20年目 → 1,233万（+513万）\n30年目 → 2,497万（+1,417万）\n\n10年目：+106万\n20年目：+407万（10年分の増分）\n30年目：+904万（10年分の増分）\n\n後半10年で全体の半分以上増える。\n\n何年目から始めた？\nまだの人は「まだ」でOK。正直に教えて",
+    "reply": "自分の条件で複利計算\nhttps://ai-money-lab.github.io/benri-tools/compound-interest/",
+    "posted": true,
+    "posted_at": "2026-02-26T07:31:10.277437"
+  },
+  {
+    "id": "v3_08_haitou",
+    "body": "配当金で月5万の不労所得。\n必要な投資額：\n\n利回り3% → 2,000万\n利回り4% → 1,500万\n利回り5% → 1,200万\n\n遠い？\n\n月5万を年利4%で20年積むと\n→ 約1,830万。\n\n「月5万の積立」が\n20年後に「月5万の不労所得」に変わる。\n\n配当金もらってる人、\n年間いくら？",
+    "reply": "配当金シミュレーター\nhttps://ai-money-lab.github.io/benri-tools/dividend-yield/",
+    "posted": true,
+    "posted_at": "2026-02-26T12:15:59.565497"
+  },
+  {
+    "id": "v3_09_loan",
+    "body": "住宅ローンの「借りられる額」と\n「返せる額」は全然違う。\n\n年収500万の場合：\n銀行が貸す上限 → 約4,500万\n安全な目安 → 約2,500万\n\n4000万を0.7%で35年借りると\n利息だけで530万円。\n\n繰上返済100万すると\n利息が約40万円減る。\n\nマイホーム検討中の人、\n予算いくらで考えてる？",
+    "reply": "住宅ローンシミュレーター\nhttps://ai-money-lab.github.io/benri-tools/loan-calculator/",
+    "posted": true,
+    "posted_at": "2026-02-26T20:00:58.446173"
+  },
+  {
+    "id": "v3_10_rent_vs_buy",
+    "body": "持ち家vs賃貸。\n数字で決着つけよう。\n\n4000万の物件 vs 家賃12万\n35年の総コスト：\n\n持ち家 → 約5,800万\n（ローン+維持費+税金）\n賃貸 → 約5,400万\n（家賃+更新料）\n\nただし条件で簡単に逆転する。\n\n結局どっちが得かは\n「その人の条件」次第。\n\n持ち家派？賃貸派？\n理由もセットで教えて",
+    "reply": "あなたの条件で比較\nhttps://ai-money-lab.github.io/benri-tools/rent-vs-buy/",
+    "posted": true,
+    "posted_at": "2026-02-27T07:30:57.680312"
+  },
+  {
+    "id": "v3_11_nenkin",
+    "body": "将来の年金額、知ってる？\n\n会社員20年（平均年収400万）の場合：\n国民年金 → 約6.5万/月\n厚生年金 → 約8.5万/月\n合計 → 約15万/月\n\n老後に月25万必要なら\n毎月10万の赤字。\n20年で2,400万円足りない。\n\n「老後2000万問題」って\n控えめな数字だったりする。\n\n老後の備え、何かしてる？\nしてる人もしてない人もリプで教えて",
+    "reply": "年金受給額シミュレーター\nhttps://ai-money-lab.github.io/benri-tools/pension-calculator/",
+    "posted": true,
+    "posted_at": "2026-02-27T12:15:51.531277"
+  },
+  {
+    "id": "v3_12_fire",
+    "body": "FIRE（経済的自立）に必要な金額。\n4%ルールで計算：\n\n月15万で暮らす → 4,500万\n月20万で暮らす → 6,000万\n月25万で暮らす → 7,500万\n月30万で暮らす → 9,000万\n\n月10万を年利5%で積み立てると\n→ 20年で約4,100万\n→ 30年で約8,300万\n\nFIRE目指してる人いる？\n目標金額と現在地、教えて",
+    "reply": "FIRE達成シミュレーター\nhttps://ai-money-lab.github.io/benri-tools/retirement-fund/",
+    "posted": true,
+    "posted_at": "2026-02-27T20:00:57.201175"
+  },
+  {
+    "id": "v3_13_hoken",
+    "body": "保険を見直したら月1.2万浮いた。\n\n原因：独身なのに死亡保障3000万。\n→ 誰が受け取るの？\n\n必要保障額の目安：\n独身 → ほぼ不要\n夫婦のみ → 最低限\n子供1人 → 約2000万\n子供2人 → 約3000万\n\n保険は「不安」じゃなく「数字」で決める。\n\n保険料、月いくら払ってる？\n高すぎる人多い気がする",
+    "reply": "必要保障額を計算\nhttps://ai-money-lab.github.io/benri-tools/insurance-calculator/",
+    "posted": true,
+    "posted_at": "2026-02-28T07:30:58.136021"
+  },
+  {
+    "id": "v3_14_shitsugyo",
+    "body": "会社辞めたら失業保険いくら？\n\n月給30万・勤続5年の場合：\n日額 → 約5,900円\n給付日数 → 90日\n総額 → 約53万円\n\n注意：自己都合退職は\n2ヶ月の待機期間あり。\n\nその間の生活費、用意してる？\n\n転職考えてる人、\n退職金と失業保険、計算してから動こう。\n\n転職経験ある人、\n辞めてから何ヶ月で次決まった？",
+    "reply": "失業保険シミュレーター\nhttps://ai-money-lab.github.io/benri-tools/unemployment-benefit/",
+    "posted": true,
+    "posted_at": "2026-02-28T12:15:50.761868"
+  },
+  {
+    "id": "v3_15_furusato",
+    "body": "ふるさと納税やってない人、\n毎年損してる。\n\n年収別の控除上限：\n400万独身 → 約4.2万\n500万独身 → 約6.1万\n600万独身 → 約7.7万\n700万共働き → 約10.8万\n\n実質2,000円で上限額分の返礼品がもらえる。\n\n上限まで使わないと\n返礼品を捨ててるのと同じ。\n\nふるさと納税の返礼品、\n何もらった？おすすめ教えて",
+    "reply": "控除上限額を計算\nhttps://ai-money-lab.github.io/benri-tools/furusato-tax/",
+    "posted": true,
+    "posted_at": "2026-02-28T20:01:00.125543"
+  },
+  {
+    "id": "v3_16_fudousan",
+    "body": "不動産投資の利回り、\n「表面」と「実質」で全然違う。\n\n物件2000万・家賃8万/月の場合：\n表面利回り → 4.8%\n実質利回り → 3.2%\n\n差の1.6%は：\n管理費・修繕積立・固定資産税\n空室リスク・保険料\n\n「利回り5%」の営業トークに注意。\n\n不動産投資やってる人、\n実質利回り何%で回ってる？",
+    "reply": "不動産利回り計算\nhttps://ai-money-lab.github.io/benri-tools/real-estate-yield/",
+    "posted": true,
+    "posted_at": "2026-03-01T07:30:53.155598"
+  },
+  {
+    "id": "v3_17_koteihi",
+    "body": "固定費を月1万削るだけで\n年12万、10年で120万浮く。\n\n今すぐ見直す5つ：\n\n1. スマホ代（格安SIMで-5000円）\n2. 保険料（不要な特約削除で-3000円）\n3. サブスク（使ってないの解約）\n4. 電気代（新電力で-1000円）\n5. ネット回線（乗換えで-1000円）\n\n全部やると月1.5万、年18万の節約。\n\n保存して1つずつ潰して",
+    "reply": "まずスマホ代から。13社の料金比較（無料）\nhttps://ai-money-lab.github.io/benri-tools/sim-comparison/",
+    "posted": true,
+    "posted_at": "2026-03-02T20:01:02.230896"
+  },
+  {
+    "id": "v3_18_ikukyu",
+    "body": "育休中にもらえるお金：\n\n月給30万の場合\n最初の6ヶ月 → 月約20万（67%）\n7ヶ月〜 → 月約15万（50%）\n最大2年間。\n\nさらに：\n出産育児一時金 → 50万\n出産手当金 → 約65万\n\n合計すると結構もらえる。\n知らないと数十万円の損。\n\n周りに妊娠中の人がいたら教えてあげて。\n保存推奨",
+    "reply": "自分の月給で給付額を計算（無料）\nhttps://ai-money-lab.github.io/benri-tools/childcare-leave/",
     "posted": false
   },
   {
-    "id": "post_03_sim",
-    "body": "スマホ代、月いくら払ってますか？\n\n格安SIM13社を毎日自動で料金収集して比較表にするシステムをClaude AIで作った。\n\npovo → 基本0円\n日本通信SIM → 1GB 290円\nNUROモバイル → 3GB 792円\n\n大手キャリアに月7,000円払ってるの、マジでもったいない。",
-    "reply": "13社の最新料金比較はこちら\nhttps://ai-money-lab.github.io/benri-tools/sim-comparison/",
+    "id": "v3_19_car",
+    "body": "車の年間維持費、計算したことある？\n\n軽自動車でも年間約40万円：\n自動車税 → 1.1万\n任意保険 → 5万\n車検 → 4万（年割）\nガソリン → 10万\n駐車場 → 12万\nメンテ → 5万\n\n10年で400万。\n普通車なら10年で600万。\n\n車を買う前に一度計算した方がいい。\n保存推奨",
+    "reply": "年間維持費を自動計算（無料）\nhttps://ai-money-lab.github.io/benri-tools/car-cost/",
     "posted": false
   },
   {
-    "id": "post_04_nisa",
-    "body": "新NISAで月3万円を20年積み立てたら？\n\n元本：720万円\n運用益：+513万円\n合計：1,233万円\n\nこれ利回り5%の場合だけど、7%なら1,563万円になる。\n\nこの差をちゃんと数字で見たことある人、意外と少ない。",
-    "reply": "自分の条件で計算できるシミュレーター作りました\nhttps://ai-money-lab.github.io/benri-tools/nisa-simulator/",
+    "id": "v3_20_money_list",
+    "body": "お金で損してる人の共通点5つ：\n\n1. 手取りと額面の違いを知らない\n2. ふるさと納税を使ってない\n3. 保険を「なんとなく」で契約\n4. 格安SIMに変えてない\n5. NISAを始めてない\n\n全部「知らない」だけで損してる。\n1つでも該当するなら今日から直せる。\n\n保存して1つずつ潰して",
+    "reply": "全部3秒で計算できるツール集（無料・登録不要）\nhttps://ai-money-lab.github.io/benri-tools/",
     "posted": false
   },
   {
-    "id": "post_05_furusato",
-    "body": "ふるさと納税で損してる人の特徴：\n\n「なんとなく3万円くらい」で寄附してる。\n\n年収500万円・独身なら控除上限は約6万円。\n年収700万円・共働きなら約10万円。\n\n上限まで使い切らないと、もらえるはずの返礼品を捨ててるのと同じ。\n\nあなたの上限額、いくらか知ってる？",
-    "reply": "年収と家族構成を入れるだけで上限額がわかります\nhttps://ai-money-lab.github.io/benri-tools/furusato-tax/",
+    "id": "v3_21_20dai",
+    "body": "20代で絶対やるべきお金のこと\n\n1. 格安SIMに変える（年7万節約）\n2. ふるさと納税を上限まで使う\n3. つみたてNISAを始める\n4. 不要な保険を解約する\n5. 固定費を全部見直す\n\n全部「知ってるかどうか」だけの差。\n30代で気づくと10年分の機会損失。\n\nこれ知ってるだけで人生変わる。\n20代の知り合いに教えてあげて",
+    "reply": "まず手取り額を3秒で確認（無料）\nhttps://ai-money-lab.github.io/benri-tools/salary-calculator/",
     "posted": false
   },
   {
-    "id": "post_06_ai",
-    "body": "「AIって結局何に使えるの？」\n\n実例を見せます。\n\nClaude AIだけで作ったもの：\n・Webツール16個\n・格安SIMの料金自動収集\n・SNS画像の自動生成\n・毎朝6時に全自動更新\n\n人間がやったこと：\n・「作って」と指示した\n\n開発費：0円\n開発期間：2日\n\nAIを使う側と使わない側、差がつくのはこれからです。",
-    "reply": "全ツールはここで公開してます\nhttps://ai-money-lab.github.io/benri-tools/",
+    "id": "v3_22_fuufu",
+    "body": "同じ世帯年収800万でも\n手取りが40万違う事実。\n\n共働き（400万+400万）→ 手取り630万\n片働き（800万）→ 手取り590万\n\n累進課税のせいで\n1人で稼ぐほど税率が上がる。\n\nつまり共働きは「節税」でもある。\n\n知らなかった人、保存しておいて。\n夫婦で話すきっかけになるはず",
+    "reply": "世帯の手取りを3秒で計算（無料）\nhttps://ai-money-lab.github.io/benri-tools/salary-calculator/",
     "posted": false
   },
   {
-    "id": "post_08_fukuri",
-    "body": "複利を知ってる人は多い。\n\nでも自分の場合いくらになるか計算した人は少ない。\n\n月3万円・年利5%の場合：\n\n10年後→466万円(+106万)\n20年後→1,233万円(+513万)\n30年後→2,497万円(+1,417万)\n\n20年目から爆発的に増える。これが複利の本質。\n\n1年遅れるだけで30年後に150万円の差。",
-    "reply": "自分の金額・利率で計算できます\nhttps://ai-money-lab.github.io/benri-tools/compound-interest/",
+    "id": "v3_23_bonus",
+    "body": "ボーナスの手取り、\n思ったより少なくない？\n\n額面50万 → 手取り約40万（80%）\n額面100万 → 手取り約77万（77%）\n\n所得税+住民税+社会保険で\n2〜3割消える。\n\n「ボーナス○ヶ月分」の求人、\n手取りで考えないと入社後にガッカリする。\n\n転職活動中の人は特に要注意。\n保存して見返して",
+    "reply": "ボーナス込みの手取りを計算（無料）\nhttps://ai-money-lab.github.io/benri-tools/salary-calculator/",
     "posted": false
   },
   {
-    "id": "post_07_ievsyachin",
-    "body": "持ち家と賃貸、結局どっちが得なのか。\n\n感情論じゃなくて数字で比較した。\n\n4,000万円の物件（金利0.7%・35年ローン）vs 家賃12万円\n\n35年後の総コスト：\n持ち家 → 約5,800万円\n賃貸 → 約5,400万円\n\nただしこれ、条件で全然変わる。\n\nあなたはどっち派？",
-    "reply": "自分の条件でシミュレーションできます\nhttps://ai-money-lab.github.io/benri-tools/rent-vs-buy/",
+    "id": "v3_24_quiz_fukuri",
+    "body": "お金クイズ：\n\n月3万円を年利5%で30年積み立てたら\n合計いくらになる？\n\nA. 1,080万（元本のみ）\nB. 1,500万\nC. 2,497万\nD. 3,200万\n\nヒント：\n元本は1,080万。\n複利の力は「後半」に爆発する。\n\n正解は↓のツールで確認できる。\n自分の金額でも計算してみて",
+    "reply": "正解→C. 2,497万円\n自分の金額で計算（無料）\nhttps://ai-money-lab.github.io/benri-tools/compound-interest/",
     "posted": false
   },
   {
-    "id": "post_09_haitou",
-    "body": "配当金で月5万円の不労所得を作るのに必要な金額：\n\n利回り3% → 2,000万円\n利回り4% → 1,500万円\n利回り5% → 1,200万円\n\n「遠い」と思うかもしれないけど、月3万円の積立を20年続ければ届く世界。\n\n配当金生活、あなたなら何年で達成できる？",
-    "reply": "配当シミュレーターで計算してみてください\nhttps://ai-money-lab.github.io/benri-tools/dividend-yield/",
+    "id": "v3_25_quiz_tedori",
+    "body": "クイズ：\n\n年収1000万の月の手取り、\nいくらだと思う？\n\nA. 約83万\nB. 約72万\nC. 約60万\nD. 約55万\n\nヒント：\n税金+社会保険で約28%消える。\n\n意外と少なくて驚くはず。\n答えは↓のツールで3秒で確認できる",
+    "reply": "正解→C（月60万）\n自分の年収で計算（無料）\nhttps://ai-money-lab.github.io/benri-tools/salary-calculator/",
     "posted": false
   },
   {
-    "id": "post_10_thread",
-    "body": "Claude AIで作った無料ツール16個：\n\n税金/年収手取り/住宅ローン\n格安SIM比較/投資リターン\n新NISA/ふるさと納税上限額\n保険必要額/年金受給額\nFIRE達成/配当金/不動産利回り\n失業保険/老後資金/複利計算\n持ち家vs賃貸\n\n全部無料、ブラウザだけで使える。",
-    "reply": "こちらからどうぞ\nhttps://ai-money-lab.github.io/benri-tools/",
+    "id": "v3_26_ai_story",
+    "body": "AIに「お金の計算ツール21個作って」\nと頼んだら本当に全部作ってくれた。\n\n税金/手取り/住宅ローン\n格安SIM比較/NISA/ふるさと納税\n年金/配当金/複利計算\n持ち家vs賃貸/FIRE/失業保険\n保険/不動産利回り/車維持費/育休/電気代…\n\nコード0行。開発費0円。\n\nAIで副業したい人、作り方はNoteで全公開中",
+    "reply": "全21ツール、無料で公開中↓\nhttps://ai-money-lab.github.io/benri-tools/",
     "posted": false
   },
   {
-    "id": "post_11_nenkin",
-    "body": "年金、月いくらもらえるか知ってる？\n\n会社員20年（平均年収400万）の場合：\n国民年金 → 約6.5万円/月\n厚生年金 → 約8.5万円/月\n合計 → 約15万円/月\n\n「思ったより少ない」と感じた人、正しい。\n\n老後に月25万円必要なら、毎月10万円の不足。\n20年で2,400万円足りない。\n\n自分の場合いくらか、計算してみて。",
-    "reply": "年金受給額シミュレーターはこちら（無料）\nhttps://ai-money-lab.github.io/benri-tools/pension-calculator/",
+    "id": "v3_27_tools_save",
+    "body": "お金の計算で困ったら使ってほしい\n無料ツール21個をAIで作った。\n\n・年収→手取り計算\n・税金計算（副業対応）\n・住宅ローン/持ち家vs賃貸\n・格安SIM 13社比較\n・新NISA/複利/配当金\n・ふるさと納税 上限額\n・年金受給額/退職金\n・FIRE達成計算\n・失業保険/保険必要額\n・車維持費/育休給付金/電気代\n\n全部ブラウザだけ。登録不要。\n\n保存しておくと便利",
+    "reply": "全21ツール、無料・登録不要↓\nhttps://ai-money-lab.github.io/benri-tools/",
     "posted": false
   },
   {
-    "id": "post_12_hoken",
-    "body": "生命保険、入りすぎてませんか？\n\n独身なら基本不要。\n共働き子供なしでも最低限でいい。\n\n本当に必要な保障額は：\n子供1人 → 約2,000万円\n子供2人 → 約3,000万円\n住宅ローンあり → 団信でカバー\n\n保険の見直しで月1万円以上浮く人、かなり多い。",
-    "reply": "あなたに必要な保障額を計算できます\nhttps://ai-money-lab.github.io/benri-tools/insurance-calculator/",
+    "id": "v3_28_nisa_tax",
+    "body": "新NISAの「節税額」を\n具体的に計算してみた。\n\n月3万×20年（利回り5%）の場合：\n運用益 → 513万円\n\n通常口座の税金（20.315%）\n→ 約104万円\n\nNISAならこの104万がまるまる手元に。\n\n20年で車1台分の差。\nNISAまだの人、今日始めても遅くない。\n\n保存して",
+    "reply": "自分の積立額で非課税メリットを計算（無料）\nhttps://ai-money-lab.github.io/benri-tools/nisa-simulator/",
     "posted": false
   },
   {
-    "id": "post_13_shitsugyo",
-    "body": "会社を辞めた後の失業保険、いくらもらえるか即答できる？\n\n月給30万円・勤続5年の場合：\n日額 → 約5,900円\n給付日数 → 90日\n総額 → 約53万円\n\n自己都合退職だと2ヶ月の待機期間がある。\nその間の生活費、準備してる？\n\n辞める前に計算しておいた方がいい。",
-    "reply": "自分の条件で失業保険額を計算できます\nhttps://ai-money-lab.github.io/benri-tools/unemployment-benefit/",
+    "id": "v3_29_taishoku",
+    "body": "退職金の相場：\n\n大企業（勤続20年）→ 約1,000万\n中小企業（勤続20年）→ 約400万\n\n差は600万。\n\nしかも退職金にも税金がかかる。\n勤続20年なら800万まで非課税。\n超えた分には所得税。\n\n退職金の額、正確に把握してる人少ない。\n辞める前に一度計算しておこう。\n保存推奨",
+    "reply": "退職金の手取りを3秒で計算（無料）\nhttps://ai-money-lab.github.io/benri-tools/retirement-calculator/",
     "posted": false
   },
   {
-    "id": "post_14_loan",
-    "body": "住宅ローン、借りすぎてない？\n\n年収500万で借りられる上限は約4,500万円。\nでも安全な借入額は年収の5倍＝2,500万円。\n\n4,000万を0.7%・35年で借りると：\n月々返済 → 約10.8万円\n総返済額 → 約4,530万円\n利息だけで530万円。\n\n繰上返済すると100万以上の差がつく。",
-    "reply": "住宅ローンシミュレーターで計算してみて\nhttps://ai-money-lab.github.io/benri-tools/loan-calculator/",
+    "id": "v3_30_denki",
+    "body": "電力会社を変えるだけで\n月1,200円安くなった。\n\n手続き：10分\n工事：なし\n解約金：なし\n\n年間14,400円の節約。\n10年で14万円。\n\n「面倒」で放置してる人、\nその面倒は10分で終わる。\n\n保存して今週中にやろう。\n10分で年1.4万円の節約になる",
+    "reply": "あなたの電気代、いくら安くなるか計算（無料）\nhttps://ai-money-lab.github.io/benri-tools/electricity-cost/",
     "posted": false
   },
   {
-    "id": "post_15_tedori",
-    "body": "年収と手取り、差がどれだけあるか知ってる？\n\n年収400万 → 手取り約315万（79%）\n年収600万 → 手取り約460万（77%）\n年収800万 → 手取り約590万（74%）\n年収1000万 → 手取り約720万（72%）\n\n年収が上がるほど税金の取り分が増える。\n\n転職で年収100万アップしても手取りは70万しか増えない。",
-    "reply": "正確な手取り額を計算できます\nhttps://ai-money-lab.github.io/benri-tools/salary-calculator/",
-    "posted": false
+    "id": "v3_31",
+    "body": "「Claudeで月30万稼げます！」\n\n←これ、本当？\n\nClaude AI自身が海外のX・Medium・Indie Hackersを調査して、実際に稼いでいる手法だけをS〜D級にランク付けしました。\n\n結果はプロフのリンクから👇\n#Claude #AI副業 #副業",
+    "reply": "S級の手法は3つ。どれも初期コスト3000円以下で始められます。海外では月140万円の実績も。日本語の詳細ガイドを1,480円で公開中。",
+    "posted": false,
+    "posted_at": null
   },
   {
-    "id": "post_16_taishoku",
-    "body": "退職金、いくらもらえるか計算したことある？\n\n大企業（勤続20年）→ 約1,000万円\n中小企業（勤続20年）→ 約400万円\n\nこの差、知らないと人生設計が狂う。\n\nしかも退職金にも税金がかかる。\n勤続20年なら800万円までは非課税だけど、それを超えると課税される。",
-    "reply": "退職金の手取り額をシミュレーションできます\nhttps://ai-money-lab.github.io/benri-tools/retirement-calculator/",
-    "posted": false
+    "id": "v3_32",
+    "body": "海外のClaude使いがマジで稼いでる方法TOP3：\n\n1⃣ Vibe Codingでアプリ量産（月5〜80万）\n2⃣ デジタルプロダクト小出し販売（月10〜140万）\n3⃣ LP+集客セット納品（月10〜30万）\n\n全部Claude Codeでできる。詳細はプロフから\n#AI副業 #ClaudeCode",
+    "reply": "3つとも共通してるのは「Claudeに作らせて、自分は売ることに集中する」こと。具体的な手順を日本語でまとめたガイドを公開してます。",
+    "posted": false,
+    "posted_at": null
   },
   {
-    "id": "post_17_fudousan",
-    "body": "不動産投資の利回り、表面と実質で全然違う。\n\n物件価格2,000万・家賃8万/月の場合：\n表面利回り → 4.8%\n実質利回り → 3.2%（管理費・修繕・税金込み）\n\nこの差を知らずに「利回り5%」に飛びつく人が多い。\n\nまず数字で判断するクセをつけよう。",
-    "reply": "不動産利回りを正確に計算できます\nhttps://ai-money-lab.github.io/benri-tools/real-estate-yield/",
-    "posted": false
+    "id": "v3_33",
+    "body": "AI副業の情報、99%はウソです。\n\n「コピペで月30万」→ その記事のアフィリで稼いでるだけ\n「プロンプト集販売」→ 差別化できず価格競争\n「SEO記事量産」→ Google がAI記事を評価下げ\n\n本当に稼いでる人は海外にいます。\nその手法を日本語でまとめました👇",
+    "reply": "海外のIndie Hackerは3ヶ月で月930万円のツールを作った事例も。でも日本では誰もやってない。先行者利益が取れるうちに知っておくべき情報です。",
+    "posted": false,
+    "posted_at": null
   },
   {
-    "id": "post_18_fire",
-    "body": "FIREに必要な資産額、計算してみた。\n\n月の生活費25万円の場合：\n年間支出 → 300万円\n必要資産（4%ルール）→ 7,500万円\n\n月3万円を年利5%で積み立てると：\n30年で約2,500万円。\n\n7,500万には届かない。月10万の積立で約8,300万。\n\nFIREの現実、数字で見ると冷静になれる。",
-    "reply": "老後資金シミュレーターで計算してみて\nhttps://ai-money-lab.github.io/benri-tools/retirement-fund/",
-    "posted": false
+    "id": "v3_34",
+    "body": "Claude Codeで19日間、たった2万円でChrome拡張を作った人がいる。\n\nそれが今、月額課金で収益を生んでいる。\n\n非エンジニアでもできる「Vibe Coding」という新しい稼ぎ方。\n\n海外では当たり前になりつつあるけど、日本ではまだほぼ誰もやってない。",
+    "reply": "100人×月額5000円=月50万円。これがマイクロSaaSの現実的なライン。Claude Codeがあれば、プログラミング経験ゼロでも作れる時代です。",
+    "posted": false,
+    "posted_at": null
   },
   {
-    "id": "post_19_kakuteiyohi",
-    "body": "副業で20万円稼いだら確定申告が必要。\n\nでも「20万円ルール」を誤解してる人が多い。\n\n・売上20万ではなく所得（売上-経費）20万\n・住民税の申告は1円でも必要\n・メルカリの生活用品売却は非課税\n\n自分が申告必要かどうか、3問で判定できるチェッカー作った。",
-    "reply": "確定申告が必要か30秒でわかります\nhttps://ai-money-lab.github.io/benri-tools/tax-return-checker/",
-    "posted": false
-  },
-  {
-    "id": "post_20_toushi",
-    "body": "100万円を投資したら10年後いくらになる？\n\n年利3% → 134万円\n年利5% → 163万円\n年利7% → 197万円\n年利10% → 259万円\n\nたった2%の差で10年後に30万円以上変わる。\n\n銀行預金（0.01%）に100万預けても10年で+1,000円。\n\n「投資しない」も立派なリスク。",
-    "reply": "投資リターン計算機はこちら\nhttps://ai-money-lab.github.io/benri-tools/investment-return/",
-    "posted": false
-  },
-  {
-    "id": "post_21_72rule",
-    "body": "投資の「72の法則」知ってる？\n\n72 ÷ 利回り ＝ 資産が2倍になる年数\n\n年利3% → 24年\n年利5% → 14.4年\n年利7% → 10.3年\n年利10% → 7.2年\n\n銀行預金（0.01%）だと7,200年かかる。\n\n複利の力を知ってるかどうかで人生変わる。",
-    "reply": "複利計算シミュレーターで確かめてみて\nhttps://ai-money-lab.github.io/benri-tools/compound-interest/"
-  },
-  {
-    "id": "post_22_nenshu500",
-    "body": "年収500万円の人が知るべき数字：\n\n手取り → 約390万（月32.5万）\n所得税 → 約14万\n住民税 → 約24万\n社会保険 → 約72万\n\n税金+社会保険で年間110万円取られてる。\n\nこれ知った上で「年収500万で十分」って言えるか考えてみて。",
-    "reply": "自分の年収で正確に計算できます\nhttps://ai-money-lab.github.io/benri-tools/salary-calculator/"
-  },
-  {
-    "id": "post_23_sim_switch",
-    "body": "格安SIMに変えるだけで年6万円浮く。\n\n大手キャリア月7,000円\n格安SIM月2,000円\n差額：月5,000円 × 12ヶ月 = 6万円\n\n10年で60万円。\nその60万をNISAで運用すれば10年後に約78万円。\n\n何もしないことが一番高くつく。",
-    "reply": "格安SIM13社の最新料金を毎日更新中\nhttps://ai-money-lab.github.io/benri-tools/sim-comparison/"
-  },
-  {
-    "id": "post_24_kinri",
-    "body": "住宅ローン金利が0.5%上がるだけで：\n\n借入4,000万・35年の場合\n0.5% → 月10.4万（総返済4,360万）\n1.0% → 月11.3万（総返済4,740万）\n1.5% → 月12.2万（総返済5,140万）\n\n0.5%の差で総額380万変わる。\n\n金利が低い今のうちに計算しておこう。",
-    "reply": "住宅ローンシミュレーターはこちら\nhttps://ai-money-lab.github.io/benri-tools/loan-calculator/"
-  },
-  {
-    "id": "post_25_sp500",
-    "body": "S&P500に月5万円を20年積み立てた場合：\n\n年利7%想定\n元本：1,200万円\n運用益：+1,404万円\n合計：2,604万円\n\n元本の2倍以上になる。\n\nでもこれ、あくまで平均。リーマンショック級の暴落もある。\n\n自分のリスク許容度、確認してる？",
-    "reply": "積立シミュレーションはこちら\nhttps://ai-money-lab.github.io/benri-tools/nisa-simulator/"
-  },
-  {
-    "id": "post_26_furusato2",
-    "body": "ふるさと納税やらない理由No.1：\n\n「よくわからないから」\n\n実際やることは3つだけ：\n1. 上限額を計算する\n2. 好きな返礼品を選んで寄附する\n3. 確定申告orワンストップ申請する\n\nたったこれだけで実質2,000円で数万円の返礼品がもらえる。",
-    "reply": "上限額の計算はここで1分でできます\nhttps://ai-money-lab.github.io/benri-tools/furusato-tax/"
-  },
-  {
-    "id": "post_27_hoken2",
-    "body": "日本人の生命保険料の平均：\n\n月額約3.2万円（年間38万円）\n\n30歳から60歳まで払い続けると1,140万円。\n\nこれ、NISAで運用してたら約2,000万円になってる。\n\n保険は「必要な分だけ」が鉄則。\n入りすぎてる保険、今すぐ見直した方がいい。",
-    "reply": "本当に必要な保障額を計算してみて\nhttps://ai-money-lab.github.io/benri-tools/insurance-calculator/"
-  },
-  {
-    "id": "post_28_fx",
-    "body": "FXで「月10万稼ぎたい」と思ってる人へ。\n\nまず計算してほしい。\n\n1ロット（1万通貨）でドル円が1円動くと：\n利益 → +10,000円\n損失 → -10,000円\n\nレバレッジ25倍なら必要証拠金は約6万円。\n\nリスクを数字で把握してからやらないと退場する。",
-    "reply": "FX損益シミュレーターで計算してみて\nhttps://ai-money-lab.github.io/benri-tools/fx-calculator/"
-  },
-  {
-    "id": "post_29_rougo",
-    "body": "老後2000万円問題の正体：\n\n月の生活費25万 - 年金15万 = 毎月10万不足\n10万 × 12ヶ月 × 20年 = 2,400万円\n\nでもこれ「平均」の話。\n\n自分の場合いくら必要か、ちゃんと計算した方がいい。",
-    "reply": "老後資金シミュレーターで計算できます\nhttps://ai-money-lab.github.io/benri-tools/retirement-fund/"
-  },
-  {
-    "id": "post_30_tenshoku",
-    "body": "転職で年収100万アップ！\n\n…でも手取りは70万しか増えない。\n\n年収400万→500万の場合：\n手取り315万→390万（+75万）\n\n年収800万→900万の場合：\n手取り590万→650万（+60万）\n\n高年収ほど税金が重い。\n転職前に「手取りベース」で判断する習慣をつけよう。",
-    "reply": "年収別の手取り額を計算できます\nhttps://ai-money-lab.github.io/benri-tools/salary-calculator/"
-  },
-  {
-    "id": "post_31_taishoku2",
-    "body": "退職金の税金、勤続年数で全然違う：\n\n勤続20年 → 800万円まで非課税\n勤続30年 → 1,500万円まで非課税\n勤続35年 → 1,850万円まで非課税\n\n退職金2,000万で勤続20年の場合：\n課税対象 → 600万円\n税金 → 約90万円\n\n手取り1,910万円。思ったより取られる。",
-    "reply": "退職金の手取りを正確に計算\nhttps://ai-money-lab.github.io/benri-tools/retirement-calculator/"
-  },
-  {
-    "id": "post_32_fudousan2",
-    "body": "ワンルームマンション投資の現実：\n\n物件2,500万・家賃9万/月\n表面利回り → 4.3%\n\nここから引かれるもの：\n管理費 -1万\n修繕積立 -0.8万\n固定資産税 -0.5万/月\n空室リスク -0.9万/月\n\n実質利回り → 2.3%\n\n表面利回りだけ見て買うと詰む。",
-    "reply": "実質利回りを正確に計算できます\nhttps://ai-money-lab.github.io/benri-tools/real-estate-yield/"
-  },
-  {
-    "id": "post_33_shitsugyo2",
-    "body": "意外と知られてない失業保険の事実：\n\n・会社都合退職なら待機7日で即給付\n・自己都合は2ヶ月待ち（+7日）\n・45歳以上で勤続20年なら最大330日\n・再就職手当は残日数の60〜70%\n\n早く再就職すると「再就職手当」がもらえる。\n辞める前にシミュレーションしておこう。",
-    "reply": "失業保険の受給額を計算できます\nhttps://ai-money-lab.github.io/benri-tools/unemployment-benefit/"
-  },
-  {
-    "id": "post_34_nenkin2",
-    "body": "年金の繰り下げ受給、知ってる？\n\n65歳から → 月15万円\n70歳から → 月21.3万円（+42%）\n75歳から → 月27.6万円（+84%）\n\n5年待つだけで月6万円増える。\n年間72万円の差。\n\nただし70歳まで生活費をどうするかが問題。",
-    "reply": "年金受給額と必要貯金額を計算\nhttps://ai-money-lab.github.io/benri-tools/pension-calculator/"
-  },
-  {
-    "id": "post_35_ievsyachin2",
-    "body": "「家賃がもったいない」は本当か？\n\n家賃10万 × 35年 = 4,200万\n\nでも持ち家にも見えないコストがある：\n・固定資産税（年15万×35年=525万）\n・修繕費（35年で500万〜）\n・住宅ローン利息（数百万）\n\n「家賃を払い続けるのは無駄」は半分正解で半分ウソ。",
-    "reply": "自分の条件で持ち家vs賃貸を比較\nhttps://ai-money-lab.github.io/benri-tools/rent-vs-buy/"
-  },
-  {
-    "id": "post_36_haitou2",
-    "body": "配当金投資を始めるなら覚えておくべき数字：\n\n配当利回り3%の株を100万円分買うと\n年間配当 → 3万円（税引前）\n税引後 → 約2.4万円\n月にすると → 2,000円\n\n「少ない」と感じたらNISAを使え。\n非課税なら年間3万円まるごと受け取れる。",
-    "reply": "配当金シミュレーターで計算してみて\nhttps://ai-money-lab.github.io/benri-tools/dividend-yield/"
-  },
-  {
-    "id": "post_37_ai2",
-    "body": "AIで月5万の副業を作る方法：\n\n1. 便利なツールをAIに作らせる\n2. 無料公開してアクセスを集める\n3. 関連する商品のアフィリエイトを貼る\n\n自分がやったこと：\n・Claude AIにツール18個作らせた\n・月間PVが徐々に増加中\n\nポイントは「売る」より「役に立つ」を先にやること。",
-    "reply": "作ったツールはこちら（全部無料）\nhttps://ai-money-lab.github.io/benri-tools/"
-  },
-  {
-    "id": "post_38_kakutei2",
-    "body": "確定申告で「経費」にできるもの：\n\n副業の場合：\n・PC購入費（10万円未満は全額OK）\n・通信費（仕事使用分）\n・書籍・教材費\n・交通費\n・サーバー代\n\n「経費を引く前」と「引いた後」で税金が全然違う。\n\n知らないだけで損してる人、めちゃくちゃ多い。",
-    "reply": "税金計算シミュレーターはこちら\nhttps://ai-money-lab.github.io/benri-tools/tax-calculator/"
-  },
-  {
-    "id": "post_39_nisa2",
-    "body": "新NISAの「つみたて投資枠」と「成長投資枠」の使い方：\n\nつみたて枠（年120万）→ インデックス投信\n成長投資枠（年240万）→ 高配当株 or 投信\n\n合計年360万、生涯1,800万円まで非課税。\n\nまだ始めてない人、1日でも早い方がいい。",
-    "reply": "NISAシミュレーターで計算してみて\nhttps://ai-money-lab.github.io/benri-tools/nisa-simulator/"
-  },
-  {
-    "id": "post_40_fire2",
-    "body": "サイドFIREという選択肢：\n\n完全FIREは7,500万円必要（月25万の場合）\n\nでもサイドFIRE（半分働く）なら：\n月12.5万を資産から + 月12.5万を労働で\n必要資産 → 3,750万円\n\n月10万を年利5%で20年積み立てると約4,110万円で達成。\n\n現実的じゃない？",
-    "reply": "FIRE達成シミュレーター\nhttps://ai-money-lab.github.io/benri-tools/retirement-fund/"
-  },
-  {
-    "id": "post_41_sim2",
-    "body": "「格安SIMは通信が遅い」\n\nこれ、もう嘘。\n\nahamo → 下り85Mbps\nUQモバイル → 下り72Mbps\nワイモバイル → 下り68Mbps\n\nYouTube 4K再生に必要な速度：25Mbps\n\n十分すぎる。まだ大手キャリアに月7,000円払ってるの？",
-    "reply": "最新の料金比較はこちら\nhttps://ai-money-lab.github.io/benri-tools/sim-comparison/"
-  },
-  {
-    "id": "post_42_loan2",
-    "body": "住宅ローンの繰上返済、100万円でどれだけ変わるか：\n\n借入3,000万・金利1.0%・35年の場合\n\n5年目に100万繰上返済すると：\n→ 利息削減額：約32万円\n→ 返済期間：1年2ヶ月短縮\n\n15年目だと利息削減は約18万円。\n\n早ければ早いほど効果が大きい。",
-    "reply": "繰上返済シミュレーション\nhttps://ai-money-lab.github.io/benri-tools/loan-calculator/"
-  },
-  {
-    "id": "post_43_tedori2",
-    "body": "ボーナスの手取り、思ったより少なくない？\n\nボーナス50万円の場合：\n健康保険 → -2.5万\n厚生年金 → -4.6万\n雇用保険 → -0.3万\n所得税 → -5.1万\n\n手取り → 約37.5万円（75%）\n\n25%引かれてる。\nボーナス100万なら25万消えてる。",
-    "reply": "正確な手取り計算はこちら\nhttps://ai-money-lab.github.io/benri-tools/salary-calculator/"
-  },
-  {
-    "id": "post_44_fukuri2",
-    "body": "「貯金」と「投資」の30年後の差：\n\n毎月3万円を30年間：\n\n貯金（0.01%）→ 1,081万円\n投資（3%）→ 1,748万円\n投資（5%）→ 2,497万円\n投資（7%）→ 3,660万円\n\n同じ3万円でも置き場所で2,500万円の差。\n\nお金に働いてもらう意味、わかった？",
-    "reply": "自分の条件で複利計算してみて\nhttps://ai-money-lab.github.io/benri-tools/compound-interest/"
-  },
-  {
-    "id": "post_45_fx2",
-    "body": "FX初心者が最初に知るべきこと：\n\n・1ロット（1万通貨）のUSD/JPY\n・レバレッジ25倍\n・必要証拠金 → 約6万円\n\nこれで1円動くと1万円の損益。\n\n「6万円で1万円稼げる！」\nと思った人、逆に1万円失う可能性も同じ。\n\nまず計算してからやろう。",
-    "reply": "FX損益計算シミュレーター\nhttps://ai-money-lab.github.io/benri-tools/fx-calculator/"
-  },
-  {
-    "id": "post_46_tax_return2",
-    "body": "確定申告が必要な人チェックリスト：\n\n□ 副業の所得が20万円超\n□ 2ヶ所以上から給与がある\n□ 医療費が10万円超\n□ ふるさと納税6自治体以上\n□ 住宅ローン控除1年目\n\n1つでも当てはまったら申告必要かも。\n30秒で判定できるチェッカー作った。",
-    "reply": "確定申告チェッカーはこちら\nhttps://ai-money-lab.github.io/benri-tools/tax-return-checker/"
-  },
-  {
-    "id": "post_47_toushi2",
-    "body": "「投資は怖い」という人に見てほしい数字：\n\nS&P500の過去実績：\n1年 → -37%〜+53%（振れ幅大）\n10年 → -1%〜+20%（ほぼプラス）\n20年 → +6%〜+17%（マイナスなし）\n\n短期は怖い。でも長期なら話が変わる。\n\n大事なのは「長く続けること」。",
-    "reply": "投資リターンを計算してみて\nhttps://ai-money-lab.github.io/benri-tools/investment-return/"
-  },
-  {
-    "id": "post_48_ai3",
-    "body": "Claude AIでツールを作る手順：\n\n1. 「○○計算機をHTMLで作って」と指示\n2. 出力されたコードをファイルに保存\n3. GitHub Pagesで無料公開\n\n以上。\n\nプログラミング知識ゼロで18個作った。\n\n「AIは使い方がわからない」\nこれ、使わない理由にはならない。",
-    "reply": "作ったツール一覧はこちら\nhttps://ai-money-lab.github.io/benri-tools/"
-  },
-  {
-    "id": "post_49_nenshu300",
-    "body": "年収300万でも資産は作れる：\n\n手取り → 月約20万\n生活費 → 月15万（倹約）\n投資 → 月5万\n\n月5万 × 年利5% × 20年 = 2,055万円\n\n年収が低くても「仕組み」を作れば資産は増える。\n\n大事なのは収入じゃなく「収入-支出」の差額。",
-    "reply": "年収別の手取りと投資シミュレーション\nhttps://ai-money-lab.github.io/benri-tools/salary-calculator/"
-  },
-  {
-    "id": "post_50_haitou3",
-    "body": "高配当株の「罠」：\n\n配当利回り7%の株、魅力的に見えるけど…\n\n・業績悪化で減配リスクあり\n・株価下落で元本割れ\n・高利回り＝市場が警戒してる証拠\n\n健全な高配当の目安は3〜5%。\n利回りだけでなく配当性向もチェックしよう。",
-    "reply": "配当金シミュレーターで計算\nhttps://ai-money-lab.github.io/benri-tools/dividend-yield/"
-  },
-  {
-    "id": "post_51_nenkin3",
-    "body": "フリーランスの年金、会社員の半分以下：\n\n会社員（年収500万・30年）→ 月約17万\nフリーランス（30年）→ 月約6.5万\n\n差額：月10万 × 30年 = 3,600万\n\nフリーランスは自分で備えないと老後詰む。\niDeCoとNISAの併用が最低ライン。",
-    "reply": "年金受給額を計算\nhttps://ai-money-lab.github.io/benri-tools/pension-calculator/"
-  },
-  {
-    "id": "post_52_ie3",
-    "body": "持ち家のメリットを数字で見ると：\n\n住宅ローン控除（13年間）→ 最大455万円の減税\n団信 → 死亡時にローン残債ゼロ\n老後 → 家賃負担なし\n\nデメリット：\n転勤リスク・修繕費・固定資産税\n\nどっちが得かは「条件次第」。\n感覚じゃなく数字で判断しよう。",
-    "reply": "持ち家vs賃貸シミュレーター\nhttps://ai-money-lab.github.io/benri-tools/rent-vs-buy/"
-  },
-  {
-    "id": "post_53_furusato3",
-    "body": "ふるさと納税の実質還元率：\n\nお米 → 還元率30%以上\n牛肉 → 還元率25〜30%\n海鮮 → 還元率20〜25%\n\n年収500万・独身の上限約6万円を全部お米にすると約20kgのお米が届く。\n\n食費が月2,000円浮く計算。やらない理由がない。",
-    "reply": "自分の上限額を計算\nhttps://ai-money-lab.github.io/benri-tools/furusato-tax/"
-  },
-  {
-    "id": "post_54_shitsugyo3",
-    "body": "知ってた？失業保険をもらいながら：\n\n・アルバイトOK（週20時間未満）\n・スキルアップ訓練に通える（交通費支給）\n・訓練中は給付延長される場合あり\n\n「辞めたら収入ゼロ」じゃない。\n\nでも自己都合退職は2ヶ月待ちだから、その間の生活費は用意しておこう。",
-    "reply": "失業保険の金額を計算\nhttps://ai-money-lab.github.io/benri-tools/unemployment-benefit/"
-  },
-  {
-    "id": "post_55_fudousan3",
-    "body": "不動産投資で「キャッシュフロー」が出るかの計算：\n\n家賃8万 - ローン返済5万 - 管理費1.5万 - 修繕0.8万 - 固定資産税0.4万\n= 月0.3万円（年3.6万円）\n\n空室が2ヶ月出たら年間マイナス。\n\n「不労所得」の幻想、数字で見ると目が覚める。",
-    "reply": "不動産利回りを正確に計算\nhttps://ai-money-lab.github.io/benri-tools/real-estate-yield/"
-  },
-  {
-    "id": "post_56_ai_tools",
-    "body": "「プログラミングを勉強しなきゃ」\n\nと思ってる人、ちょっと待って。\n\nAIに頼めば：\n・計算ツール → 5分で完成\n・比較表 → データ入れれば自動生成\n・Webサイト → 指示するだけ\n\n「作る力」より「指示する力」の時代。\n\n実際に18個作った自分が言うから間違いない。",
-    "reply": "AIで作ったツール一覧\nhttps://ai-money-lab.github.io/benri-tools/"
-  },
-  {
-    "id": "post_57_loan3",
-    "body": "住宅ローン「変動」vs「固定」：\n\n変動（0.5%）→ 月10.4万\n固定（1.8%）→ 月12.9万\n差額 → 月2.5万（年30万）\n\n35年で1,050万の差。\n\nでも変動金利が2%に上がったら逆転する。\n「今安い」だけで選ぶと将来痛い目に遭うかも。",
-    "reply": "金利別のシミュレーション\nhttps://ai-money-lab.github.io/benri-tools/loan-calculator/"
-  },
-  {
-    "id": "post_58_tsumitate",
-    "body": "積立投資の「ドルコスト平均法」の威力：\n\n毎月3万円を投資した場合：\n株価が下がった月 → 多く買える\n株価が上がった月 → 少なく買う\n\n結果、平均取得単価が下がる。\n\n一括投資と違って「いつ始めても正解」になりやすい。\nだからNISAは「今すぐ始める」が最適解。",
-    "reply": "積立シミュレーション\nhttps://ai-money-lab.github.io/benri-tools/nisa-simulator/"
-  },
-  {
-    "id": "post_59_tax2",
-    "body": "会社員でも節税できること一覧：\n\n・ふるさと納税（全員OK）\n・iDeCo（掛金が全額控除）\n・医療費控除（10万超）\n・住宅ローン控除（最大455万）\n・生命保険料控除（最大12万）\n\n何もしないと毎年数万〜数十万円損してる。\nまず自分の税金がいくらか知ることから。",
-    "reply": "税金計算ツール\nhttps://ai-money-lab.github.io/benri-tools/tax-calculator/"
-  },
-  {
-    "id": "post_60_hoken3",
-    "body": "医療保険、本当に必要？\n\n日本は高額療養費制度があるから：\n年収500万の場合、月の自己負担上限 → 約8万円\n\nつまり入院しても月8万で済む。\n\n医療保険に月3,000円払い続けると30年で108万円。\n\n「もしもの8万円」のために108万払う？\n計算してから決めよう。",
-    "reply": "必要保障額を計算\nhttps://ai-money-lab.github.io/benri-tools/insurance-calculator/"
-  },
-  {
-    "id": "post_61_nenshu_real",
-    "body": "「年収1,000万は勝ち組」の幻想：\n\n手取り → 約720万（月60万）\n\n東京で家族4人：\n家賃15万+食費10万+教育費8万+保険3万+車2万+その他10万 = 月48万\n\n貯蓄 → 月12万\n\n意外とカツカツ。\n年収より「支出の最適化」が大事。",
-    "reply": "年収別の手取り計算\nhttps://ai-money-lab.github.io/benri-tools/salary-calculator/"
-  },
-  {
-    "id": "post_62_toushi3",
-    "body": "投資の名言を数字で検証：\n\n「卵を一つのカゴに盛るな」\n\n全額を株式 → 年リターン7%（暴落時-40%）\n株60:債券40 → 年リターン5%（暴落時-20%）\n\n分散するとリターンは下がるが暴落に耐えやすくなる。\n自分に合うバランスを見つけよう。",
-    "reply": "投資リターン計算機\nhttps://ai-money-lab.github.io/benri-tools/investment-return/"
-  },
-  {
-    "id": "post_63_fx3",
-    "body": "FXの「スワップポイント」で稼ぐ方法：\n\n高金利通貨を買って保有するだけで毎日利息がもらえる。\n\nメキシコペソ/円：1万通貨で約20円/日\n10万通貨なら200円/日 = 月6,000円\n\nただし為替変動リスクあり。\n1円動くと±10万円。スワップ狙いでもリスク管理は必須。",
-    "reply": "FX損益シミュレーター\nhttps://ai-money-lab.github.io/benri-tools/fx-calculator/"
-  },
-  {
-    "id": "post_64_compound3",
-    "body": "「時間」が最大の武器である証拠：\n\n月3万円を年利5%で積み立てた場合：\n\n25歳から（40年）→ 4,580万円\n35歳から（30年）→ 2,497万円\n45歳から（20年）→ 1,233万円\n\n10年遅れるごとに1,000万円以上の差。\n投資は「いつ始めるか」が全て。",
-    "reply": "複利計算シミュレーター\nhttps://ai-money-lab.github.io/benri-tools/compound-interest/"
-  },
-  {
-    "id": "post_65_taishoku3",
-    "body": "iDeCoで退職金の税金を減らす方法：\n\n退職金とiDeCoは「退職所得控除」を共有する。\n\nただし受け取り方を工夫すれば：\n・iDeCoを60歳で一括受取\n・退職金を65歳で受取\n→ 控除枠を2回使える可能性あり\n\n受け取り順とタイミングで税金が数十万変わる。",
-    "reply": "退職金の手取りシミュレーション\nhttps://ai-money-lab.github.io/benri-tools/retirement-calculator/"
-  },
-  {
-    "id": "post_66_tools_18",
-    "body": "毎日自動更新されるお金のツール集：\n\n格安SIM → 13社の料金を毎日収集\n税金計算 → 最新の税率に対応\n年金シミュ → 最新の年金制度に対応\n\n他にも18ツール、全部無料。\n\nブックマークしておけば、お金で迷ったときにすぐ答えが出る。",
-    "reply": "全ツール一覧\nhttps://ai-money-lab.github.io/benri-tools/"
-  },
-  {
-    "id": "post_67_fire3",
-    "body": "FIRE達成者の共通点：\n\n1. 収入の50%以上を投資に回す\n2. 固定費を極限まで下げる\n3. インデックス投資を淡々と続ける\n4. 副業で収入源を増やす\n\n月25万で生活して月25万投資すると：\n年利5%で20年 → 約1億円\n\nFIREは「高収入」じゃなく「高貯蓄率」で決まる。",
-    "reply": "FIRE達成シミュレーター\nhttps://ai-money-lab.github.io/benri-tools/retirement-fund/"
-  },
-  {
-    "id": "post_68_sim3",
-    "body": "家族4人のスマホ代：\n\n大手キャリア → 月28,000円（年33.6万）\n格安SIM → 月8,000円（年9.6万）\n\n差額：年24万円\n10年で240万円。\n\nこの240万をNISAで運用すれば10年後300万超。\n格安SIMに変えるだけで「投資の原資」が生まれる。",
-    "reply": "格安SIM比較表\nhttps://ai-money-lab.github.io/benri-tools/sim-comparison/"
-  },
-  {
-    "id": "post_69_rougo2",
-    "body": "定年後にかかるお金、甘く見てない？\n\n月の支出（夫婦2人）：\n食費7万+住居3万+光熱2万+医療3万+交通2万+娯楽3万+他5万\n合計：25万円/月\n\n年金15万だと毎月10万不足。\n65歳までにいくら貯めるべき？",
-    "reply": "老後資金シミュレーター\nhttps://ai-money-lab.github.io/benri-tools/retirement-fund/"
-  },
-  {
-    "id": "post_70_kakutei3",
-    "body": "医療費控除、使ってない人多すぎ：\n\n年間の医療費が10万円超えたら確定申告で取り戻せる。\n\n対象：病院代・薬代・通院交通費・歯科・レーシック\n家族合算OK。\n\n年間15万かかってたら約1.5万円戻ってくる。",
-    "reply": "税金計算ツールで控除額を確認\nhttps://ai-money-lab.github.io/benri-tools/tax-calculator/"
+    "id": "v3_35",
+    "body": "シングルマザーがClaude AIで月60万円の出版システムを構築。\n\n東大生がClaude Codeで月10万円の収益ルートを作成。\n\nLinkedIn特化ツールが3ヶ月で月930万円。\n\n全部、実在する事例です。\n\n海外のClaude勢が実際に稼いでいる7つの手法、AIが検証してまとめました。",
+    "reply": "どの手法も初期コストは月3000円程度。必要なのはClaude Proの契約と「今日1つ作って出す」行動力だけです。",
+    "posted": false,
+    "posted_at": null
   }
 ]
