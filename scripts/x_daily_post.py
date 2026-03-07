@@ -18,6 +18,7 @@ BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 LOGS_DIR = os.path.join(BASE_DIR, 'logs')
 QUEUE_PATH = os.path.join(BASE_DIR, 'data', 'x_post_queue.json')
 BROWSER_PROFILE = os.path.join(BASE_DIR, 'data', 'x_browser_profile')
+CARDS_DIR = os.path.join(BASE_DIR, 'output', 'social', 'x_cards')
 os.makedirs(LOGS_DIR, exist_ok=True)
 
 X_EMAIL = 'aijidouca@gmail.com'
@@ -156,83 +157,234 @@ def type_text(page, text):
             page.keyboard.press('Enter')
 
 
-def post_tweet(page, text):
+def get_card_path(post_id):
+    """投稿IDに対応する画像カードのパスを返す（存在しなければNone）"""
+    card_path = os.path.join(CARDS_DIR, f'{post_id}.png')
+    if os.path.exists(card_path):
+        return card_path
+    return None
+
+
+def attach_image(page, image_path):
+    """投稿エディタに画像を添付する"""
+    try:
+        # X の compose ダイアログには hidden file input がある
+        file_input = page.locator('input[type="file"][accept*="image"]')
+        if file_input.count() > 0:
+            file_input.first.set_input_files(image_path)
+            time.sleep(3)
+            log(f'画像添付完了: {os.path.basename(image_path)}')
+            return True
+    except Exception as e:
+        log(f'file input での添付失敗: {e}')
+
+    # フォールバック: メディアボタンをクリックしてからファイル選択
+    try:
+        media_btn = page.locator('[data-testid="fileInput"]')
+        if media_btn.count() > 0:
+            media_btn.first.set_input_files(image_path)
+            time.sleep(3)
+            log(f'画像添付完了 (fileInput): {os.path.basename(image_path)}')
+            return True
+    except Exception as e:
+        log(f'fileInput での添付失敗: {e}')
+
+    log('画像添付スキップ（file input が見つからない）')
+    return False
+
+
+def post_tweet(page, text, image_path=None):
     """ツイートを即時投稿し、成功したら True を返す"""
-    page.goto('https://x.com/compose/post', wait_until='domcontentloaded', timeout=15000)
-    time.sleep(3)
+    page.goto('https://x.com/compose/post', wait_until='domcontentloaded', timeout=20000)
+    time.sleep(5)
 
-    editor = page.locator('[data-testid="tweetTextarea_0"]')
-    if editor.count() == 0:
+    # エディタを探す（複数のセレクターを試行）
+    editor = None
+    for sel in ['[data-testid="tweetTextarea_0"]', '[role="textbox"]', 'div[contenteditable="true"]']:
+        try:
+            loc = page.locator(sel)
+            if loc.count() > 0 and loc.first.is_visible(timeout=3000):
+                editor = loc.first
+                log(f'エディタ発見: {sel}')
+                break
+        except Exception:
+            continue
+
+    if not editor:
         page.keyboard.press('n')
-        time.sleep(2)
-        editor = page.locator('[data-testid="tweetTextarea_0"]')
+        time.sleep(3)
+        for sel in ['[data-testid="tweetTextarea_0"]', '[role="textbox"]', 'div[contenteditable="true"]']:
+            try:
+                loc = page.locator(sel)
+                if loc.count() > 0 and loc.first.is_visible(timeout=2000):
+                    editor = loc.first
+                    break
+            except Exception:
+                continue
 
-    if editor.count() == 0:
+    if not editor:
         log('投稿エディタが見つかりません')
         page.screenshot(path=os.path.join(LOGS_DIR, 'x_daily_no_editor.png'))
         return False
 
-    editor.first.click()
-    time.sleep(0.3)
-    type_text(page, text)
+    editor.click()
     time.sleep(0.5)
+    type_text(page, text)
+    time.sleep(1)
 
-    for sel in ['[data-testid="tweetButton"]', '[data-testid="tweetButtonInline"]']:
-        try:
-            btn = page.locator(sel)
-            if btn.count() > 0 and btn.first.is_visible(timeout=2000):
-                btn.first.click()
-                time.sleep(3)
-                log('投稿完了')
-                return True
-        except Exception:
-            continue
+    # 画像添付
+    if image_path:
+        attach_image(page, image_path)
+
+    page.screenshot(path=os.path.join(LOGS_DIR, 'x_daily_before_submit.png'))
+
+    # テキスト入力後にボタンが有効になるまで待機
+    time.sleep(3)
+
+    # 投稿ボタンをクリック（data-testidで直接取得）
+    try:
+        btn = page.locator('[data-testid="tweetButton"]')
+        btn.wait_for(state='visible', timeout=10000)
+        # force=True: オーバーレイ要素がinterceptする問題を回避
+        btn.click(force=True)
+        time.sleep(5)
+        log('投稿完了 (tweetButton)')
+        return True
+    except Exception as e:
+        log(f'tweetButton クリック失敗: {e}')
+
+    # フォールバック: テキスト「ポストする」で検索
+    try:
+        btn = page.locator('button:has-text("ポストする")')
+        if btn.count() > 0:
+            btn.first.click(force=True)
+            time.sleep(4)
+            log('投稿完了 (ポストする)')
+            return True
+    except Exception:
+        pass
+
+    # 最終手段: Ctrl+Enter で送信
+    log('ボタン見つからず、Ctrl+Enterを試行')
+    page.keyboard.press('Control+Enter')
+    time.sleep(4)
+
+    # 投稿ダイアログが消えたかチェック
+    try:
+        check = page.locator('[data-testid="tweetTextarea_0"]')
+        if check.count() == 0:
+            log('投稿完了 (Ctrl+Enter)')
+            return True
+    except Exception:
+        pass
 
     log('投稿ボタンが見つかりません')
     page.screenshot(path=os.path.join(LOGS_DIR, 'x_daily_no_submit.png'))
+    # デバッグ: ページ上のボタン一覧を出力
+    try:
+        info = page.evaluate('''() => {
+            const btns = document.querySelectorAll('button, [role="button"]');
+            return Array.from(btns).slice(0, 20).map(b => ({
+                testid: b.getAttribute('data-testid') || '',
+                aria: b.getAttribute('aria-label') || '',
+                text: (b.textContent || '').substring(0, 30)
+            }));
+        }''')
+        log(f'ボタン一覧: {info}')
+    except Exception:
+        pass
     return False
 
 
 def post_reply(page, reply_text):
-    """最新の自分のツイートにリプライする"""
-    time.sleep(2)
-    page.goto(f'https://x.com/{X_USERNAME}', wait_until='domcontentloaded', timeout=15000)
-    time.sleep(3)
+    """投稿直後に自分の最新ツイートにリプライする。
+    compose/post 画面からホームに戻った後、プロフィールの最新ツイートを開く。
+    """
+    time.sleep(5)
 
-    tweets = page.locator('article[data-testid="tweet"]')
+    # プロフィールに移動して最新ツイートを取得
+    page.goto(f'https://x.com/{X_USERNAME}', wait_until='domcontentloaded', timeout=30000)
+
+    # ツイートが表示されるまでしっかり待つ
+    for _ in range(10):
+        time.sleep(2)
+        tweets = page.locator('article[data-testid="tweet"]')
+        if tweets.count() > 0:
+            break
+
     if tweets.count() == 0:
         log('ツイートが見つかりません')
+        page.screenshot(path=os.path.join(LOGS_DIR, 'x_daily_no_tweets.png'))
         return False
 
-    tweets.first.click()
-    time.sleep(2)
+    log(f'ツイート {tweets.count()} 件発見')
 
-    reply_editor = page.locator('[data-testid="tweetTextarea_0"]')
-    if reply_editor.count() == 0:
-        reply_editor = page.locator('[role="textbox"]')
+    # 最新ツイート内のリプライアイコンをクリック（ツイート詳細に移動せずダイアログを開く）
+    try:
+        reply_icon = tweets.first.locator('[data-testid="reply"]')
+        if reply_icon.count() > 0:
+            reply_icon.first.click()
+            time.sleep(4)
+            log('リプライダイアログを開いた')
+        else:
+            # フォールバック: ツイート詳細に遷移
+            tweets.first.click()
+            time.sleep(5)
+    except Exception as e:
+        log(f'リプライアイコンクリック失敗: {e}')
+        tweets.first.click()
+        time.sleep(5)
 
-    if reply_editor.count() == 0:
-        log('リプライ欄が見つかりません')
-        return False
+    page.screenshot(path=os.path.join(LOGS_DIR, 'x_daily_reply_dialog.png'))
 
-    reply_editor.first.click()
-    time.sleep(0.3)
-    type_text(page, reply_text)
-    time.sleep(0.5)
-
-    for sel in ['[data-testid="tweetButton"]', '[data-testid="tweetButtonInline"]']:
+    # リプライエディタを探す
+    reply_editor = None
+    for sel in ['[data-testid="tweetTextarea_0"]', '[role="textbox"]', 'div[contenteditable="true"]']:
         try:
-            btn = page.locator(sel)
-            if btn.count() > 0 and btn.first.is_visible(timeout=2000):
-                btn.first.click()
-                time.sleep(3)
-                log('リプライ完了')
-                return True
+            loc = page.locator(sel)
+            if loc.count() > 0 and loc.first.is_visible(timeout=5000):
+                reply_editor = loc.first
+                log(f'リプライエディタ発見: {sel}')
+                break
         except Exception:
             continue
 
-    log('リプライ投稿ボタンが見つかりません')
-    return False
+    if not reply_editor:
+        log('リプライ欄が見つかりません')
+        page.screenshot(path=os.path.join(LOGS_DIR, 'x_daily_no_reply_editor.png'))
+        return False
+
+    reply_editor.click()
+    time.sleep(0.5)
+    type_text(page, reply_text)
+    time.sleep(2)
+
+    # リプライ送信ボタン
+    try:
+        btn = page.locator('[data-testid="tweetButton"]')
+        btn.wait_for(state='visible', timeout=10000)
+        btn.click(force=True)
+        time.sleep(5)
+        log('リプライ完了')
+        return True
+    except Exception as e:
+        log(f'リプライボタン失敗: {e}')
+
+    # フォールバック
+    try:
+        btn = page.locator('button:has-text("返信"), button:has-text("ポストする")')
+        if btn.count() > 0:
+            btn.first.click(force=True)
+            time.sleep(4)
+            log('リプライ完了 (フォールバック)')
+            return True
+    except Exception:
+        pass
+
+    page.keyboard.press('Control+Enter')
+    time.sleep(3)
+    log('リプライ完了 (Ctrl+Enter)')
+    return True
 
 
 def run_with_persistent_context(post):
@@ -270,7 +422,7 @@ def run_with_persistent_context(post):
 
             log('ログイン済み')
 
-            # 本文投稿
+            # 本文投稿（ハッシュタグは使わない＝Xアルゴリズムでは逆効果）
             ok = post_tweet(page, post['body'])
             if not ok:
                 log('本文投稿失敗')
@@ -368,6 +520,7 @@ def run_with_chrome_debug(post):
 
             log('ログイン済み')
 
+            # 本文投稿（ハッシュタグは使わない＝Xアルゴリズムでは逆効果）
             ok = post_tweet(page, post['body'])
             if not ok:
                 log('本文投稿失敗')

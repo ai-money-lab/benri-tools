@@ -122,55 +122,64 @@
     "id": "v3_18_ikukyu",
     "body": "育休中にもらえるお金：\n\n月給30万の場合\n最初の6ヶ月 → 月約20万（67%）\n7ヶ月〜 → 月約15万（50%）\n最大2年間。\n\nさらに：\n出産育児一時金 → 50万\n出産手当金 → 約65万\n\n合計すると結構もらえる。\n知らないと数十万円の損。\n\n周りに妊娠中の人がいたら教えてあげて。\n保存推奨",
     "reply": "自分の月給で給付額を計算（無料）\nhttps://ai-money-lab.github.io/benri-tools/childcare-leave/",
-    "posted": false
+    "posted": true,
+    "posted_at": "2026-03-03T20:00:57.996914"
   },
   {
     "id": "v3_19_car",
     "body": "車の年間維持費、計算したことある？\n\n軽自動車でも年間約40万円：\n自動車税 → 1.1万\n任意保険 → 5万\n車検 → 4万（年割）\nガソリン → 10万\n駐車場 → 12万\nメンテ → 5万\n\n10年で400万。\n普通車なら10年で600万。\n\n車を買う前に一度計算した方がいい。\n保存推奨",
     "reply": "年間維持費を自動計算（無料）\nhttps://ai-money-lab.github.io/benri-tools/car-cost/",
-    "posted": false
+    "posted": true,
+    "posted_at": "2026-03-04T07:30:56.820153"
   },
   {
     "id": "v3_20_money_list",
     "body": "お金で損してる人の共通点5つ：\n\n1. 手取りと額面の違いを知らない\n2. ふるさと納税を使ってない\n3. 保険を「なんとなく」で契約\n4. 格安SIMに変えてない\n5. NISAを始めてない\n\n全部「知らない」だけで損してる。\n1つでも該当するなら今日から直せる。\n\n保存して1つずつ潰して",
     "reply": "全部3秒で計算できるツール集（無料・登録不要）\nhttps://ai-money-lab.github.io/benri-tools/",
-    "posted": false
+    "posted": true,
+    "posted_at": "2026-03-05T07:31:01.345371"
   },
   {
     "id": "v3_21_20dai",
     "body": "20代で絶対やるべきお金のこと\n\n1. 格安SIMに変える（年7万節約）\n2. ふるさと納税を上限まで使う\n3. つみたてNISAを始める\n4. 不要な保険を解約する\n5. 固定費を全部見直す\n\n全部「知ってるかどうか」だけの差。\n30代で気づくと10年分の機会損失。\n\nこれ知ってるだけで人生変わる。\n20代の知り合いに教えてあげて",
     "reply": "まず手取り額を3秒で確認（無料）\nhttps://ai-money-lab.github.io/benri-tools/salary-calculator/",
-    "posted": false
+    "posted": true,
+    "posted_at": "2026-03-05T12:16:01.445534"
   },
   {
     "id": "v3_22_fuufu",
     "body": "同じ世帯年収800万でも\n手取りが40万違う事実。\n\n共働き（400万+400万）→ 手取り630万\n片働き（800万）→ 手取り590万\n\n累進課税のせいで\n1人で稼ぐほど税率が上がる。\n\nつまり共働きは「節税」でもある。\n\n知らなかった人、保存しておいて。\n夫婦で話すきっかけになるはず",
     "reply": "世帯の手取りを3秒で計算（無料）\nhttps://ai-money-lab.github.io/benri-tools/salary-calculator/",
-    "posted": false
+    "posted": true,
+    "posted_at": "2026-03-05T20:00:57.988926"
   },
   {
     "id": "v3_23_bonus",
     "body": "ボーナスの手取り、\n思ったより少なくない？\n\n額面50万 → 手取り約40万（80%）\n額面100万 → 手取り約77万（77%）\n\n所得税+住民税+社会保険で\n2〜3割消える。\n\n「ボーナス○ヶ月分」の求人、\n手取りで考えないと入社後にガッカリする。\n\n転職活動中の人は特に要注意。\n保存して見返して",
     "reply": "ボーナス込みの手取りを計算（無料）\nhttps://ai-money-lab.github.io/benri-tools/salary-calculator/",
-    "posted": false
+    "posted": true,
+    "posted_at": "2026-03-06T07:30:59.842500"
   },
   {
     "id": "v3_24_quiz_fukuri",
     "body": "お金クイズ：\n\n月3万円を年利5%で30年積み立てたら\n合計いくらになる？\n\nA. 1,080万（元本のみ）\nB. 1,500万\nC. 2,497万\nD. 3,200万\n\nヒント：\n元本は1,080万。\n複利の力は「後半」に爆発する。\n\n正解は↓のツールで確認できる。\n自分の金額でも計算してみて",
     "reply": "正解→C. 2,497万円\n自分の金額で計算（無料）\nhttps://ai-money-lab.github.io/benri-tools/compound-interest/",
-    "posted": false
+    "posted": true,
+    "posted_at": "2026-03-07T07:30:57.510302"
   },
   {
     "id": "v3_25_quiz_tedori",
     "body": "クイズ：\n\n年収1000万の月の手取り、\nいくらだと思う？\n\nA. 約83万\nB. 約72万\nC. 約60万\nD. 約55万\n\nヒント：\n税金+社会保険で約28%消える。\n\n意外と少なくて驚くはず。\n答えは↓のツールで3秒で確認できる",
     "reply": "正解→C（月60万）\n自分の年収で計算（無料）\nhttps://ai-money-lab.github.io/benri-tools/salary-calculator/",
-    "posted": false
+    "posted": true,
+    "posted_at": "2026-03-07T12:15:56.934556"
   },
   {
     "id": "v3_26_ai_story",
     "body": "AIに「お金の計算ツール21個作って」\nと頼んだら本当に全部作ってくれた。\n\n税金/手取り/住宅ローン\n格安SIM比較/NISA/ふるさと納税\n年金/配当金/複利計算\n持ち家vs賃貸/FIRE/失業保険\n保険/不動産利回り/車維持費/育休/電気代…\n\nコード0行。開発費0円。\n\nAIで副業したい人、作り方はNoteで全公開中",
     "reply": "全21ツール、無料で公開中↓\nhttps://ai-money-lab.github.io/benri-tools/",
-    "posted": false
+    "posted": true,
+    "posted_at": "2026-03-07T20:00:51.592169"
   },
   {
     "id": "v3_27_tools_save",
