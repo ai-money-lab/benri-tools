@@ -50,3 +50,8 @@ data/x_browser_profile/
 
 # Root screenshots (debug artifacts)
 *-full.png
+
+# VPS credentials
+scripts/vps_connect.rdp
+scripts/vps_windows_setup.ps1
+scripts/vps_register_tasks.ps1

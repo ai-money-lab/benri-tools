@@ -21,9 +21,9 @@ BROWSER_PROFILE = os.path.join(BASE_DIR, 'data', 'x_browser_profile')
 CARDS_DIR = os.path.join(BASE_DIR, 'output', 'social', 'x_cards')
 os.makedirs(LOGS_DIR, exist_ok=True)
 
-X_EMAIL = 'aijidouca@gmail.com'
-X_PASSWORD = 'aijidouca@88'
-X_USERNAME = 'claude_sidejob'
+X_EMAIL = os.environ.get('X_EMAIL', '')
+X_PASSWORD = os.environ.get('X_PASSWORD', '')
+X_USERNAME = os.environ.get('X_USERNAME', '')
 
 IS_WINDOWS = platform.system() == 'Windows'
 
