@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>あなたの家賃、適正？無料家賃診断 | ROCKEDGE</title>
+<meta name="description" content="7つの質問に答えるだけで、あなたの家賃が適正かどうかを無料診断。エリア別・年収別の相場データと比較して、今すぐ結果がわかります。">
+<meta property="og:title" content="あなたの家賃、適正？無料家賃診断">
+<meta property="og:description" content="7つの質問に答えるだけで家賃の適正度を診断。エリア別相場データと比較。">
+<meta property="og:type" content="website">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Hiragino Kaku Gothic ProN',Meiryo,sans-serif;background:#f4f6fa;color:#333;line-height:1.6;min-width:320px}
+.container{max-width:720px;margin:0 auto;padding:16px}
+h1{text-align:center;color:#1a2744;font-size:clamp(1.3rem,4vw,1.8rem);margin:16px 0 8px;font-weight:700}
+.subtitle{text-align:center;color:#667;font-size:.85rem;margin-bottom:24px}
+.badge{display:inline-block;background:#e74c3c;color:#fff;font-size:.7rem;padding:2px 8px;border-radius:10px;margin-bottom:8px;font-weight:700}
+.card{background:#fff;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,.08);padding:24px;margin-bottom:20px}
+.progress-bar{background:#e9ecef;border-radius:8px;height:8px;margin-bottom:24px;overflow:hidden}
+.progress-fill{background:linear-gradient(90deg,#667eea,#764ba2);height:100%;border-radius:8px;transition:width .4s ease}
+.step{display:none}
+.step.active{display:block}
+.step-title{font-size:1.1rem;font-weight:700;color:#1a2744;margin-bottom:16px;text-align:center}
+.step-num{display:inline-block;background:#667eea;color:#fff;width:28px;height:28px;border-radius:50%;text-align:center;line-height:28px;font-size:.85rem;margin-right:8px}
+.options{display:grid;gap:10px;margin-bottom:20px}
+.option-btn{display:block;width:100%;padding:14px 16px;background:#f8f9fa;border:2px solid #e9ecef;border-radius:10px;font-size:.95rem;cursor:pointer;text-align:left;transition:all .2s;font-family:inherit;color:#333}
+.option-btn:hover{border-color:#667eea;background:#f0f0ff}
+.option-btn.selected{border-color:#667eea;background:#667eea;color:#fff}
+.input-group{margin-bottom:16px}
+.input-group label{display:block;font-weight:600;margin-bottom:6px;font-size:.9rem;color:#444}
+.input-field{width:100%;padding:12px 14px;border:2px solid #e9ecef;border-radius:10px;font-size:1rem;font-family:inherit;transition:border-color .2s}
+.input-field:focus{outline:none;border-color:#667eea}
+.slider-wrap{margin-bottom:16px}
+.slider-wrap label{display:block;font-weight:600;margin-bottom:6px;font-size:.9rem;color:#444}
+.slider-row{display:flex;align-items:center;gap:12px}
+.slider-row input[type=range]{flex:1;accent-color:#667eea}
+.slider-val{font-size:1.1rem;font-weight:700;color:#667eea;min-width:80px;text-align:right}
+.btn-row{display:flex;gap:10px;justify-content:center;margin-top:20px}
+.btn{padding:12px 32px;border-radius:10px;font-size:1rem;font-weight:600;cursor:pointer;border:none;font-family:inherit;transition:all .2s}
+.btn-next{background:#667eea;color:#fff}
+.btn-next:hover{background:#5a6fd6}
+.btn-back{background:#e9ecef;color:#555}
+.btn-back:hover{background:#ddd}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+/* Result Styles */
+.result-section{display:none}
+.result-header{text-align:center;padding:24px;border-radius:12px;margin-bottom:20px}
+.result-header.good{background:linear-gradient(135deg,#d4edda,#e8f5e9)}
+.result-header.warning{background:linear-gradient(135deg,#fff3e0,#fff8e1)}
+.result-header.danger{background:linear-gradient(135deg,#ffeef0,#ffebee)}
+.result-rank{font-size:3rem;margin-bottom:8px}
+.result-title{font-size:1.4rem;font-weight:800;color:#1a2744}
+.result-subtitle{font-size:.9rem;color:#666;margin-top:4px}
+.metric-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:20px}
+.metric-card{background:#fff;border-radius:10px;padding:16px;text-align:center;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.metric-val{font-size:1.6rem;font-weight:800;color:#667eea}
+.metric-label{font-size:.78rem;color:#888;margin-top:2px}
+.advice-box{background:#f8f9fa;border-radius:10px;padding:16px;margin-bottom:16px;border-left:4px solid #667eea}
+.advice-box h3{font-size:.95rem;color:#1a2744;margin-bottom:8px}
+.advice-box p{font-size:.87rem;color:#555}
+.share-section{text-align:center;margin-top:24px;padding:20px;background:#f8f9fa;border-radius:12px}
+.share-section h3{font-size:1rem;margin-bottom:12px;color:#1a2744}
+.share-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.share-btn{padding:10px 20px;border-radius:8px;font-size:.85rem;font-weight:600;text-decoration:none;color:#fff;transition:opacity .2s}
+.share-btn:hover{opacity:.85}
+.share-btn.x{background:#000}
+.share-btn.line{background:#06c755}
+.share-btn.copy{background:#667eea}
+.cta-box{background:linear-gradient(135deg,#667eea,#764ba2);border-radius:12px;padding:24px;text-align:center;margin:20px 0}
+.cta-box h3{color:#fff;font-size:1.1rem;margin-bottom:8px}
+.cta-box p{color:rgba(255,255,255,.85);font-size:.85rem;margin-bottom:16px}
+.cta-box a{display:inline-block;background:#fff;color:#667eea;padding:12px 32px;border-radius:8px;font-weight:700;text-decoration:none;font-size:.95rem}
+.stats-bar{display:flex;justify-content:center;gap:24px;margin-bottom:24px;flex-wrap:wrap}
+.stat-item{text-align:center}
+.stat-num{font-size:1.3rem;font-weight:800;color:#667eea}
+.stat-lbl{font-size:.72rem;color:#888}
+.note{background:#fff3e0;border-radius:8px;padding:12px 16px;font-size:.75rem;color:#888;margin-top:16px;text-align:center}
+footer{text-align:center;color:#aaa;font-size:.72rem;padding:24px 0 16px}
+.related-tools{background:#f8f9fa;border-radius:12px;padding:20px;margin:20px 0}
+.related-tools h3{font-size:1rem;color:#1a2744;margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid #667eea}
+.related-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px}
+.related-link{display:block;padding:10px 14px;background:#fff;border-radius:8px;text-decoration:none;color:#333;font-size:.9rem;font-weight:500;box-shadow:0 1px 3px rgba(0,0,0,.08);transition:transform .15s,box-shadow .15s}
+.related-link:hover{transform:translateY(-1px);box-shadow:0 3px 8px rgba(102,126,234,.2);color:#667eea}
+@media(max-width:640px){
+  .card{padding:16px}
+  .metric-grid{grid-template-columns:1fr}
+  .stats-bar{gap:16px}
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <p class="badge" style="text-align:center;display:block">無料・登録不要</p>
+  <h1>あなたの家賃、適正ですか？</h1>
+  <p class="subtitle">7つの質問で無料診断 ・ 約60秒 ・ 結果すぐ表示</p>
+
+  <!-- Stats Bar -->
+  <div class="stats-bar">
+    <div class="stat-item"><div class="stat-num">60</div><div class="stat-lbl">秒で完了</div></div>
+    <div class="stat-item"><div class="stat-num">7</div><div class="stat-lbl">問だけ</div></div>
+    <div class="stat-item"><div class="stat-num">無料</div><div class="stat-lbl">登録不要</div></div>
+  </div>
+
+  <!-- Form Section -->
+  <div id="formSection">
+    <div class="card">
+      <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:14%"></div></div>
+
+      <!-- Q1: エリア -->
+      <div class="step active" id="step1">
+        <p class="step-title"><span class="step-num">1</span>お住まいのエリアは？</p>
+        <div class="options" id="q1options">
+          <button class="option-btn" data-value="東京23区">東京23区</button>
+          <button class="option-btn" data-value="東京23区外">東京23区外</button>
+          <button class="option-btn" data-value="神奈川・千葉・埼玉">神奈川・千葉・埼玉</button>
+          <button class="option-btn" data-value="大阪・京都・兵庫">大阪・京都・兵庫</button>
+          <button class="option-btn" data-value="名古屋・福岡・札幌">名古屋・福岡・札幌</button>
+          <button class="option-btn" data-value="その他地方">その他地方</button>
+        </div>
+        <div class="btn-row"><button class="btn btn-next" id="btn1" disabled onclick="nextStep(2)">次へ →</button></div>
+      </div>
+
+      <!-- Q2: 家賃 -->
+      <div class="step" id="step2">
+        <p class="step-title"><span class="step-num">2</span>現在の家賃（管理費込み）は？</p>
+        <div class="slider-wrap">
+          <div class="slider-row">
+            <input type="range" id="rentSlider" min="10000" max="1000000" step="5000" value="80000">
+            <span class="slider-val" id="rentVal">80,000円</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:.7rem;color:#aaa;margin-top:2px"><span>1万</span><span>50万</span><span>100万</span></div>
+        </div>
+        <div class="input-group" style="margin-top:12px">
+          <label style="font-size:.8rem;color:#888">直接入力（100万円以上もOK）</label>
+          <div style="display:flex;align-items:center;gap:8px">
+            <input type="number" id="rentInput" class="input-field" style="width:180px;text-align:right" min="10000" step="1000" value="80000" placeholder="340000">
+            <span style="font-size:.9rem;color:#888">円</span>
+          </div>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-back" onclick="prevStep(1)">← 戻る</button>
+          <button class="btn btn-next" onclick="nextStep(3)">次へ →</button>
+        </div>
+      </div>
+
+      <!-- Q3: 年齢 -->
+      <div class="step" id="step3">
+        <p class="step-title"><span class="step-num">3</span>あなたの年代は？</p>
+        <div class="options" id="q3options">
+          <button class="option-btn" data-value="20代">20代</button>
+          <button class="option-btn" data-value="30代">30代</button>
+          <button class="option-btn" data-value="40代">40代</button>
+          <button class="option-btn" data-value="50代以上">50代以上</button>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-back" onclick="prevStep(2)">← 戻る</button>
+          <button class="btn btn-next" id="btn3" disabled onclick="nextStep(4)">次へ →</button>
+        </div>
+      </div>
+
+      <!-- Q4: 年収 -->
+      <div class="step" id="step4">
+        <p class="step-title"><span class="step-num">4</span>世帯年収はどのくらい？</p>
+        <div class="options" id="q4options">
+          <button class="option-btn" data-value="300万未満">300万円未満</button>
+          <button class="option-btn" data-value="300-500万">300〜500万円</button>
+          <button class="option-btn" data-value="500-700万">500〜700万円</button>
+          <button class="option-btn" data-value="700-1000万">700〜1,000万円</button>
+          <button class="option-btn" data-value="1000-1500万">1,000〜1,500万円</button>
+          <button class="option-btn" data-value="1500-2000万">1,500〜2,000万円</button>
+          <button class="option-btn" data-value="2000万以上">2,000万円以上</button>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-back" onclick="prevStep(3)">← 戻る</button>
+          <button class="btn btn-next" id="btn4" disabled onclick="nextStep(5)">次へ →</button>
+        </div>
+      </div>
+
+      <!-- Q5: 家族構成 -->
+      <div class="step" id="step5">
+        <p class="step-title"><span class="step-num">5</span>家族構成は？</p>
+        <div class="options" id="q5options">
+          <button class="option-btn" data-value="一人暮らし">一人暮らし</button>
+          <button class="option-btn" data-value="二人暮らし">二人暮らし（カップル・夫婦）</button>
+          <button class="option-btn" data-value="ファミリー（子1人）">ファミリー（子ども1人）</button>
+          <button class="option-btn" data-value="ファミリー（子2人以上）">ファミリー（子ども2人以上）</button>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-back" onclick="prevStep(4)">← 戻る</button>
+          <button class="btn btn-next" id="btn5" disabled onclick="nextStep(6)">次へ →</button>
+        </div>
+      </div>
+
+      <!-- Q6: 満足度 -->
+      <div class="step" id="step6">
+        <p class="step-title"><span class="step-num">6</span>今の家賃に対する満足度は？</p>
+        <div class="options" id="q6options">
+          <button class="option-btn" data-value="とても満足">😊 とても満足</button>
+          <button class="option-btn" data-value="まあ満足">🙂 まあ満足</button>
+          <button class="option-btn" data-value="やや不満">😐 やや不満</button>
+          <button class="option-btn" data-value="とても不満">😣 とても不満</button>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-back" onclick="prevStep(5)">← 戻る</button>
+          <button class="btn btn-next" id="btn6" disabled onclick="nextStep(7)">次へ →</button>
+        </div>
+      </div>
+
+      <!-- Q7: 希望 -->
+      <div class="step" id="step7">
+        <p class="step-title"><span class="step-num">7</span>住まいで最も重視するポイントは？</p>
+        <div class="options" id="q7options">
+          <button class="option-btn" data-value="家賃の安さ">💰 家賃の安さ</button>
+          <button class="option-btn" data-value="駅からの近さ">🚃 駅からの近さ</button>
+          <button class="option-btn" data-value="広さ・間取り">🏠 広さ・間取り</button>
+          <button class="option-btn" data-value="築年数・設備">✨ 築年数・設備の新しさ</button>
+          <button class="option-btn" data-value="治安・周辺環境">🌳 治安・周辺環境</button>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-back" onclick="prevStep(6)">← 戻る</button>
+          <button class="btn btn-next" id="btn7" disabled onclick="showResult()" style="background:#e74c3c">診断結果を見る 🔍</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Result Section -->
+  <div class="result-section" id="resultSection">
+    <div class="result-header" id="resultHeader">
+      <div class="result-rank" id="resultRank"></div>
+      <div class="result-title" id="resultTitle"></div>
+      <div class="result-subtitle" id="resultSubtitle"></div>
+    </div>
+
+    <div class="card">
+      <h2 style="color:#1a2744;font-size:1rem;margin-bottom:12px">📊 あなたの家賃データ</h2>
+      <div class="metric-grid">
+        <div class="metric-card">
+          <div class="metric-val" id="mRent"></div>
+          <div class="metric-label">あなたの家賃</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-val" id="mAvg"></div>
+          <div class="metric-label">エリア相場</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-val" id="mDiff"></div>
+          <div class="metric-label">相場との差額</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-val" id="mRatio"></div>
+          <div class="metric-label">年収に対する家賃比率</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2 style="color:#1a2744;font-size:1rem;margin-bottom:12px">💡 あなたへのアドバイス</h2>
+      <div id="adviceContainer"></div>
+    </div>
+
+    <div class="card">
+      <h2 style="color:#1a2744;font-size:1rem;margin-bottom:12px">📈 同じエリアの人はいくら払ってる？</h2>
+      <div id="comparisonContainer"></div>
+    </div>
+
+    <!-- Share -->
+    <div class="share-section">
+      <h3>結果をシェアして友達と比較しよう</h3>
+      <div class="share-btns">
+        <a class="share-btn x" id="shareX" href="#" target="_blank" rel="noopener">Xでシェア</a>
+        <a class="share-btn line" id="shareLine" href="#" target="_blank" rel="noopener">LINEで送る</a>
+        <button class="share-btn copy" onclick="copyResult()">結果をコピー</button>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="cta-box">
+      <h3>もっと詳しく知りたい方へ</h3>
+      <p>持ち家vs賃貸シミュレーターで長期コストを比較できます</p>
+      <a href="../rent-vs-buy/index.html">持ち家vs賃貸を比較する →</a>
+    </div>
+
+    <!-- Related Tools -->
+    <div class="related-tools">
+      <h3>関連ツール</h3>
+      <div class="related-grid">
+        <a href="../rent-vs-buy/index.html" class="related-link">持ち家vs賃貸シミュレーター</a>
+        <a href="../loan-calculator/index.html" class="related-link">住宅ローン計算機</a>
+        <a href="../salary-calculator/index.html" class="related-link">年収手取り計算機</a>
+        <a href="../real-estate-yield/index.html" class="related-link">不動産投資利回り計算機</a>
+      </div>
+    </div>
+
+    <!-- Retry -->
+    <div style="text-align:center;margin:20px 0">
+      <button class="btn btn-next" onclick="resetForm()" style="background:#667eea">もう一度診断する ↻</button>
+    </div>
+
+    <p class="note">※この診断は統計データに基づく参考値です。個別の不動産相談については専門家にご相談ください。データはプライバシーに配慮し個人を特定できない形で統計処理に利用します。</p>
+
+    <div class="card" style="margin-top:16px">
+      <h2 style="color:#1a2744;font-size:.9rem;margin-bottom:8px">📚 データ出典</h2>
+      <ul style="font-size:.75rem;color:#888;padding-left:16px;line-height:1.8">
+        <li>アットホーム「全国主要都市の賃貸マンション・アパート募集家賃動向」2025年</li>
+        <li>LIFULL HOME'S マーケットレポート 2025年（掲載賃料ベース）</li>
+        <li>総務省統計局「住宅・土地統計調査」令和5年（2023年）確報集計</li>
+        <li>総務省統計局「家計調査」2024年</li>
+      </ul>
+      <p style="font-size:.7rem;color:#aaa;margin-top:6px">※掲載賃料（募集価格）は成約賃料より5〜10%高い傾向があります。本ツールでは実勢に近い調整済み数値を使用しています。</p>
+    </div>
+  </div>
+
+  <footer>© 2025 ROCKEDGE Money Tools</footer>
+</div>
+
+<script>
+// ============ DATA ============
+// 出典: アットホーム/LIFULL HOME'S マーケットレポート 2025年、総務省 住宅・土地統計調査 令和5年
+// 面積帯: single(30㎡以下), couple(30-50㎡), fam1(50-70㎡), fam2(70㎡以上)
+// 掲載賃料から実勢ベースに約5%調整済み
+const AREA_RENT = {
+  '東京23区':      { single: 99000, couple: 162000, fam1: 236000, fam2: 295000 },
+  '東京23区外':    { single: 67000, couple: 108000, fam1: 155000, fam2: 195000 },
+  '神奈川・千葉・埼玉': { single: 64000, couple: 103000, fam1: 148000, fam2: 185000 },
+  '大阪・京都・兵庫':   { single: 71000, couple: 105000, fam1: 128000, fam2: 165000 },
+  '名古屋・福岡・札幌': { single: 58000, couple: 80000,  fam1: 110000, fam2: 140000 },
+  'その他地方':    { single: 47000, couple: 61000,  fam1: 76000,  fam2: 93000  }
+};
+
+const INCOME_MID = {
+  '300万未満': 250, '300-500万': 400, '500-700万': 600,
+  '700-1000万': 850, '1000-1500万': 1250, '1500-2000万': 1750, '2000万以上': 2500
+};
+
+const FAMILY_KEY = {
+  '一人暮らし': 'single', '二人暮らし': 'couple',
+  'ファミリー（子1人）': 'fam1', 'ファミリー（子2人以上）': 'fam2'
+};
+
+// ============ STATE ============
+const answers = {};
+let currentStep = 1;
+
+// ============ FORM LOGIC ============
+function setupOptions(containerId, key, nextBtnId) {
+  const container = document.getElementById(containerId);
+  const btns = container.querySelectorAll('.option-btn');
+  btns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      btns.forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      answers[key] = btn.dataset.value;
+      if (nextBtnId) document.getElementById(nextBtnId).disabled = false;
+    });
+  });
+}
+
+setupOptions('q1options', 'area', 'btn1');
+setupOptions('q3options', 'age', 'btn3');
+setupOptions('q4options', 'income', 'btn4');
+setupOptions('q5options', 'family', 'btn5');
+setupOptions('q6options', 'satisfaction', 'btn6');
+setupOptions('q7options', 'priority', 'btn7');
+
+// Rent slider + input sync
+const rentSlider = document.getElementById('rentSlider');
+const rentVal = document.getElementById('rentVal');
+const rentInput = document.getElementById('rentInput');
+
+function updateRent(v) {
+  v = Math.max(10000, parseInt(v) || 10000);
+  answers.rent = v;
+  rentVal.textContent = v.toLocaleString() + '円';
+}
+
+rentSlider.addEventListener('input', () => {
+  const v = parseInt(rentSlider.value);
+  rentInput.value = v;
+  updateRent(v);
+});
+
+rentInput.addEventListener('input', () => {
+  const v = parseInt(rentInput.value) || 10000;
+  if (v <= 1000000) rentSlider.value = v;
+  else rentSlider.value = 1000000;
+  updateRent(v);
+});
+
+answers.rent = 80000;
+
+function nextStep(n) {
+  document.getElementById('step' + currentStep).classList.remove('active');
+  document.getElementById('step' + n).classList.add('active');
+  currentStep = n;
+  document.getElementById('progressFill').style.width = (n / 7 * 100) + '%';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function prevStep(n) {
+  document.getElementById('step' + currentStep).classList.remove('active');
+  document.getElementById('step' + n).classList.add('active');
+  currentStep = n;
+  document.getElementById('progressFill').style.width = (n / 7 * 100) + '%';
+}
+
+// ============ RESULT CALC ============
+function showResult() {
+  const area = answers.area;
+  const rent = answers.rent;
+  const income = answers.income;
+  const family = answers.family;
+  const satisfaction = answers.satisfaction;
+  const priority = answers.priority;
+  const age = answers.age;
+
+  const famKey = FAMILY_KEY[family] || 'single';
+  const areaAvg = AREA_RENT[area][famKey];
+  const incomeMid = INCOME_MID[income];
+  const monthlyIncome = incomeMid * 10000 / 12;
+  const rentRatio = (rent / monthlyIncome * 100).toFixed(1);
+  const diff = rent - areaAvg;
+
+  // Scoring
+  let score = 50;
+  // Rent ratio scoring (ideal: 25% or less)
+  if (rentRatio <= 20) score += 25;
+  else if (rentRatio <= 25) score += 15;
+  else if (rentRatio <= 30) score += 5;
+  else if (rentRatio <= 35) score -= 5;
+  else score -= 15;
+
+  // Area comparison scoring
+  const diffPct = (diff / areaAvg * 100);
+  if (diffPct <= -20) score += 20;
+  else if (diffPct <= -10) score += 15;
+  else if (diffPct <= 0) score += 10;
+  else if (diffPct <= 10) score -= 0;
+  else if (diffPct <= 20) score -= 10;
+  else score -= 20;
+
+  // Satisfaction bonus
+  if (satisfaction === 'とても満足') score += 10;
+  else if (satisfaction === 'まあ満足') score += 5;
+
+  score = Math.max(0, Math.min(100, score));
+
+  // Determine rank
+  let rank, title, subtitle, headerClass;
+  if (score >= 75) {
+    rank = '🎉 A'; title = '適正家賃です！'; subtitle = 'コスパの良い住まいを選べています';
+    headerClass = 'good';
+  } else if (score >= 50) {
+    rank = '🤔 B'; title = 'おおむね適正'; subtitle = '少し見直すと月数千円節約できるかも';
+    headerClass = 'warning';
+  } else if (score >= 30) {
+    rank = '⚠️ C'; title = 'やや割高かも'; subtitle = '年間で数万円〜十数万円の節約余地あり';
+    headerClass = 'warning';
+  } else {
+    rank = '🚨 D'; title = '家賃見直しを推奨'; subtitle = '家計を圧迫している可能性があります';
+    headerClass = 'danger';
+  }
+
+  // Display results
+  document.getElementById('formSection').style.display = 'none';
+  document.getElementById('resultSection').style.display = 'block';
+
+  const rh = document.getElementById('resultHeader');
+  rh.className = 'result-header ' + headerClass;
+  document.getElementById('resultRank').textContent = rank;
+  document.getElementById('resultTitle').textContent = title;
+  document.getElementById('resultSubtitle').textContent = subtitle;
+
+  document.getElementById('mRent').textContent = rent.toLocaleString() + '円';
+  document.getElementById('mAvg').textContent = areaAvg.toLocaleString() + '円';
+
+  const diffEl = document.getElementById('mDiff');
+  if (diff > 0) {
+    diffEl.textContent = '+' + diff.toLocaleString() + '円';
+    diffEl.style.color = '#e74c3c';
+  } else if (diff < 0) {
+    diffEl.textContent = diff.toLocaleString() + '円';
+    diffEl.style.color = '#27ae60';
+  } else {
+    diffEl.textContent = '±0円';
+    diffEl.style.color = '#667eea';
+  }
+
+  document.getElementById('mRatio').textContent = rentRatio + '%';
+  if (parseFloat(rentRatio) > 30) {
+    document.getElementById('mRatio').style.color = '#e74c3c';
+  } else if (parseFloat(rentRatio) > 25) {
+    document.getElementById('mRatio').style.color = '#f39c12';
+  }
+
+  // Advice
+  const adviceContainer = document.getElementById('adviceContainer');
+  let adviceHTML = '';
+
+  // Rent ratio advice
+  if (parseFloat(rentRatio) > 30) {
+    adviceHTML += '<div class="advice-box"><h3>⚠️ 家賃比率が高めです</h3><p>一般的に家賃は手取りの25〜30%が目安。現在' + rentRatio + '%で、月' + Math.round((parseFloat(rentRatio) - 25) / 100 * monthlyIncome).toLocaleString() + '円ほど家計に余裕が生まれる可能性があります。</p></div>';
+  } else if (parseFloat(rentRatio) <= 20) {
+    adviceHTML += '<div class="advice-box"><h3>✅ 家賃バランスが良好</h3><p>手取りに対する家賃比率が' + rentRatio + '%と理想的。貯蓄や投資に回す余力が十分あります。</p></div>';
+  }
+
+  // Area comparison advice
+  if (diff > 10000) {
+    const yearSave = diff * 12;
+    adviceHTML += '<div class="advice-box"><h3>📍 エリア相場より高め</h3><p>' + area + 'の' + family + '相場は約' + areaAvg.toLocaleString() + '円。同エリアでの引越しで年間約' + yearSave.toLocaleString() + '円の節約が見込めます。</p></div>';
+  } else if (diff < -10000) {
+    adviceHTML += '<div class="advice-box"><h3>🎯 相場より安い物件をゲット</h3><p>' + area + 'の相場' + areaAvg.toLocaleString() + '円に対して' + Math.abs(diff).toLocaleString() + '円安く住めています。良い物件を見つけていますね。</p></div>';
+  }
+
+  // Priority-based advice
+  const priorityAdvice = {
+    '家賃の安さ': '<div class="advice-box"><h3>💰 コスト重視のあなたへ</h3><p>築年数を少し妥協すると同じエリアで1〜2万円安くなることも。また更新時の交渉も有効です。</p></div>',
+    '駅からの近さ': '<div class="advice-box"><h3>🚃 駅近重視のあなたへ</h3><p>駅から徒歩1分増えるごとに家賃が約2〜3%下がる傾向。徒歩10分前後が家賃と利便性のバランスが良いゾーンです。</p></div>',
+    '広さ・間取り': '<div class="advice-box"><h3>🏠 広さ重視のあなたへ</h3><p>駅から少し離れるだけで同じ家賃で+5〜10㎡広い物件が見つかることも。テレワーク時代は要検討。</p></div>',
+    '築年数・設備': '<div class="advice-box"><h3>✨ 設備重視のあなたへ</h3><p>リノベーション物件なら築年数は古くても設備は最新。家賃も新築より2〜3割安くなります。</p></div>',
+    '治安・周辺環境': '<div class="advice-box"><h3>🌳 環境重視のあなたへ</h3><p>住環境は家賃に反映されにくいポイント。人気エリアの隣駅に住むと環境は同等で家賃が1〜2万円安いケースも。</p></div>'
+  };
+  adviceHTML += priorityAdvice[priority] || '';
+  adviceContainer.innerHTML = adviceHTML;
+
+  // Comparison data
+  const compContainer = document.getElementById('comparisonContainer');
+  const areaData = AREA_RENT[area];
+  compContainer.innerHTML = `
+    <div class="metric-grid">
+      <div class="metric-card"><div class="metric-val" style="font-size:1.2rem">${areaData.single.toLocaleString()}円</div><div class="metric-label">一人暮らし相場</div></div>
+      <div class="metric-card"><div class="metric-val" style="font-size:1.2rem">${areaData.couple.toLocaleString()}円</div><div class="metric-label">二人暮らし相場</div></div>
+      <div class="metric-card"><div class="metric-val" style="font-size:1.2rem">${areaData.fam1.toLocaleString()}円</div><div class="metric-label">ファミリー(子1人)相場</div></div>
+      <div class="metric-card"><div class="metric-val" style="font-size:1.2rem">${areaData.fam2.toLocaleString()}円</div><div class="metric-label">ファミリー(子2人+)相場</div></div>
+    </div>
+  `;
+
+  // Share links
+  const shareText = `家賃診断の結果: ${rank.replace(/[^\w\s]/g,'')}ランク！私の家賃は${area}で${rent.toLocaleString()}円（相場比${diff > 0 ? '+' : ''}${diff.toLocaleString()}円）。あなたも診断してみて👇`;
+  const shareUrl = window.location.href;
+  document.getElementById('shareX').href = 'https://x.com/intent/tweet?text=' + encodeURIComponent(shareText) + '&url=' + encodeURIComponent(shareUrl);
+  document.getElementById('shareLine').href = 'https://social-plugins.line.me/lineit/share?url=' + encodeURIComponent(shareUrl) + '&text=' + encodeURIComponent(shareText);
+
+  // Send data to Google Forms (if configured)
+  submitToGoogleForms(answers, score, rentRatio);
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ============ GOOGLE FORMS SUBMISSION ============
+function submitToGoogleForms(data, score, rentRatio) {
+  // Replace with your actual Google Form URL and entry IDs
+  // Instructions: See DEPLOY_GUIDE.md for setup
+  const GOOGLE_FORM_URL = '';  // e.g., 'https://docs.google.com/forms/d/e/XXXXX/formResponse'
+  const ENTRY_IDS = {
+    area: '',       // e.g., 'entry.123456789'
+    rent: '',       // e.g., 'entry.234567890'
+    age: '',        // e.g., 'entry.345678901'
+    income: '',     // e.g., 'entry.456789012'
+    family: '',     // e.g., 'entry.567890123'
+    satisfaction: '',// e.g., 'entry.678901234'
+    priority: '',   // e.g., 'entry.789012345'
+    score: '',      // e.g., 'entry.890123456'
+    rentRatio: ''   // e.g., 'entry.901234567'
+  };
+
+  if (!GOOGLE_FORM_URL) return; // Skip if not configured
+
+  const formData = new FormData();
+  formData.append(ENTRY_IDS.area, data.area);
+  formData.append(ENTRY_IDS.rent, data.rent);
+  formData.append(ENTRY_IDS.age, data.age);
+  formData.append(ENTRY_IDS.income, data.income);
+  formData.append(ENTRY_IDS.family, data.family);
+  formData.append(ENTRY_IDS.satisfaction, data.satisfaction);
+  formData.append(ENTRY_IDS.priority, data.priority);
+  formData.append(ENTRY_IDS.score, score);
+  formData.append(ENTRY_IDS.rentRatio, rentRatio);
+
+  fetch(GOOGLE_FORM_URL, {
+    method: 'POST',
+    body: formData,
+    mode: 'no-cors'
+  }).catch(() => {});
+}
+
+// ============ UTILS ============
+function resetForm() {
+  document.getElementById('formSection').style.display = 'block';
+  document.getElementById('resultSection').style.display = 'none';
+  currentStep = 1;
+  document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+  document.getElementById('step1').classList.add('active');
+  document.getElementById('progressFill').style.width = '14%';
+  document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+  document.querySelectorAll('[id^="btn"]').forEach(b => { if (b.id !== 'btn1') return; b.disabled = true; });
+  rentSlider.value = 80000;
+  rentInput.value = 80000;
+  rentVal.textContent = '80,000円';
+  Object.keys(answers).forEach(k => delete answers[k]);
+  answers.rent = 80000;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function copyResult() {
+  const text = document.getElementById('resultTitle').textContent + '\n' +
+    '家賃: ' + document.getElementById('mRent').textContent + '\n' +
+    '相場: ' + document.getElementById('mAvg').textContent + '\n' +
+    '差額: ' + document.getElementById('mDiff').textContent + '\n' +
+    '家賃比率: ' + document.getElementById('mRatio').textContent + '\n' +
+    '診断はこちら → ' + window.location.href;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.querySelector('.share-btn.copy');
+    btn.textContent = 'コピーしました！';
+    setTimeout(() => btn.textContent = '結果をコピー', 2000);
+  });
+}
+
+</script>
+</body>
+</html>

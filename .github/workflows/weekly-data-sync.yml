@@ -1,0 +1,46 @@
+name: Weekly Data Sync
+
+on:
+  schedule:
+    # 毎週月曜 00:00 UTC = JST 09:00
+    - cron: '0 0 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync-data:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Sync form data
+        env:
+          GSHEET_JSON_URL: ${{ secrets.GSHEET_JSON_URL }}
+        run: python scripts/sync_form_data.py
+
+      - name: Commit and push data
+        run: |
+          git config user.name "ROCKEDGE AI-OS"
+          git config user.email "ai-os@rockedge.jp"
+          git add data/raw_data.json data/summary.json data/kpi_history.json
+          git diff --cached --quiet || git commit -m "chore: weekly data sync $(date +%Y-%m-%d)"
+          git push
+
+      - name: Job Summary
+        if: always()
+        run: |
+          echo "## Weekly Data Sync Report" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ -f data/raw_data.json ]; then
+            TOTAL=$(python3 -c "import json; d=json.load(open('data/raw_data.json')); print(d.get('totalEntries',0))")
+            NEW=$(python3 -c "import json; d=json.load(open('data/raw_data.json')); print(d.get('newThisWeek',0))")
+            echo "- Total data: ${TOTAL}" >> $GITHUB_STEP_SUMMARY
+            echo "- New this week: ${NEW}" >> $GITHUB_STEP_SUMMARY
+          fi
+          echo "- Sync time: $(date -u '+%Y-%m-%d %H:%M UTC')" >> $GITHUB_STEP_SUMMARY
