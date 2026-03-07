@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>持ち家vs賃貸シミュレーター - 累計コスト比較で損益分岐点がわかる</title>
-<meta name="description" content="物件価格・ローン金利・家賃を入力するだけで持ち家と賃貸の累計コストを比較。損益分岐点がひと目でわかるグラフ付きシミュレーション。">
+<meta name="description" content="物件価格・ローン金利・家賃を入力するだけで持ち家と賃貸の累計コストを比較。住宅ローン控除・固定資産税・管理費・物件残存価値まで考慮した本格シミュレーション。">
 <meta property="og:title" content="持ち家vs賃貸シミュレーター - 累計コスト比較で損益分岐点がわかる">
-<meta property="og:description" content="物件価格・ローン金利・家賃を入力するだけで持ち家と賃貸の累計コストを比較。損益分岐点がひと目でわかるグラフ付きシミュレーション。">
+<meta property="og:description" content="住宅ローン控除・固定資産税・管理費・物件残存価値まで考慮した本格シミュレーション。損益分岐点がひと目でわかるグラフ付き。">
 <meta property="og:type" content="website">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -22,6 +22,7 @@ h1{text-align:center;color:#1a2744;font-size:clamp(1.3rem,4vw,1.8rem);margin:16p
 .input-row input[type=range]{flex:1;accent-color:#1a6b3c}
 .input-row input[type=number]{width:130px;padding:8px 10px;border:1px solid #ccc;border-radius:6px;font-size:1rem;text-align:right}
 .input-row .unit{font-size:.85rem;color:#888;white-space:nowrap}
+.detail-note{font-size:.7rem;color:#999;margin-top:4px;padding-left:2px}
 .columns{display:grid;grid-template-columns:1fr 1fr;gap:20px}
 .columns .card{margin-bottom:0}
 .result-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-bottom:16px}
@@ -34,11 +35,13 @@ h1{text-align:center;color:#1a2744;font-size:clamp(1.3rem,4vw,1.8rem);margin:16p
 .result-card.rent .val{color:#1a6b3c}
 .result-card.diff .val{color:#e65100}
 .result-card .lbl{font-size:.8rem;color:#666;margin-bottom:4px}
-.result-card .sub{font-size:.82rem;color:#888;margin-top:4px}
-.breakdown{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-top:12px}
+.result-card .sub{font-size:.78rem;color:#888;margin-top:4px;line-height:1.5}
+.breakdown{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-top:12px}
 .breakdown-item{background:#fafafa;border-radius:8px;padding:12px;text-align:center;border:1px solid #eee}
-.breakdown-item .v{font-size:1.1rem;font-weight:700;color:#1a2744}
-.breakdown-item .l{font-size:.75rem;color:#888;margin-top:2px}
+.breakdown-item .v{font-size:1rem;font-weight:700;color:#1a2744}
+.breakdown-item .l{font-size:.72rem;color:#888;margin-top:2px}
+.breakdown-item.deduct{background:#fff8e8;border-color:#ffe0b2}
+.breakdown-item.deduct .v{color:#e65100}
 .breakeven-box{background:linear-gradient(135deg,#fffde7,#fff9c4);border:2px solid #f9a825;border-radius:12px;padding:16px 20px;text-align:center;margin-bottom:20px}
 .breakeven-box .be-label{font-size:.9rem;color:#666;margin-bottom:4px}
 .breakeven-box .be-val{font-size:clamp(1.4rem,4vw,1.9rem);font-weight:800;color:#e65100}
@@ -51,13 +54,20 @@ h1{text-align:center;color:#1a2744;font-size:clamp(1.3rem,4vw,1.8rem);margin:16p
 .affiliate-box a{display:inline-block;background:#1a6b3c;color:#fff;text-decoration:none;padding:12px 32px;border-radius:8px;font-weight:700;font-size:1rem;transition:background .2s}
 .affiliate-box a:hover{background:#145230}
 .table-wrap{overflow-x:auto;margin-top:16px}
-table{width:100%;border-collapse:collapse;font-size:.82rem}
+table{width:100%;border-collapse:collapse;font-size:.78rem}
 th,td{padding:8px 10px;text-align:right;border-bottom:1px solid #eee}
 th{background:#f4f6fa;color:#555;font-weight:600;position:sticky;top:0}
 td:first-child,th:first-child{text-align:center}
 tr:hover{background:#f6faf6}
+.source-section{background:#f8f9fb;border-radius:10px;padding:16px 20px;margin:20px 0}
+.source-section h3{font-size:.9rem;color:#1a2744;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid #ddd}
+.source-section ul{font-size:.72rem;color:#888;padding-left:18px;line-height:1.9}
 .note{background:#fff3e0;border-radius:8px;padding:12px 16px;font-size:.78rem;color:#888;margin-top:16px;text-align:center}
 footer{text-align:center;color:#aaa;font-size:.75rem;padding:24px 0 16px}
+.monthly-box{display:flex;gap:16px;justify-content:center;margin-top:12px;flex-wrap:wrap}
+.monthly-item{background:#f0f4ff;border-radius:8px;padding:10px 16px;text-align:center;border:1px solid #d6e6f5}
+.monthly-item .mv{font-size:1.15rem;font-weight:700;color:#1a2744}
+.monthly-item .ml{font-size:.72rem;color:#888;margin-top:2px}
 @media(max-width:640px){
   .columns{grid-template-columns:1fr}
   .input-row{flex-wrap:wrap}
@@ -65,6 +75,7 @@ footer{text-align:center;color:#aaa;font-size:.75rem;padding:24px 0 16px}
   .input-row input[type=number]{width:100%}
   .card{padding:16px}
   .result-grid{grid-template-columns:1fr}
+  .monthly-box{flex-direction:column;align-items:center}
 }
 </style>
 <style>.related-tools{background:#f8f9fa;border-radius:12px;padding:20px;margin:20px 0}.related-tools h3{font-size:1rem;color:#1a2744;margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid #667eea}.related-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px}.related-link{display:block;padding:10px 14px;background:#fff;border-radius:8px;text-decoration:none;color:#333;font-size:.9rem;font-weight:500;box-shadow:0 1px 3px rgba(0,0,0,.08);transition:transform .15s,box-shadow .15s}.related-link:hover{transform:translateY(-1px);box-shadow:0 3px 8px rgba(102,126,234,.2);color:#667eea}</style>
@@ -72,7 +83,7 @@ footer{text-align:center;color:#aaa;font-size:.75rem;padding:24px 0 16px}
 <body>
 <div class="container">
   <h1>持ち家 vs 賃貸 シミュレーター</h1>
-  <p class="subtitle">購入と賃貸の累計コストを比較して損益分岐点を見つけよう</p>
+  <p class="subtitle">住宅ローン控除・固定資産税・物件残存価値まで考慮した本格比較</p>
 
   <div class="columns">
     <div class="card">
@@ -80,42 +91,45 @@ footer{text-align:center;color:#aaa;font-size:.75rem;padding:24px 0 16px}
       <div class="input-group">
         <label>物件価格</label>
         <div class="input-row">
-          <input type="range" id="priceRange" min="1000" max="10000" step="100" value="4000">
-          <input type="number" id="priceInput" min="1000" max="10000" step="100" value="4000">
+          <input type="range" id="priceRange" min="1000" max="20000" step="100" value="5000">
+          <input type="number" id="priceInput" min="500" max="30000" step="100" value="5000">
           <span class="unit">万円</span>
         </div>
+        <div class="detail-note">※東京23区中古平均 約7,700万円 / 首都圏中古平均 約5,200万円（REINS 2025年）</div>
       </div>
       <div class="input-group">
         <label>頭金割合</label>
         <div class="input-row">
           <input type="range" id="downRange" min="0" max="50" step="1" value="10">
-          <input type="number" id="downInput" min="0" max="50" step="1" value="10">
+          <input type="number" id="downInput" min="0" max="90" step="1" value="10">
           <span class="unit">%</span>
         </div>
       </div>
       <div class="input-group">
-        <label>住宅ローン金利</label>
+        <label>住宅ローン金利（変動）</label>
         <div class="input-row">
-          <input type="range" id="rateRange" min="0.3" max="3.0" step="0.1" value="0.7">
-          <input type="number" id="rateInput" min="0.1" max="5.0" step="0.1" value="0.7">
+          <input type="range" id="rateRange" min="0.3" max="3.0" step="0.05" value="0.85">
+          <input type="number" id="rateInput" min="0.1" max="5.0" step="0.05" value="0.85">
           <span class="unit">%</span>
         </div>
+        <div class="detail-note">※2026年3月: ネット銀行0.60%〜 / メガバンク0.78〜1.18%（住宅金融支援機構）</div>
       </div>
       <div class="input-group">
         <label>ローン期間</label>
         <div class="input-row">
           <input type="range" id="termRange" min="15" max="35" step="1" value="35">
-          <input type="number" id="termInput" min="10" max="45" step="1" value="35">
+          <input type="number" id="termInput" min="10" max="50" step="1" value="35">
           <span class="unit">年</span>
         </div>
       </div>
       <div class="input-group">
-        <label>維持費（物件価格の年率）</label>
+        <label>管理費・修繕積立金</label>
         <div class="input-row">
-          <input type="range" id="maintRange" min="0.5" max="2.0" step="0.1" value="1.0">
-          <input type="number" id="maintInput" min="0.1" max="5.0" step="0.1" value="1.0">
-          <span class="unit">%/年</span>
+          <input type="range" id="maintRange" min="1.0" max="6.0" step="0.1" value="2.7">
+          <input type="number" id="maintInput" min="0" max="15" step="0.1" value="2.7">
+          <span class="unit">万円/月</span>
         </div>
+        <div class="detail-note">※全国70㎡平均: 管理費14,000円+修繕積立金13,000円（REINS/国交省）</div>
       </div>
     </div>
 
@@ -124,10 +138,11 @@ footer{text-align:center;color:#aaa;font-size:.75rem;padding:24px 0 16px}
       <div class="input-group">
         <label>月額家賃</label>
         <div class="input-row">
-          <input type="range" id="rentRange" min="5" max="30" step="0.5" value="12">
-          <input type="number" id="rentInput" min="1" max="100" step="0.5" value="12">
+          <input type="range" id="rentRange" min="3" max="50" step="0.5" value="15">
+          <input type="number" id="rentInput" min="1" max="100" step="0.5" value="15">
           <span class="unit">万円</span>
         </div>
+        <div class="detail-note">※東京23区1人暮し平均 約10万 / ファミリー平均 約24万（LIFULL 2025年）</div>
       </div>
       <div class="input-group">
         <label>家賃上昇率</label>
@@ -136,6 +151,7 @@ footer{text-align:center;color:#aaa;font-size:.75rem;padding:24px 0 16px}
           <input type="number" id="rentUpInput" min="0" max="5.0" step="0.1" value="0.5">
           <span class="unit">%/年</span>
         </div>
+        <div class="detail-note">※CPI民営家賃 2025年: +0.5〜0.8%（総務省 消費者物価指数）</div>
       </div>
       <div class="input-group">
         <label>更新料（2年ごと）</label>
@@ -144,6 +160,7 @@ footer{text-align:center;color:#aaa;font-size:.75rem;padding:24px 0 16px}
           <input type="number" id="renewInput" min="0" max="3" step="0.5" value="1">
           <span class="unit">ヶ月分</span>
         </div>
+        <div class="detail-note">※関東は1ヶ月/2年が主流。関西は更新料なしが一般的（国交省調査）</div>
       </div>
       <div class="input-group" style="margin-top:32px">
         <label>比較期間</label>
@@ -164,7 +181,7 @@ footer{text-align:center;color:#aaa;font-size:.75rem;padding:24px 0 16px}
 
   <div class="result-grid">
     <div class="result-card buy">
-      <div class="lbl">購入の累計コスト</div>
+      <div class="lbl">購入の実質コスト</div>
       <div class="val" id="buyCost">-</div>
       <div class="sub" id="buySub"></div>
     </div>
@@ -174,15 +191,22 @@ footer{text-align:center;color:#aaa;font-size:.75rem;padding:24px 0 16px}
       <div class="sub" id="rentSub"></div>
     </div>
     <div class="result-card diff">
-      <div class="lbl">差額（賃貸 - 購入）</div>
+      <div class="lbl">差額</div>
       <div class="val" id="diffCost">-</div>
       <div class="sub" id="diffSub"></div>
     </div>
   </div>
 
+  <div class="monthly-box" id="monthlyBox"></div>
+
   <div class="card">
     <h2>購入コスト内訳</h2>
     <div class="breakdown" id="buyBreakdown"></div>
+  </div>
+
+  <div class="card">
+    <h2>賃貸コスト内訳</h2>
+    <div class="breakdown" id="rentBreakdown"></div>
   </div>
 
   <div class="card">
@@ -198,9 +222,9 @@ footer{text-align:center;color:#aaa;font-size:.75rem;padding:24px 0 16px}
 
   <div class="card">
     <h2>年次推移表</h2>
-    <div class="table-wrap" style="max-height:400px;overflow-y:auto">
+    <div class="table-wrap" style="max-height:440px;overflow-y:auto">
       <table id="yearlyTable">
-        <thead><tr><th>年</th><th>購入 累計</th><th>うちローン</th><th>うち維持費</th><th>賃貸 累計</th><th>差額</th></tr></thead>
+        <thead><tr><th>年</th><th>購入支出</th><th>資産価値</th><th>実質コスト</th><th>賃貸累計</th><th>差額</th></tr></thead>
         <tbody></tbody>
       </table>
     </div>
@@ -212,7 +236,6 @@ footer{text-align:center;color:#aaa;font-size:.75rem;padding:24px 0 16px}
     <a href="https://px.a8.net/svt/ejp?a8mat=45E59Y+3FU9OY+5MNK+5YJRM" target="_blank" rel="nofollow noopener">無料で見積もりする</a>
   </div>
 
-  
   <div class="related-tools">
     <h3>関連ツール</h3>
     <div class="related-grid">
@@ -223,15 +246,30 @@ footer{text-align:center;color:#aaa;font-size:.75rem;padding:24px 0 16px}
     </div>
   </div>
 
-  <p class="note">※ 本シミュレーションは概算です。実際の費用は物件の立地・築年数・税制優遇（住宅ローン控除等）・売却価値・機会費用等により異なります。詳細は専門家にご相談ください。</p>
-  <footer>&copy; 2025 持ち家vs賃貸シミュレーター</footer>
+  <div class="source-section">
+    <h3>計算に使用しているデータ出典</h3>
+    <ul>
+      <li><strong>物件価格:</strong> 東日本不動産流通機構（REINS）「首都圏不動産流通市場の動向」2025年 / 不動産経済研究所「全国マンション市場動向」2024年度</li>
+      <li><strong>住宅ローン金利:</strong> 住宅金融支援機構「フラット35金利情報」2026年3月 / 各行公表金利</li>
+      <li><strong>管理費・修繕積立金:</strong> REINS 成約データ 2022年度（197円/㎡+181円/㎡）/ 国土交通省「マンション総合調査」令和5年度（修繕13,378円/月）</li>
+      <li><strong>固定資産税:</strong> 東京都主税局（標準税率1.4%+都市計画税0.3%、評価額＝時価の約70%、住宅用地特例適用後）</li>
+      <li><strong>住宅ローン控除:</strong> 国土交通省「住宅ローン減税」制度概要（控除率0.7%、新築13年/中古10年）</li>
+      <li><strong>物件残存価値:</strong> REINS「築年数から見た首都圏の不動産流通市場」2023年（築年数別成約価格推移）</li>
+      <li><strong>家賃上昇率:</strong> 総務省統計局「消費者物価指数」2025年（CPI民営家賃 +0.5〜0.8%）</li>
+      <li><strong>更新料:</strong> 国土交通省「住宅市場動向調査」令和4年度（全国45.8%が支払い、うち77.2%が1ヶ月分）</li>
+      <li><strong>賃貸初期費用:</strong> SUUMO/LIFULL HOME'S 2025年調査（敷金+礼金+仲介手数料+前家賃+保証会社 = 約5ヶ月分）</li>
+    </ul>
+  </div>
+
+  <p class="note">※ 本シミュレーションは概算です。物件残存価値はREINS首都圏データに基づく平均的な下落率を使用しており、立地・管理状態・市況により大きく異なります。住宅ローン控除は2024年以降の新制度（新築認定住宅・借入限度額4,500万円）を適用。固定資産税は住宅用地特例・新築軽減適用後の実効税率で計算。詳細は税理士・FP等の専門家にご相談ください。</p>
+  <footer>&copy; 2026 ROCKEDGE 持ち家vs賃貸シミュレーター</footer>
 </div>
 
 <script>
 (function(){
   const $=id=>document.getElementById(id);
 
-  /* Slider/Number pair sync */
+  /* ===== Slider/Number pair sync ===== */
   const pairs=[
     ['priceRange','priceInput'],['downRange','downInput'],
     ['rateRange','rateInput'],['termRange','termInput'],
@@ -244,91 +282,210 @@ footer{text-align:center;color:#aaa;font-size:.75rem;padding:24px 0 16px}
     $(n).addEventListener('input',()=>{$(r).value=$(n).value;calc()});
   });
 
+  /* ===== Constants (sourced from official data) ===== */
+
+  // 固定資産税+都市計画税 実効税率（住宅用地特例・評価額70%適用後）
+  // 建物60%×70%×1.7% + 土地40%×70%×(1.4%/6+0.3%/3) ≈ 0.80%
+  // 新築5年間は建物分が1/2軽減 → 約0.50%
+  const PROP_TAX_RATE_NEW = 0.005;    // 新築5年間の実効税率
+  const PROP_TAX_RATE_NORMAL = 0.008; // 6年目以降の実効税率
+
+  // 火災保険+地震保険（70㎡マンション全国平均）
+  const INSURANCE_ANNUAL = 50000; // 5万円/年（ソニー損保等の平均値）
+
+  // 住宅ローン控除（2024年制度改正後）
+  const LOAN_DEDUCTION_RATE = 0.007;      // 控除率0.7%
+  const LOAN_DEDUCTION_YEARS = 13;        // 新築13年（中古10年）
+  const LOAN_DEDUCTION_CAP = 45000000;    // 借入限度額4,500万円（認定住宅）
+
+  // 諸費用率（仲介手数料・登記費用・印紙税・不動産取得税・ローン関連費用）
+  const CLOSING_COST_RATE = 0.07; // 中古7%（新築直販なら3-5%）
+
+  // 賃貸初期費用（敷金+礼金+仲介手数料+前家賃+保証会社）
+  const RENTAL_INIT_MONTHS = 5;
+
+  // 物件残存価値テーブル（REINS「築年数から見た首都圏の不動産流通市場」2023年）
+  // 新築を100%として築年数ごとの成約価格比率
+  const DEPR_TABLE = [
+    [0,  1.00],
+    [5,  0.93],  // REINS: 94.0%と87.7%の中間値
+    [10, 0.85],  // REINS: 83.8%と87.7%の平均
+    [15, 0.78],  // REINS: 78.9%
+    [20, 0.70],  // REINS: 70.5%〜77.8%の下限寄り
+    [25, 0.62],  // REINS: 60.7%〜69.0%
+    [30, 0.50],  // REINS: 47.2%〜60.7%の中間
+    [35, 0.38],  // REINS: 32.5%と推計
+    [40, 0.33],  // REINS: 37.7%（立地選別で反発含む）
+    [50, 0.30]   // 長期安定値
+  ];
+
+  function getResidualRate(year){
+    if(year <= 0) return 1.0;
+    for(let i=0; i<DEPR_TABLE.length-1; i++){
+      if(year <= DEPR_TABLE[i+1][0]){
+        const t = (year - DEPR_TABLE[i][0]) / (DEPR_TABLE[i+1][0] - DEPR_TABLE[i][0]);
+        return DEPR_TABLE[i][1] + t * (DEPR_TABLE[i+1][1] - DEPR_TABLE[i][1]);
+      }
+    }
+    return DEPR_TABLE[DEPR_TABLE.length-1][1];
+  }
+
+  /* ===== Formatting ===== */
   function fmtMan(v){
-    const m=v/10000;
-    if(Math.abs(m)>=10000) return (m/10000).toFixed(1)+'億円';
-    if(Math.abs(m)>=1) return Math.round(m).toLocaleString('ja-JP')+'万円';
+    const m = v / 10000;
+    if(Math.abs(m) >= 10000) return (m/10000).toFixed(1)+'億円';
+    if(Math.abs(m) >= 1) return Math.round(m).toLocaleString('ja-JP')+'万円';
     return Math.round(v).toLocaleString('ja-JP')+'円';
   }
 
-  /* PMT: monthly payment for a given annual rate, term in years, principal */
-  function monthlyPmt(annualRate,years,principal){
-    if(principal<=0) return 0;
-    if(annualRate===0) return principal/(years*12);
-    const r=annualRate/12;
-    const n=years*12;
-    return principal*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1);
+  /* ===== PMT: monthly payment ===== */
+  function monthlyPmt(annualRate, years, principal){
+    if(principal <= 0) return 0;
+    if(annualRate === 0) return principal / (years * 12);
+    const r = annualRate / 12;
+    const n = years * 12;
+    return principal * r * Math.pow(1+r, n) / (Math.pow(1+r, n) - 1);
   }
 
+  /* ===== Main calculation ===== */
   function calc(){
     /* Parse inputs */
-    const price   = parseFloat($('priceInput').value)*10000;       // yen
-    const downPct = parseFloat($('downInput').value)/100;
-    const rate    = parseFloat($('rateInput').value)/100;           // annual
-    const term    = parseInt($('termInput').value);                 // years
-    const maintPct= parseFloat($('maintInput').value)/100;         // annual % of price
-    const monthlyRent = parseFloat($('rentInput').value)*10000;    // yen
-    const rentUpRate  = parseFloat($('rentUpInput').value)/100;    // annual
-    const renewMonths = parseFloat($('renewInput').value);         // months of rent
-    const period  = parseInt($('periodInput').value);              // years
+    const price       = parseFloat($('priceInput').value) * 10000;       // yen
+    const downPct     = parseFloat($('downInput').value) / 100;
+    const rate        = parseFloat($('rateInput').value) / 100;          // annual
+    const term        = parseInt($('termInput').value);                  // years
+    const maintMonth  = parseFloat($('maintInput').value) * 10000;      // yen/month
+    const monthlyRent = parseFloat($('rentInput').value) * 10000;       // yen
+    const rentUpRate  = parseFloat($('rentUpInput').value) / 100;       // annual
+    const renewMonths = parseFloat($('renewInput').value);              // months of rent
+    const period      = parseInt($('periodInput').value);               // years
 
-    /* ===== Purchase cost calculation ===== */
+    /* ===== Purchase calculations ===== */
     const downPayment = price * downPct;
     const loanAmount  = price - downPayment;
-    const initCosts   = price * 0.07;  // purchase closing costs ~7%
+    const closingCost = price * CLOSING_COST_RATE;
     const mp = monthlyPmt(rate, term, loanAmount);
+    const monthlyRate = rate / 12;
 
     /* ===== Build yearly data ===== */
     const years = [];
-    let cumBuy = downPayment + initCosts;
-    let cumRent = monthlyRent * 2;  // initial: deposit + key money ~2 months
-    let cumLoan = 0;
-    let cumMaint = 0;
+    let cumBuySpend = downPayment + closingCost;      // 購入側 累計支出
+    let cumLoanDeduction = 0;                          // ローン控除 累計
+    let cumRent = monthlyRent * RENTAL_INIT_MONTHS;   // 賃貸側 累計（初期費用5ヶ月分）
+
+    let cumLoanPayment = 0;
+    let cumMaintFee = 0;
+    let cumPropTax = 0;
+    let cumInsurance = 0;
+    let cumInterest = 0;
+
+    let cumRentOnly = 0;
+    let cumRenewFee = 0;
+
+    let loanBalance = loanAmount;
     let currentRent = monthlyRent;
     let breakEvenYear = null;
 
-    // Year 0
+    // Calculate equity & net cost at year 0
+    const equity0 = price - loanBalance;
+    const netCost0 = cumBuySpend - cumLoanDeduction - equity0;
+
     years.push({
       year: 0,
-      cumBuy: cumBuy,
+      cumBuySpend: cumBuySpend,
+      equity: equity0,
+      netCost: netCost0,
       cumRent: cumRent,
-      cumLoan: 0,
-      cumMaint: 0,
-      annualRent: 0
+      cumLoanPayment: 0,
+      cumMaintFee: 0,
+      cumPropTax: 0,
+      cumInsurance: 0,
+      cumInterest: 0,
+      cumLoanDeduction: 0,
+      propertyValue: price,
+      loanBalance: loanBalance
     });
 
-    for(let y=1; y<=period; y++){
-      /* Purchase annual cost */
-      const loanPayYear = y <= term ? mp*12 : 0;
-      const maintYear   = price * maintPct;
-      cumLoan  += loanPayYear;
-      cumMaint += maintYear;
-      cumBuy   += loanPayYear + maintYear;
+    for(let y = 1; y <= period; y++){
+      /* -- Loan payment (amortization) -- */
+      let yearInterest = 0;
+      let yearPrincipal = 0;
+      for(let m = 0; m < 12; m++){
+        if(loanBalance > 0){
+          const interest = loanBalance * monthlyRate;
+          let principal = mp - interest;
+          if(principal > loanBalance) principal = loanBalance;
+          yearInterest += interest;
+          yearPrincipal += principal;
+          loanBalance -= principal;
+          if(loanBalance < 0.5) loanBalance = 0;
+        }
+      }
+      cumLoanPayment += yearInterest + yearPrincipal;
+      cumInterest += yearInterest;
 
-      /* Rent annual cost */
+      /* -- Management + repair reserve -- */
+      const maintYear = maintMonth * 12;
+      cumMaintFee += maintYear;
+
+      /* -- Property tax (新築5年間軽減) -- */
+      const taxRate = (y <= 5) ? PROP_TAX_RATE_NEW : PROP_TAX_RATE_NORMAL;
+      const propTaxYear = price * taxRate;
+      cumPropTax += propTaxYear;
+
+      /* -- Insurance -- */
+      cumInsurance += INSURANCE_ANNUAL;
+
+      /* -- 住宅ローン控除 (0.7% of balance, capped, 13 years) -- */
+      let deductionYear = 0;
+      if(y <= LOAN_DEDUCTION_YEARS && loanBalance > 0){
+        const applicableBalance = Math.min(loanBalance + yearPrincipal, LOAN_DEDUCTION_CAP);
+        deductionYear = applicableBalance * LOAN_DEDUCTION_RATE;
+      }
+      cumLoanDeduction += deductionYear;
+
+      /* -- Purchase cumulative spending -- */
+      cumBuySpend += (yearInterest + yearPrincipal) + maintYear + propTaxYear + INSURANCE_ANNUAL;
+
+      /* -- Property value & equity -- */
+      const propertyValue = price * getResidualRate(y);
+      const equity = propertyValue - loanBalance;
+
+      /* -- Net cost = spending - ローン控除 - equity -- */
+      const netCost = cumBuySpend - cumLoanDeduction - equity;
+
+      /* -- Rent -- */
       if(y > 1) currentRent = currentRent * (1 + rentUpRate);
       const rentYear = currentRent * 12;
       const renewYear = (y % 2 === 0 && renewMonths > 0) ? currentRent * renewMonths : 0;
       cumRent += rentYear + renewYear;
+      cumRentOnly += rentYear;
+      cumRenewFee += renewYear;
 
       years.push({
         year: y,
-        cumBuy: cumBuy,
+        cumBuySpend: cumBuySpend,
+        equity: equity,
+        netCost: netCost,
         cumRent: cumRent,
-        cumLoan: cumLoan,
-        cumMaint: cumMaint,
-        annualRent: rentYear
+        cumLoanPayment: cumLoanPayment,
+        cumMaintFee: cumMaintFee,
+        cumPropTax: cumPropTax,
+        cumInsurance: cumInsurance,
+        cumInterest: cumInterest,
+        cumLoanDeduction: cumLoanDeduction,
+        propertyValue: propertyValue,
+        loanBalance: loanBalance
       });
 
-      /* Break-even detection */
-      if(breakEvenYear === null && cumBuy < cumRent){
-        // linear interpolation for more precise break-even
+      /* Break-even detection: when purchase net cost < rental cost */
+      if(breakEvenYear === null && netCost < cumRent){
         const prev = years[y-1];
-        const prevDiff = prev.cumRent - prev.cumBuy;
-        const curDiff  = cumRent - cumBuy;
+        const prevDiff = prev.cumRent - prev.netCost;
+        const curDiff  = cumRent - netCost;
         if(prevDiff <= 0 && curDiff > 0){
           const frac = -prevDiff / (curDiff - prevDiff);
-          breakEvenYear = (y - 1) + frac;
+          breakEvenYear = (y-1) + frac;
         } else {
           breakEvenYear = y;
         }
@@ -336,47 +493,73 @@ footer{text-align:center;color:#aaa;font-size:.75rem;padding:24px 0 16px}
     }
 
     const last = years[years.length-1];
-    const totalInterest = cumLoan - loanAmount * Math.min(period, term) / term;
 
-    /* ===== Update results ===== */
-    $('buyCost').textContent = fmtMan(last.cumBuy);
-    $('buySub').textContent  = 'ローン返済 ' + fmtMan(cumLoan) + ' + 維持費 ' + fmtMan(cumMaint);
+    /* ===== Update result cards ===== */
+    $('buyCost').textContent = fmtMan(last.netCost);
+    $('buySub').textContent = '支出 ' + fmtMan(last.cumBuySpend) +
+      ' - ローン控除 ' + fmtMan(last.cumLoanDeduction) +
+      ' - 資産価値 ' + fmtMan(last.equity);
 
     $('rentCost').textContent = fmtMan(last.cumRent);
-    $('rentSub').textContent  = period + '年間の家賃合計（更新料込み）';
+    $('rentSub').textContent = period + '年間の家賃+更新料+初期費用';
 
-    const diff = last.cumRent - last.cumBuy;
+    const diff = last.cumRent - last.netCost;
     $('diffCost').textContent = (diff >= 0 ? '+' : '') + fmtMan(diff);
-    $('diffSub').textContent  = diff >= 0 ? period + '年後、購入のほうが' + fmtMan(Math.abs(diff)) + 'お得' : period + '年後、賃貸のほうが' + fmtMan(Math.abs(diff)) + 'お得';
+    $('diffSub').textContent = diff >= 0
+      ? period + '年後、購入のほうが' + fmtMan(Math.abs(diff)) + 'お得'
+      : period + '年後、賃貸のほうが' + fmtMan(Math.abs(diff)) + 'お得';
 
     /* Break-even */
     if(breakEvenYear !== null){
-      const beYears = Math.floor(breakEvenYear);
-      const beMonths = Math.round((breakEvenYear - beYears)*12);
-      $('breakevenVal').textContent = beYears + '年' + (beMonths > 0 ? beMonths + 'ヶ月' : '');
-      $('breakevenSub').textContent = 'この時点で購入の累計コストが賃貸を下回ります';
+      const beY = Math.floor(breakEvenYear);
+      const beM = Math.round((breakEvenYear - beY) * 12);
+      $('breakevenVal').textContent = beY + '年' + (beM > 0 ? beM + 'ヶ月' : '');
+      $('breakevenSub').textContent = 'この時点で購入の実質コストが賃貸を下回ります（資産価値・ローン控除考慮）';
     } else {
       $('breakevenVal').textContent = period + '年以内には到達せず';
-      $('breakevenSub').textContent = '比較期間内では賃貸のほうがコストが低い結果です';
+      $('breakevenSub').textContent = '比較期間内では賃貸のほうが実質コストが低い結果です';
     }
 
-    /* Purchase breakdown */
+    /* Monthly payment display */
+    const monthlyTotal = mp + maintMonth + (price * PROP_TAX_RATE_NORMAL / 12) + (INSURANCE_ANNUAL / 12);
+    $('monthlyBox').innerHTML =
+      '<div class="monthly-item"><div class="mv">' + fmtMan(mp) + '</div><div class="ml">月々ローン返済額</div></div>' +
+      '<div class="monthly-item"><div class="mv">' + fmtMan(monthlyTotal) + '</div><div class="ml">月々総支払額<br>(ローン+管理費+税+保険)</div></div>';
+
+    /* ===== Purchase breakdown ===== */
     $('buyBreakdown').innerHTML = [
       {l:'頭金', v:fmtMan(downPayment)},
-      {l:'諸費用（約7%）', v:fmtMan(initCosts)},
-      {l:'ローン返済総額', v:fmtMan(cumLoan)},
-      {l:'月々返済額', v:fmtMan(mp)},
-      {l:'維持費累計', v:fmtMan(cumMaint)},
-      {l:'購入総コスト', v:fmtMan(last.cumBuy)}
+      {l:'諸費用（7%）', v:fmtMan(closingCost)},
+      {l:'ローン返済総額', v:fmtMan(last.cumLoanPayment)},
+      {l:'うち利息', v:fmtMan(last.cumInterest)},
+      {l:'管理費・修繕積立金', v:fmtMan(last.cumMaintFee)},
+      {l:'固定資産税等', v:fmtMan(last.cumPropTax)},
+      {l:'火災・地震保険', v:fmtMan(last.cumInsurance)},
+      {l:'支出合計', v:fmtMan(last.cumBuySpend)},
+    ].map(i=>'<div class="breakdown-item"><div class="v">'+i.v+'</div><div class="l">'+i.l+'</div></div>').join('') +
+    [
+      {l:'住宅ローン控除', v:'-'+fmtMan(last.cumLoanDeduction)},
+      {l:'物件残存価値', v:'-'+fmtMan(last.equity)},
+      {l:'実質コスト', v:fmtMan(last.netCost)},
+    ].map(i=>'<div class="breakdown-item deduct"><div class="v">'+i.v+'</div><div class="l">'+i.l+'</div></div>').join('');
+
+    /* ===== Rent breakdown ===== */
+    const rentalInit = monthlyRent * RENTAL_INIT_MONTHS;
+    $('rentBreakdown').innerHTML = [
+      {l:'初期費用（5ヶ月分）', v:fmtMan(rentalInit)},
+      {l:'家賃累計', v:fmtMan(cumRentOnly)},
+      {l:'更新料累計', v:fmtMan(cumRenewFee)},
+      {l:'賃貸総コスト', v:fmtMan(last.cumRent)},
     ].map(i=>'<div class="breakdown-item"><div class="v">'+i.v+'</div><div class="l">'+i.l+'</div></div>').join('');
 
-    /* ===== Canvas chart ===== */
+    /* ===== Chart ===== */
     drawChart(years, breakEvenYear);
 
-    /* ===== Yearly table ===== */
+    /* ===== Table ===== */
     buildTable(years);
   }
 
+  /* ===== Canvas Chart ===== */
   function drawChart(years, breakEvenYear){
     const canvas = $('costChart');
     const dpr = window.devicePixelRatio || 1;
@@ -393,9 +576,10 @@ footer{text-align:center;color:#aaa;font-size:.75rem;padding:24px 0 16px}
     const cW=W-mL-mR, cH=H-mT-mB;
     const n = years.length;
 
-    const allVals = years.flatMap(y=>[y.cumBuy, y.cumRent]);
-    const maxVal = Math.max(...allVals);
-    const minVal = 0;
+    // Determine Y range from all plotted values
+    const allVals = years.flatMap(y=>[y.netCost, y.cumRent, y.cumBuySpend]);
+    const maxVal = Math.max(...allVals) * 1.05;
+    const minVal = Math.min(0, Math.min(...allVals));
     const range = maxVal - minVal || 1;
 
     const toX = i => mL + (i/(n-1)) * cW;
@@ -423,30 +607,42 @@ footer{text-align:center;color:#aaa;font-size:.75rem;padding:24px 0 16px}
       }
     });
 
-    /* Area fill - Buy */
+    /* Area fill - Purchase spending (light) */
     ctx.beginPath();
-    ctx.moveTo(toX(0), toY(0));
-    years.forEach((d,i)=> ctx.lineTo(toX(i), toY(d.cumBuy)));
-    ctx.lineTo(toX(n-1), toY(0));
+    ctx.moveTo(toX(0), toY(minVal));
+    years.forEach((d,i)=> ctx.lineTo(toX(i), toY(d.cumBuySpend)));
+    ctx.lineTo(toX(n-1), toY(minVal));
     ctx.closePath();
-    ctx.fillStyle='rgba(26,39,68,0.08)';
+    ctx.fillStyle='rgba(26,39,68,0.04)';
     ctx.fill();
 
     /* Area fill - Rent */
     ctx.beginPath();
-    ctx.moveTo(toX(0), toY(0));
+    ctx.moveTo(toX(0), toY(minVal));
     years.forEach((d,i)=> ctx.lineTo(toX(i), toY(d.cumRent)));
-    ctx.lineTo(toX(n-1), toY(0));
+    ctx.lineTo(toX(n-1), toY(minVal));
     ctx.closePath();
-    ctx.fillStyle='rgba(26,107,60,0.08)';
+    ctx.fillStyle='rgba(26,107,60,0.06)';
     ctx.fill();
 
-    /* Line - Buy */
+    /* Line - Purchase spending (dashed, thin) */
+    ctx.strokeStyle='rgba(26,39,68,0.35)';
+    ctx.lineWidth=1.5;
+    ctx.setLineDash([4,4]);
+    ctx.beginPath();
+    years.forEach((d,i)=>{
+      const x=toX(i), y=toY(d.cumBuySpend);
+      i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+    });
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    /* Line - Purchase net cost (solid) */
     ctx.strokeStyle='#1a2744';
     ctx.lineWidth=3;
     ctx.beginPath();
     years.forEach((d,i)=>{
-      const x=toX(i), y=toY(d.cumBuy);
+      const x=toX(i), y=toY(d.netCost);
       i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
     });
     ctx.stroke();
@@ -465,9 +661,9 @@ footer{text-align:center;color:#aaa;font-size:.75rem;padding:24px 0 16px}
     if(breakEvenYear !== null && breakEvenYear <= years[years.length-1].year){
       const beIdx = Math.min(Math.floor(breakEvenYear), years.length-2);
       const frac  = breakEvenYear - beIdx;
-      const yBuy  = years[beIdx].cumBuy + (years[beIdx+1].cumBuy - years[beIdx].cumBuy)*frac;
+      const yNet  = years[beIdx].netCost + (years[beIdx+1].netCost - years[beIdx].netCost)*frac;
       const bx = toX(breakEvenYear);
-      const by = toY(yBuy);
+      const by = toY(yNet);
 
       /* Vertical dashed line */
       ctx.strokeStyle='#e65100';
@@ -489,43 +685,56 @@ footer{text-align:center;color:#aaa;font-size:.75rem;padding:24px 0 16px}
       ctx.fillStyle='#e65100';
       ctx.font='bold 12px sans-serif';
       ctx.textAlign='center';
-      const beLabel = Math.floor(breakEvenYear) + '年' + (Math.round((breakEvenYear%1)*12)>0 ? Math.round((breakEvenYear%1)*12)+'ヶ月' : '');
+      const beY = Math.floor(breakEvenYear);
+      const beM = Math.round((breakEvenYear%1)*12);
+      const beLabel = beY + '年' + (beM > 0 ? beM + 'ヶ月' : '');
       ctx.fillText('損益分岐 ' + beLabel, bx, by - 16);
     }
 
     /* Legend */
-    ctx.font='bold 12px sans-serif'; ctx.textAlign='left';
+    let lx = mL + 10;
+    ctx.font='bold 11px sans-serif'; ctx.textAlign='left';
 
     ctx.strokeStyle='#1a2744'; ctx.lineWidth=3;
-    ctx.beginPath(); ctx.moveTo(mL+10, 20); ctx.lineTo(mL+35, 20); ctx.stroke();
-    ctx.fillStyle='#1a2744'; ctx.fillText('購入 累計コスト', mL+40, 24);
+    ctx.beginPath(); ctx.moveTo(lx, 20); ctx.lineTo(lx+22, 20); ctx.stroke();
+    ctx.fillStyle='#1a2744'; ctx.fillText('購入 実質コスト', lx+27, 24);
 
+    lx += 140;
+    ctx.strokeStyle='rgba(26,39,68,0.35)'; ctx.lineWidth=1.5;
+    ctx.setLineDash([4,4]);
+    ctx.beginPath(); ctx.moveTo(lx, 20); ctx.lineTo(lx+22, 20); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle='#888'; ctx.fillText('購入 支出のみ', lx+27, 24);
+
+    lx += 130;
     ctx.strokeStyle='#1a6b3c'; ctx.lineWidth=3;
-    ctx.beginPath(); ctx.moveTo(mL+200, 20); ctx.lineTo(mL+225, 20); ctx.stroke();
-    ctx.fillStyle='#1a6b3c'; ctx.fillText('賃貸 累計コスト', mL+230, 24);
+    ctx.beginPath(); ctx.moveTo(lx, 20); ctx.lineTo(lx+22, 20); ctx.stroke();
+    ctx.fillStyle='#1a6b3c'; ctx.fillText('賃貸 累計コスト', lx+27, 24);
 
+    lx += 140;
     ctx.fillStyle='#e65100';
-    ctx.beginPath(); ctx.arc(mL+400, 19, 5, 0, Math.PI*2); ctx.fill();
-    ctx.fillText('損益分岐点', mL+410, 24);
+    ctx.beginPath(); ctx.arc(lx+8, 19, 5, 0, Math.PI*2); ctx.fill();
+    ctx.fillText('損益分岐点', lx+18, 24);
   }
 
+  /* ===== Yearly Table ===== */
   function buildTable(years){
     const tbody = document.querySelector('#yearlyTable tbody');
-    tbody.innerHTML = years.filter(d => d.year > 0).map(d=>{
-      const diff = d.cumRent - d.cumBuy;
+    tbody.innerHTML = years.filter(d => d.year > 0).map(d => {
+      const diff = d.cumRent - d.netCost;
       const diffClass = diff >= 0 ? 'color:#1a6b3c' : 'color:#c62828';
       return '<tr>' +
-        '<td>'+d.year+'年目</td>' +
-        '<td>'+fmtMan(d.cumBuy)+'</td>' +
-        '<td>'+fmtMan(d.cumLoan)+'</td>' +
-        '<td>'+fmtMan(d.cumMaint)+'</td>' +
-        '<td>'+fmtMan(d.cumRent)+'</td>' +
-        '<td style="'+diffClass+';font-weight:600">'+(diff>=0?'+':'')+fmtMan(diff)+'</td>' +
+        '<td>' + d.year + '年</td>' +
+        '<td>' + fmtMan(d.cumBuySpend) + '</td>' +
+        '<td>' + fmtMan(Math.max(0, d.equity)) + '</td>' +
+        '<td>' + fmtMan(d.netCost) + '</td>' +
+        '<td>' + fmtMan(d.cumRent) + '</td>' +
+        '<td style="' + diffClass + ';font-weight:600">' + (diff>=0?'+':'') + fmtMan(diff) + '</td>' +
         '</tr>';
     }).join('');
   }
 
-  /* Initial calc */
+  /* Initial calculation */
   calc();
 })();
 </script>
